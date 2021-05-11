@@ -23,6 +23,7 @@ namespace Выборы
         public MainWindow()
         {
             InitializeComponent();
+            
         }
     }
 }

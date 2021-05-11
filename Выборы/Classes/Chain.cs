@@ -9,7 +9,7 @@ namespace Выборы.Classes
     /// <summary>
     /// Цепочка блоков
     /// </summary>
-    class Chain
+    public class Chain
     {
         //Цепочка блоков
         private List<Block> Blocks { get; set; }
@@ -28,11 +28,11 @@ namespace Выборы.Classes
         {
             if (user == null)
             {
-                throw new ArgumentException("Неправильный пользователь", nameof(user));
+                throw new ArgumentException(Properties.Language.Invalid_user);
             }
             if (candidate == null)
             {
-                throw new ArgumentException("Неправильный кандидат", nameof(candidate));
+                throw new ArgumentException(Properties.Language.Invalid_condidate);
             }
             Block newBlock = new Block(user.Id, candidate, Last);
             Blocks.Add(newBlock);

@@ -50,16 +50,6 @@ namespace Выборы
         /// <param name="block">последний блок</param>
         public Block(int user, Candidate candidate, Block block)
         {
-            if (user < 0)
-            {
-                throw new ArgumentException("Неправильный пользователь", nameof(user));
-            }
-            
-            if (candidate == null)
-            {
-                throw new ArgumentException("Неправильный кандидат", nameof(candidate));
-            }
-
             if (block == null)
             {
                 throw new ArgumentException("Пустой блок", nameof(block));

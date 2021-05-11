@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Выборы.Classes
 {
-    class User
+    public class User
     {
         public int Id;
-
     }
 }
