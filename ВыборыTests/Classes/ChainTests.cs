@@ -14,20 +14,13 @@ namespace Выборы.Classes.Tests
         [TestMethod()]
         public void ChainConstructorTest()
         {
-            Chain chain = new Chain(
-                new Candidate[]
-                    {
-                        new Candidate { Name = "Игорь"},
-                        new Candidate { Name = "Иван"},
-                        new Candidate { Name = "Петр"},
-                    },
-                "Выборы председателя");
+            Chain chain = new Chain(new Election("Выборы на пост главного дворника", DateTime.Parse("10.10.2019 20:00:00"), DateTime.Parse("10.12.2019 20:00:00")));
             Assert.IsNotNull(chain);
         }
         [TestMethod()]
         public void ChainAddTest()
         {
-            Chain chain = new Chain(new Candidate[] { }, "Выборы председателя");
+            Chain chain = new Chain(new Election("Выборы на пост главного дворника", DateTime.Parse("10.10.2019 20:00:00"), DateTime.Parse("10.12.2019 20:00:00")));
             try
             {
                 chain.Add(null, new Candidate());

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Выборы.Classes
 {
-    public class Candidate
+    public class Candidate: User
     {
-        public string Name { get; set; }
+        
     }
 }

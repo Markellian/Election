@@ -13,17 +13,23 @@ namespace Выборы.Classes
     {
         //Цепочка блоков
         private List<Block> Blocks { get; set; }
+        //Последний блок
         private Block Last { get; set; }
         //Конструктор для создания цепочки блоков
-        public Chain(Candidate[] candidates, string nameElection)
+        public Chain(Election election)
         {
             Blocks = new List<Block>();
-            var genesisBlock = new Block(candidates, nameElection);
+            var genesisBlock = new Block(election);
 
             Blocks.Add(genesisBlock);
             Last = genesisBlock;
         }
 
+        /// <summary>
+        /// Добавление блока в цепочку
+        /// </summary>
+        /// <param name="user">Пользователь, который голосует</param>
+        /// <param name="candidate">Кандидат, за которого голосуют</param>
         public void Add(User user, Candidate candidate)
         {
             if (user == null)
@@ -34,7 +40,7 @@ namespace Выборы.Classes
             {
                 throw new ArgumentException(Properties.Language.Invalid_condidate);
             }
-            Block newBlock = new Block(user.Id, candidate, Last);
+            Block newBlock = new Block(user, candidate, Last);
             Blocks.Add(newBlock);
             Last = newBlock;
         }         

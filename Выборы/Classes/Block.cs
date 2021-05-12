@@ -11,35 +11,17 @@ namespace Выборы
     /// <summary>
     /// Блок
     /// </summary>
-    class Block
+    public class Block: Blocks
     {
-        //номер блока
-        public int Id { get; private set; }
-        //ID пользоателя
-        public int User { get; private set; }
-        //Дата создания блока
-        public DateTime DataCreated { get; private set; }
-        //Данные
-        public Dictionary<Candidate, int> Data { get; private set; }
-        //Хэш блока
-        public string Hash { get; private set; }
-        //Хэш предыдущего блока
-        public string PreviousHash { get; private set; }
-
         /// <summary>
         /// Конструктор генезис-блока. Создает первый блок.
         /// </summary>
-        public Block(Candidate[] candidates, string name)
+        public Block(Election election)
         {
-            Id = 1;
-            User = 0;
-            DataCreated = DateTime.UtcNow;
-            Data = new Dictionary<Candidate, int> { };
-            foreach (Candidate candidate in candidates)
-            {
-                Data.Add(candidate, 0);
-            }
-            PreviousHash = name;
+            User_id = 0;
+            DataCreated = election.DateStart.ToUniversalTime();            
+            Data = "";
+            PreviousHash = election.Name;
             Hash = MakeHash();
         }
         /// <summary>
@@ -48,21 +30,15 @@ namespace Выборы
         /// <param name="user">Идентификатор пользователя</param>
         /// <param name="candidate">кандидат, за которого отдан голос</param>
         /// <param name="block">последний блок</param>
-        public Block(int user, Candidate candidate, Block block)
+        public Block(User user, Candidate candidate, Block block)
         {
             if (block == null)
             {
                 throw new ArgumentException("Пустой блок", nameof(block));
             }
-
-            Id = block.Id + 1;
-            User = user;
+            User_id = user.Id;
             DataCreated = DateTime.UtcNow;
-            Data = new Dictionary<Candidate, int> { };
-            foreach (var data in block.Data)
-            {
-                Data.Add(data.Key, data.Key == candidate ? data.Value+1 : data.Value);
-            }
+            Data = candidate.Id.ToString();
             PreviousHash = block.Hash;
             Hash = MakeHash();
 
@@ -74,8 +50,7 @@ namespace Выборы
         private string GetStringForHash()
         {
             string text = "";
-            text += Id.ToString();
-            text += User.ToString();
+            text += User_id.ToString();
             text += DataCreated.ToString("O");
             text += Data.ToString();
             text += PreviousHash;

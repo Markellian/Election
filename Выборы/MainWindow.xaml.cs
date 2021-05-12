@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Выборы.Classes;
 
 namespace Выборы
 {
@@ -23,6 +24,11 @@ namespace Выборы
         public MainWindow()
         {
             InitializeComponent();
+            using (var db = new ElectionsDataBase())
+            {
+                
+                //db.SaveChanges();
+            }
             
         }
     }
