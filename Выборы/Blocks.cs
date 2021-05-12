@@ -21,6 +21,6 @@ namespace Выборы
         public string Hash { get; set; }
         public string PreviousHash { get; set; }
     
-        public virtual Users Users { get; set; }
+        private Users Users { get; set; }
     }
 }

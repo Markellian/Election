@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Выборы", "Выборы\Выборы.csproj", "{496A78CA-1643-4A01-AAE3-C9066232B22F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elections", "Выборы\Elections.csproj", "{496A78CA-1643-4A01-AAE3-C9066232B22F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ВыборыTests", "ВыборыTests\ВыборыTests.csproj", "{BA6A81A6-53B5-4B1A-B59E-139ADF43E865}"
 EndProject

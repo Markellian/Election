@@ -63,9 +63,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Выборы\Выборы.csproj">
+    <ProjectReference Include="..\Выборы\Elections.csproj">
       <Project>{496A78CA-1643-4A01-AAE3-C9066232B22F}</Project>
-      <Name>Выборы</Name>
+      <Name>Elections</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
