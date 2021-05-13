@@ -46,7 +46,6 @@ namespace Выборы
         {
             Chain chain = new Chain(new Election("Любимый цвет", DateTime.Parse("01/01/2020 00:00:00:000"), DateTime.Parse("01/03/2020 00:00:00:000")));
 
-
         }
     }
 }

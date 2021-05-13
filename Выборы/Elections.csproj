@@ -82,8 +82,14 @@
     <Compile Include="Blocks.cs">
       <DependentUpon>ElectionsDataBase.tt</DependentUpon>
     </Compile>
+    <Compile Include="Classes\DataBase.cs" />
     <Compile Include="Classes\Election.cs" />
     <Compile Include="Elections.cs">
+      <DependentUpon>ElectionsDataBase.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ElectionsDataBase.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
       <DependentUpon>ElectionsDataBase.tt</DependentUpon>
     </Compile>
     <Compile Include="Role.cs">
@@ -108,11 +114,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ElectionsDataBase.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ElectionsDataBase.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ElectionsDataBase.tt</DependentUpon>
     </Compile>
     <Compile Include="ElectionsDataBase.Designer.cs">
       <AutoGen>True</AutoGen>

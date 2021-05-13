@@ -20,7 +20,9 @@ namespace Выборы
         public string Data { get; set; }
         public string Hash { get; set; }
         public string PreviousHash { get; set; }
+        public int Election_id { get; set; }
     
-        private Users Users { get; set; }
+        public virtual Elections Elections { get; set; }
+        public virtual Users Users { get; set; }
     }
 }

@@ -18,19 +18,23 @@ namespace Выборы.Classes
         //Конструктор для создания цепочки блоков
         public Chain(Election election)
         {
-            Blocks = new List<Block>();
-            var genesisBlock = new Block(election);
-
-            Blocks.Add(genesisBlock);
-            Last = genesisBlock;
+            Blocks = DataBase.GetChain(election.Id);
+            if (Blocks.Count() == 0)
+            {
+                Blocks.Add(new Block(election));
+            }
+            Last = Blocks.Last();          
+            
         }
 
+               
         /// <summary>
-        /// Добавление блока в цепочку
+        /// Добавляет новый блок в цепочку
         /// </summary>
-        /// <param name="user">Пользователь, который голосует</param>
-        /// <param name="candidate">Кандидат, за которого голосуют</param>
-        public void Add(User user, Candidate candidate)
+        /// <param name="user">Пользователь, который инициирует добавление</param>
+        /// <param name="candidate">Кандидат, за которого отдается голос</param>
+        /// <returns>true - добавление прошло успешно. false - ошибка добавления</returns>
+        public bool Add(User user, Candidate candidate)
         {
             if (user == null)
             {
@@ -41,8 +45,18 @@ namespace Выборы.Classes
                 throw new ArgumentException(Properties.Language.Invalid_condidate);
             }
             Block newBlock = new Block(user, candidate, Last);
-            Blocks.Add(newBlock);
-            Last = newBlock;
+            var res = DataBase.AddBlock(newBlock);
+            if (res)
+            {
+                Blocks.Add(newBlock);
+                Last = newBlock;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
         }         
     }
 }

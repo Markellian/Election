@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Хранилище ElectionsDataBaseModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="Хранилище ElectionsDataBaseModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Blocks">
           <Key>
             <PropertyRef Name="Id" />
@@ -15,6 +15,7 @@
           <Property Name="Data" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Hash" Type="nchar" MaxLength="50" Nullable="false" />
           <Property Name="PreviousHash" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="Election_id" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Elections">
           <Key>
@@ -45,8 +46,20 @@
           <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Phone" Type="nvarchar" MaxLength="50" />
           <Property Name="Birthday" Type="date" Nullable="false" />
-          <Property Name="Role" Type="int" Nullable="false" />
+          <Property Name="Role_id" Type="int" Nullable="false" />
         </EntityType>
+        <Association Name="FK_Blocks_Elections">
+          <End Role="Elections" Type="Self.Elections" Multiplicity="1" />
+          <End Role="Blocks" Type="Self.Blocks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Elections">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Blocks">
+              <PropertyRef Name="Election_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Blocks_Users">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="Blocks" Type="Self.Blocks" Multiplicity="*" />
@@ -67,7 +80,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Users">
-              <PropertyRef Name="Role" />
+              <PropertyRef Name="Role_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -76,6 +89,10 @@
           <EntitySet Name="Elections" EntityType="Self.Elections" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Blocks_Elections" Association="Self.FK_Blocks_Elections">
+            <End Role="Elections" EntitySet="Elections" />
+            <End Role="Blocks" EntitySet="Blocks" />
+          </AssociationSet>
           <AssociationSet Name="FK_Blocks_Users" Association="Self.FK_Blocks_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Blocks" EntitySet="Blocks" />
@@ -85,24 +102,11 @@
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ElectionsDataBaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityContainer Name="ElectionsDataBase" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Blocks" EntityType="ElectionsDataBaseModel.Blocks" />
-          <EntitySet Name="Elections" EntityType="ElectionsDataBaseModel.Elections" />
-          <EntitySet Name="Role" EntityType="ElectionsDataBaseModel.Role" />
-          <EntitySet Name="Users" EntityType="ElectionsDataBaseModel.Users" />
-          <AssociationSet Name="FK_Blocks_Users" Association="ElectionsDataBaseModel.FK_Blocks_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Blocks" EntitySet="Blocks" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Users_Role" Association="ElectionsDataBaseModel.FK_Users_Role">
-            <End Role="Role" EntitySet="Role" />
-            <End Role="Users" EntitySet="Users" />
-          </AssociationSet>
-        </EntityContainer>
         <EntityType Name="Blocks">
           <Key>
             <PropertyRef Name="Id" />
@@ -110,48 +114,63 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="User_id" Type="Int32" Nullable="false" />
           <Property Name="DataCreated" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Data" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Hash" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="true" />
-          <Property Name="PreviousHash" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="true" />
-          <NavigationProperty Name="Users" Relationship="ElectionsDataBaseModel.FK_Blocks_Users" FromRole="Blocks" ToRole="Users" />
+          <Property Name="Data" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Hash" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="PreviousHash" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Election_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Elections" Relationship="Self.FK_Blocks_Elections" FromRole="Blocks" ToRole="Elections" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Blocks_Users" FromRole="Blocks" ToRole="Users" />
         </EntityType>
         <EntityType Name="Elections">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="DateStart" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateEnd" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Blocks" Relationship="Self.FK_Blocks_Elections" FromRole="Elections" ToRole="Blocks" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Users" Relationship="ElectionsDataBaseModel.FK_Users_Role" FromRole="Role" ToRole="Users" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Users_Role" FromRole="Role" ToRole="Users" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Passport_series" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="true" />
-          <Property Name="Passport_id" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="true" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="First_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Passport_series" Type="String" MaxLength="4" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Passport_id" Type="String" MaxLength="6" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="First_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Last_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Birthday" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Role" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Blocks" Relationship="ElectionsDataBaseModel.FK_Blocks_Users" FromRole="Users" ToRole="Blocks" />
-          <NavigationProperty Name="Role1" Relationship="ElectionsDataBaseModel.FK_Users_Role" FromRole="Users" ToRole="Role" />
+          <Property Name="Role_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Blocks" Relationship="Self.FK_Blocks_Users" FromRole="Users" ToRole="Blocks" />
+          <NavigationProperty Name="Role" Relationship="Self.FK_Users_Role" FromRole="Users" ToRole="Role" />
         </EntityType>
+        <Association Name="FK_Blocks_Elections">
+          <End Role="Elections" Type="Self.Elections" Multiplicity="1" />
+          <End Role="Blocks" Type="Self.Blocks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Elections">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Blocks">
+              <PropertyRef Name="Election_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Blocks_Users">
-          <End Type="ElectionsDataBaseModel.Users" Role="Users" Multiplicity="1" />
-          <End Type="ElectionsDataBaseModel.Blocks" Role="Blocks" Multiplicity="*" />
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Blocks" Type="Self.Blocks" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
               <PropertyRef Name="Id" />
@@ -162,18 +181,36 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Users_Role">
-          <End Type="ElectionsDataBaseModel.Role" Role="Role" Multiplicity="1" />
-          <End Type="ElectionsDataBaseModel.Users" Role="Users" Multiplicity="*" />
+          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Role">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Users">
-              <PropertyRef Name="Role" />
+              <PropertyRef Name="Role_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        </Schema>
+        <EntityContainer Name="ElectionsDataBase" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Blocks" EntityType="Self.Blocks" />
+          <EntitySet Name="Elections" EntityType="Self.Elections" />
+          <EntitySet Name="Role" EntityType="Self.Role" />
+          <EntitySet Name="Users" EntityType="Self.Users" />
+          <AssociationSet Name="FK_Blocks_Elections" Association="Self.FK_Blocks_Elections">
+            <End Role="Elections" EntitySet="Elections" />
+            <End Role="Blocks" EntitySet="Blocks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Blocks_Users" Association="Self.FK_Blocks_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Blocks" EntitySet="Blocks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_Role" Association="Self.FK_Users_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -182,46 +219,47 @@
           <EntitySetMapping Name="Blocks">
             <EntityTypeMapping TypeName="ElectionsDataBaseModel.Blocks">
               <MappingFragment StoreEntitySet="Blocks">
-                <ScalarProperty Name="PreviousHash" ColumnName="PreviousHash" />
-                <ScalarProperty Name="Hash" ColumnName="Hash" />
-                <ScalarProperty Name="Data" ColumnName="Data" />
-                <ScalarProperty Name="DataCreated" ColumnName="DataCreated" />
-                <ScalarProperty Name="User_id" ColumnName="User_id" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="User_id" ColumnName="User_id" />
+                <ScalarProperty Name="DataCreated" ColumnName="DataCreated" />
+                <ScalarProperty Name="Data" ColumnName="Data" />
+                <ScalarProperty Name="Hash" ColumnName="Hash" />
+                <ScalarProperty Name="PreviousHash" ColumnName="PreviousHash" />
+                <ScalarProperty Name="Election_id" ColumnName="Election_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Elections">
             <EntityTypeMapping TypeName="ElectionsDataBaseModel.Elections">
               <MappingFragment StoreEntitySet="Elections">
-                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
-                <ScalarProperty Name="DateStart" ColumnName="DateStart" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Role">
             <EntityTypeMapping TypeName="ElectionsDataBaseModel.Role">
               <MappingFragment StoreEntitySet="Role">
-                <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="name" ColumnName="name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="ElectionsDataBaseModel.Users">
               <MappingFragment StoreEntitySet="Users">
-                <ScalarProperty Name="Role" ColumnName="Role" />
-                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Last_name" ColumnName="Last_name" />
-                <ScalarProperty Name="First_name" ColumnName="First_name" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Passport_id" ColumnName="Passport_id" />
-                <ScalarProperty Name="Passport_series" ColumnName="Passport_series" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Passport_series" ColumnName="Passport_series" />
+                <ScalarProperty Name="Passport_id" ColumnName="Passport_id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="First_name" ColumnName="First_name" />
+                <ScalarProperty Name="Last_name" ColumnName="Last_name" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="Role_id" ColumnName="Role_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

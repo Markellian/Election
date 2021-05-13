@@ -29,10 +29,10 @@ namespace Выборы
         public string Email { get; set; }
         public string Phone { get; set; }
         public System.DateTime Birthday { get; set; }
-        public int Role { get; set; }
+        public int Role_id { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         private ICollection<Blocks> Blocks { get; set; }
-        public virtual Role Role1 { get; set; }
+        public virtual Role Role { get; set; }
     }
 }

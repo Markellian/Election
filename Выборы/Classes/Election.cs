@@ -14,5 +14,9 @@ namespace Выборы.Classes
             DateStart = dateStart;
             DateEnd = dateEnd;
         }
+        public static Election GetElection(string name)
+        {
+            return DataBase.GetElection(name);
+        }
     }
 }

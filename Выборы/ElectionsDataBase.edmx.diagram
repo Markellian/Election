@@ -4,13 +4,14 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="e4ad4ef4782b49a99032483efe56352c" Name="Diagram1" ZoomLevel="74">
-        <EntityTypeShape EntityType="ElectionsDataBaseModel.Blocks" Width="1.5" PointX="5.25" PointY="1.5" />
-        <EntityTypeShape EntityType="ElectionsDataBaseModel.Elections" Width="1.5" PointX="0.75" PointY="5.75" />
-        <EntityTypeShape EntityType="ElectionsDataBaseModel.Role" Width="1.5" PointX="0.75" PointY="1.875" />
-        <EntityTypeShape EntityType="ElectionsDataBaseModel.Users" Width="1.5" PointX="3" PointY="1" />
-        <AssociationConnector Association="ElectionsDataBaseModel.FK_Blocks_Users" />
-        <AssociationConnector Association="ElectionsDataBaseModel.FK_Users_Role" />
+      <Diagram DiagramId="ccd0a3980ad342a48d340ca6f4a4bae5" Name="Diagram1">
+        <EntityTypeShape EntityType="ElectionsDataBaseModel.Blocks" Width="1.5" PointX="5.25" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ElectionsDataBaseModel.Elections" Width="1.5" PointX="3" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ElectionsDataBaseModel.Role" Width="1.5" PointX="0.75" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ElectionsDataBaseModel.Users" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="ElectionsDataBaseModel.FK_Blocks_Elections" ManuallyRouted="false" />
+        <AssociationConnector Association="ElectionsDataBaseModel.FK_Blocks_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="ElectionsDataBaseModel.FK_Users_Role" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

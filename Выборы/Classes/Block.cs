@@ -53,6 +53,7 @@ namespace Выборы
             text += User_id.ToString();
             text += DataCreated.ToString("O");
             text += Data.ToString();
+            text += Election_id.ToString();
             text += PreviousHash;
             return text;
         }
