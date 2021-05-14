@@ -14,9 +14,16 @@ namespace Выборы.Classes
             DateStart = dateStart;
             DateEnd = dateEnd;
         }
+        public Election(Elections elections)
+        {
+            Name = elections.Name;
+            DateStart = elections.DateStart;
+            DateEnd = elections.DateEnd;
+        }
         public static Election GetElection(string name)
         {
             return DataBase.GetElection(name);
         }
+
     }
 }

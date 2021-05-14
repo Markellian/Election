@@ -82,6 +82,7 @@
     <Compile Include="Blocks.cs">
       <DependentUpon>ElectionsDataBase.tt</DependentUpon>
     </Compile>
+    <Compile Include="Classes\Controller.cs" />
     <Compile Include="Classes\DataBase.cs" />
     <Compile Include="Classes\Election.cs" />
     <Compile Include="Elections.cs">
@@ -93,6 +94,9 @@
       <DependentUpon>ElectionsDataBase.tt</DependentUpon>
     </Compile>
     <Compile Include="Role.cs">
+      <DependentUpon>ElectionsDataBase.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysdiagrams.cs">
       <DependentUpon>ElectionsDataBase.tt</DependentUpon>
     </Compile>
     <Compile Include="Users.cs">

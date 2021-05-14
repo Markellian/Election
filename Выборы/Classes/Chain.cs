@@ -36,13 +36,9 @@ namespace Выборы.Classes
         /// <returns>true - добавление прошло успешно. false - ошибка добавления</returns>
         public bool Add(User user, Candidate candidate)
         {
-            if (user == null)
+            if (user == null || candidate == null)
             {
-                throw new ArgumentException(Properties.Language.Invalid_user);
-            }
-            if (candidate == null)
-            {
-                throw new ArgumentException(Properties.Language.Invalid_condidate);
+                return false;
             }
             Block newBlock = new Block(user, candidate, Last);
             var res = DataBase.AddBlock(newBlock);

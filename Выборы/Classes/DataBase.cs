@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,11 +26,21 @@ namespace Выборы.Classes
             return blockchain;
         }
 
-        public static bool AddBlock(Blocks block)
+        public static bool AddBlock(Block block)
         {
-            using(var db = new ElectionsDataBase())
+            using (var db = new ElectionsDataBase())
             {
-                db.Blocks.Add(block);
+                Blocks blocks = new Blocks()
+                {
+                    User_id = block.User_id,
+                    DataCreated = block.DataCreated,
+                    Data = block.Data,
+                    Hash = block.Hash,
+                    PreviousHash = block.PreviousHash,
+                    Election_id = block.Election_id
+                };
+            
+                db.Blocks.Add(blocks);
                 var res = db.SaveChanges();
                 return res==1;
             }
@@ -40,9 +51,74 @@ namespace Выборы.Classes
             Election election;
             using(var db = new ElectionsDataBase())
             {
-                election = (Election)(from e in db.Elections where e.Name == electionName select e);
+                var elec = (from e in db.Elections where e.Name == electionName select e).ToList().First();
+                election = new Election(elec);
             }
             return election;
+        }
+
+        public static bool AddElection(Election election)
+        {
+            Elections elections = new Elections(){
+                Name = election.Name,
+                DateStart = election.DateStart,
+                DateEnd = election.DateEnd
+            };
+            using (var db = new ElectionsDataBase())
+            {
+                try
+                {
+                    db.Elections.Add(elections);
+                    db.SaveChanges();
+                    return true;
+                }
+                catch (InvalidOperationException)
+                {
+                    return false;
+                }
+            }
+        }
+
+        public static User GetUser(string login, string password)
+        {
+            User user = null;
+            using(var db = new ElectionsDataBase())
+            {
+                var pas = GetHash(password);
+                var res0 = (from u in db.Users where u.Login == login && u.Password == pas  select u).ToList();
+                if (res0.Count() != 0)
+                {
+                    var res = res0.First(); 
+                    user = new User()
+                    {
+                        Id = res.Id,
+                        Passport = res.Passport,
+                        Name = res.Name,
+                        First_name = res.First_name,
+                        Last_name = res.Last_name,
+                        Email = res.Email,
+                        Phone = res.Phone,
+                        Birthday = res.Birthday,
+                        Role_id = res.Role_id,
+                        Login = login
+                    };
+                }
+            }
+            return user;
+        }
+
+        public static string GetHash(string str)
+        {
+            byte[] bytes = Encoding.Unicode.GetBytes(str);
+            byte[] result = new SHA256Managed().ComputeHash(bytes);
+
+            string hashString = string.Empty;
+            foreach (byte x in result)
+            {
+                hashString += String.Format("{0:x2}", x);
+            }
+
+            return hashString;
         }
     }
 }

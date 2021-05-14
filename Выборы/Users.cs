@@ -21,8 +21,9 @@ namespace Выборы
         }
     
         public int Id { get; set; }
-        public string Passport_series { get; set; }
-        public string Passport_id { get; set; }
+        public string Login { get; set; }
+        public string Password { get; set; }
+        public string Passport { get; set; }
         public string Name { get; set; }
         public string First_name { get; set; }
         public string Last_name { get; set; }
@@ -32,7 +33,7 @@ namespace Выборы
         public int Role_id { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        private ICollection<Blocks> Blocks { get; set; }
+        public virtual ICollection<Blocks> Blocks { get; set; }
         public virtual Role Role { get; set; }
     }
 }

@@ -22,20 +22,32 @@ namespace Выборы
     /// </summary>
     public partial class MainWindow : Window
     {
+        User user;
         public MainWindow()
         {
             InitializeComponent();
-            using (var db = new ElectionsDataBase())
-            {
-                Blocks blocks = new Blocks();
-                //db.SaveChanges();
-            }
-            
+            Controller controller = new Controller();   
         }
 
         private void UserLoginButton_Click(object sender, RoutedEventArgs e)
         {
-            //TODO: Авторизация
+            var login = AuthLoginTextBox.Text.ToString();
+            var password = AuthPasswordBox.Password.ToString();
+            if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(password))
+            {
+                MessageBox.Show("Заполните логин и пароль");
+                return;
+            }
+
+            user = Controller.AuthUser(login, password);
+            if (user == null)
+            {
+                MessageBox.Show("Неверный логин или пароль");
+                return;
+            }
+            AuthGrid.Visibility = Visibility.Hidden;
+            UserGrid.Visibility = Visibility.Visible;
+
         }
         private void UserRegisterButton_Click(object sender, RoutedEventArgs e)
         {

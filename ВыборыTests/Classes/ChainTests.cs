@@ -14,47 +14,20 @@ namespace Выборы.Classes.Tests
         [TestMethod()]
         public void ChainConstructorTest()
         {
-            Chain chain = new Chain(new Election("Выборы на пост главного дворника", DateTime.Parse("10.10.2019 20:00:00"), DateTime.Parse("10.12.2019 20:00:00")));
+            Chain chain = new Chain(Election.GetElection("Любимый цвет"));            
             Assert.IsNotNull(chain);
         }
         [TestMethod()]
         public void ChainAddTest()
         {
+            
             Chain chain = new Chain(new Election("Выборы на пост главного дворника", DateTime.Parse("10.10.2019 20:00:00"), DateTime.Parse("10.12.2019 20:00:00")));
-            try
-            {
-                chain.Add(null, new Candidate());
-                Assert.Fail();
-            } catch (ArgumentException ex)
-            {
-                Assert.AreEqual(Properties.Language.Invalid_user, ex.Message);
-            } catch (Exception)
-            {
-                Assert.Fail();
-            }
+            
+            Assert.IsFalse(chain.Add(null, new Candidate()));
 
-            try
-            {
-                chain.Add(new User(), null);
-                Assert.Fail();
-            }
-            catch (ArgumentException ex)
-            {
-                Assert.AreEqual(Properties.Language.Invalid_condidate, ex.Message);
-            }
-            catch (Exception)
-            {
-                Assert.Fail();
-            }
-
-            try
-            {
-                chain.Add(new User(), new Candidate());
-            }
-            catch (Exception)
-            {
-                Assert.Fail();
-            }
+            Assert.IsFalse(chain.Add(new User(), null));
+            
+            //Assert.IsTrue(chain.Add(new User(), new Candidate()));
         }
     }
 }
