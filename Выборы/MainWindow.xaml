@@ -13,7 +13,7 @@
         <sys:Double x:Key="FontSizeSimplyText">20</sys:Double>
     </Window.Resources>
     <Grid>
-        <Grid x:Name="AuthGrid" Visibility="Visible">
+        <Grid x:Name="AuthGrid" Visibility="Hidden">
             <Grid.RowDefinitions>
                 <RowDefinition Height="150*"/>
                 <RowDefinition Height="142*"/>
@@ -39,8 +39,38 @@
 
         </Grid>
         <Grid x:Name="UserGrid" Visibility="Hidden">
-            
+
         </Grid>
-        
+
+        <Grid x:Name="RegistrationGrid" Visibility="Hidden">
+
+        </Grid>
+
+        <Grid x:Name="MainGrid" Visibility="Visible" IsVisibleChanged="MainGrid_IsVisibleChanged">
+            <Button x:Name="UserEnterMainMenuButton" Content="Войти" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Height="35" Width="75" Click="UserEnterMainMenuButton_Click"/>
+            <Button x:Name="UserExitMainMenuButton" Visibility="Hidden" Background="Red" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" Margin="0,10,9.6,0" VerticalAlignment="Top" Height="35" Width="35" Click="UserExitMainMenuButton_Click">
+                <Image Source="Resources/OnOff.png"/>
+                <Button.ToolTip>
+                    <ToolTip>Выйти из профиля</ToolTip>
+                </Button.ToolTip>
+            </Button>
+
+            <Menu x:Name="MenuNavigationPanel" Height="35" Margin="10,10,95,0" VerticalAlignment="Top" VerticalContentAlignment="Center">
+                <MenuItem Header="Главная" FontSize="{StaticResource FontSizeSimplyText}" Height="35"/>
+                <MenuItem x:Name="MenuMyProfileButton" Header="Мой профиль" Visibility="Visible" FontSize="{StaticResource FontSizeSimplyText}">
+                    <MenuItem x:Name="MenuNavigationPanelCreateElection" Header="Создать голосование" Visibility="Hidden" Click="MenuNavigationPanelCreateElection_Click"/>
+                </MenuItem>
+            </Menu>
+            <ScrollViewer Margin="10,50,10,10">
+                <StackPanel>
+
+                </StackPanel>
+            </ScrollViewer>
+
+        </Grid>
+        <Grid x:Name="CreateElectionGrid" Visibility="Hidden">
+            <Label Content="Create Election"></Label>
+        </Grid>
+
     </Grid>
 </Window>

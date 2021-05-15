@@ -59,6 +59,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Xml" />
@@ -199,6 +200,7 @@
       <DependentUpon>ElectionsDataBase.edmx</DependentUpon>
       <LastGenOutput>ElectionsDataBase.cs</LastGenOutput>
     </Content>
+    <Resource Include="Resources\OnOff.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
