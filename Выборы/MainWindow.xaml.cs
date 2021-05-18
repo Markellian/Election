@@ -16,7 +16,7 @@ using Выборы.Classes;
 
 
 namespace Выборы
-{
+{    
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
@@ -29,7 +29,7 @@ namespace Выборы
             Controller controller = new Controller();
 
         }
-
+        
         /// <summary>
         /// Авторизация пользователя на странице авторизации
         /// </summary>
@@ -60,10 +60,9 @@ namespace Выборы
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void UserRegisterButton_Click(object sender, RoutedEventArgs e)
+        private void FromAuthToRegistration_Click(object sender, RoutedEventArgs e)
         {
-            AuthGrid.Visibility = Visibility.Hidden;
-            RegistrationGrid.Visibility = Visibility.Visible;
+            ChangeGridVisibility(RegistrationGrid, AuthGrid);
         }
 
         private void UserExitMainMenuButton_Click(object sender, RoutedEventArgs e)
@@ -72,10 +71,9 @@ namespace Выборы
             MainGrid_IsVisibleChanged(MainGrid, new DependencyPropertyChangedEventArgs());
         }
 
-        private void UserEnterMainMenuButton_Click(object sender, RoutedEventArgs e)
+        private void FromMainToAuth_Click(object sender, RoutedEventArgs e)
         {
-            MainGrid.Visibility = Visibility.Hidden;
-            AuthGrid.Visibility = Visibility.Visible;
+            ChangeGridVisibility(AuthGrid, MainGrid);
         }
 
         private void MainGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -90,10 +88,11 @@ namespace Выборы
                     UserExitMainMenuButton.Visibility = Visibility.Hidden;
 
                     MenuNavigationPanel.Margin = new Thickness(10, 10, UserEnterMainMenuButton.Width + UserEnterMainMenuButton.Margin.Right + 10, 0);
-
+                    
                 }
                 else
                 {
+                    
                     MenuMyProfileButton.Visibility = Visibility.Visible;
                     UserEnterMainMenuButton.Visibility = Visibility.Hidden;
                     UserExitMainMenuButton.Visibility = Visibility.Visible;
@@ -104,14 +103,62 @@ namespace Выборы
                     {
                         MenuNavigationPanelCreateElection.Visibility = Visibility.Visible;
                     }
+                    
                 }
             }
         }
 
         private void MenuNavigationPanelCreateElection_Click(object sender, RoutedEventArgs e)
         {
-            MainGrid.Visibility = Visibility.Hidden;
+            NewsGrid.Visibility = Visibility.Hidden;
             CreateElectionGrid.Visibility = Visibility.Visible;
+        }
+        private void ChangeGridVisibility(Grid makeVisible, Grid makeHidden)
+        {
+            makeVisible.Visibility = Visibility.Visible;
+            makeHidden.Visibility = Visibility.Hidden;
+        }
+
+        private void CreateElectionGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            DateStartElectionDataPicker.DisplayDateStart = DateTime.Now;
+            DateEndElectionDataPicker.DisplayDateStart = DateTime.Now;
+        }
+
+        private void DateStartElectionDataPicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {            
+            DateEndElectionDataPicker.DisplayDateStart = ((DatePicker)sender).SelectedDate;
+            if (DateStartElectionDataPicker.SelectedDate > DateEndElectionDataPicker.SelectedDate)
+            {
+                DateEndElectionDataPicker.SelectedDate = DateStartElectionDataPicker.SelectedDate;
+            }
+        }
+
+        private void AddElectionButton_Click(object sender, RoutedEventArgs e)
+        {
+            string name = ElectionNameTextBox.Text;
+            DateTime? start = DateStartElectionDataPicker.SelectedDate;
+            DateTime? end = DateEndElectionDataPicker.SelectedDate;
+            if (string.IsNullOrEmpty(name))
+            {
+                MessageBox.Show("Введите название голосования");
+                return;
+            }
+            if (start == null)
+            {
+                MessageBox.Show("Введите дату начала голосования");
+                return;
+            }
+            if (end == null)
+            {
+                MessageBox.Show("Введите дату окончания голосования");
+                return;
+            }
+
+            if (!Controller.AddElection(name, (DateTime)start, (DateTime)end))
+            {
+                MessageBox.Show("Не удалось сохранить голосование");
+            }
         }
     }
 }

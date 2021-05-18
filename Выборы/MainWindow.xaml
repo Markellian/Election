@@ -35,19 +35,42 @@
             <Label FontSize="{StaticResource FontSizeSimplyText}" Content="Пароль " HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.Column="1" Grid.Row="3"/>
             <PasswordBox x:Name="AuthPasswordBox" VerticalContentAlignment="Center" FontSize="{StaticResource FontSizeSimplyText}" Grid.Column="2" Grid.Row="3" Height="35" Grid.ColumnSpan="2"/>
             <Button FontSize="{StaticResource FontSizeSimplyText}" Content="Войти" Grid.Column="3"  Margin="0,15,10,0" Grid.Row="4" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="UserLoginButton_Click"/>
-            <Button FontSize="{StaticResource FontSizeSimplyText}" Grid.ColumnSpan="2" Content="Регистрация" Grid.Column="1" Margin="35,15,10,0" Grid.Row="4"  VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="UserRegisterButton_Click"/>
+            <Button FontSize="{StaticResource FontSizeSimplyText}" Grid.ColumnSpan="2" Content="Регистрация" Grid.Column="1" Margin="35,15,10,0" Grid.Row="4"  VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="FromAuthToRegistration_Click"/>
 
         </Grid>
         <Grid x:Name="UserGrid" Visibility="Hidden">
 
         </Grid>
 
-        <Grid x:Name="RegistrationGrid" Visibility="Hidden">
+        <Grid x:Name="RegistrationGrid" Visibility="Visible">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="353*"/>
+                <ColumnDefinition Width="409*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="87*"/>
+                <RowDefinition Height="419*"/>
+            </Grid.RowDefinitions>
+            <Label Content="Регистрация" FontSize="{StaticResource FontSizeHead}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="290,0,290.6,0" Grid.ColumnSpan="2"/>
+            <Label Content="Логин:" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" Margin="0,10,10,0" Grid.Row="1" VerticalAlignment="Top" Height="35"/>
+            <TextBox x:Name="RegistrationLoginTextBox" Grid.Column="1" HorizontalAlignment="Left" Margin="0,10,0,0" FontSize="{StaticResource FontSizeSimplyText}" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300" MaxLength="50" Height="35" VerticalContentAlignment="Center"/>
+            <Label Content="Пароль:" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" Margin="0,55,10,0" Grid.Row="1" VerticalAlignment="Top" Height="35"/>
+            <PasswordBox x:Name="RegistrationPasswordPasswordBox" Grid.Column="1" HorizontalAlignment="Left" Margin="0,55,0,0" FontSize="{StaticResource FontSizeSimplyText}" Grid.Row="1" VerticalAlignment="Top" Width="300" MaxLength="50" Height="35" VerticalContentAlignment="Center"/>
+            <Label Content="Повторите пароль:" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" Margin="0,100,10,0" Grid.Row="1" VerticalAlignment="Top" Height="35"/>
+            <PasswordBox x:Name="RegistrationPasswordDoublePasswordBox" Grid.Column="1" HorizontalAlignment="Left" Margin="0,100,0,0" FontSize="{StaticResource FontSizeSimplyText}" Grid.Row="1" VerticalAlignment="Top" Width="300" MaxLength="50" Height="35" VerticalContentAlignment="Center"/>
+            <Label Content="Серия паспорта:" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" Margin="0,145,60,0" Grid.Row="1" VerticalAlignment="Top" Height="35" RenderTransformOrigin="0.186,0.454"/>
+            <TextBox x:Name="RegistrationSeriesPassportTextBox" Grid.Column="0" HorizontalAlignment="Right" Margin="0,145,0,0" FontSize="{StaticResource FontSizeSimplyText}" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="55" MaxLength="4" Height="35" VerticalContentAlignment="Center"/>
+
+            <Label Content="Номер паспорта:" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Left" Margin="10,145,0,0" Grid.Row="1" VerticalAlignment="Top" Height="35" Grid.Column="1"/>
+            <TextBox x:Name="RegistrationNumberPassportTextBox" Grid.Column="1" HorizontalAlignment="Left" Margin="180.2,144.8,0,0" FontSize="{StaticResource FontSizeSimplyText}" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" MaxLength="6" Height="35" VerticalContentAlignment="Center"/>
+
+
 
         </Grid>
 
-        <Grid x:Name="MainGrid" Visibility="Visible" IsVisibleChanged="MainGrid_IsVisibleChanged">
-            <Button x:Name="UserEnterMainMenuButton" Content="Войти" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Height="35" Width="75" Click="UserEnterMainMenuButton_Click"/>
+        <Grid x:Name="MainGrid" Visibility="Hidden" IsVisibleChanged="MainGrid_IsVisibleChanged">
+
+            <Button x:Name="UserEnterMainMenuButton" Content="Войти" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Height="35" Width="75" Click="FromMainToAuth_Click"/>
             <Button x:Name="UserExitMainMenuButton" Visibility="Hidden" Background="Red" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" Margin="0,10,9.6,0" VerticalAlignment="Top" Height="35" Width="35" Click="UserExitMainMenuButton_Click">
                 <Image Source="Resources/OnOff.png"/>
                 <Button.ToolTip>
@@ -61,16 +84,38 @@
                     <MenuItem x:Name="MenuNavigationPanelCreateElection" Header="Создать голосование" Visibility="Hidden" Click="MenuNavigationPanelCreateElection_Click"/>
                 </MenuItem>
             </Menu>
+
+
             <ScrollViewer Margin="10,50,10,10">
                 <StackPanel>
+                    <Grid x:Name="NewsGrid" Visibility="Hidden">
 
+                    </Grid>
+                    <Grid x:Name="CreateElectionGrid" Visibility="Visible" Height="446" IsVisibleChanged="CreateElectionGrid_IsVisibleChanged">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="349*"/>
+                            <ColumnDefinition Width="376*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="28*"/>
+                            <RowDefinition Height="195*"/>
+                        </Grid.RowDefinitions>
+                        <Label FontSize="{StaticResource FontSizeHead}" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Top" Content="Создание голосования" Height="50" Margin="200,0,199.8,0" Width="325"/>
+                        <Label FontSize="{StaticResource FontSizeSimplyText}" Margin="0,10,10.8,0" Height="35" VerticalAlignment="Top" Content="Название голосования:" HorizontalAlignment="Right"  Grid.Row="1" Width="224"/>
+                        <TextBox x:Name="ElectionNameTextBox" Margin="9.2,10,0,0" Grid.Column="1" Grid.Row="1" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Left" Height="35" VerticalAlignment="Top" Width="300"/>
+                        <Label FontSize="{StaticResource FontSizeSimplyText}" Margin="0,55,10.8,0" Height="35" VerticalAlignment="Top" Content="Начало голосования:" HorizontalAlignment="Right"  Grid.Row="1" Width="204"/>
+                        <DatePicker Name="DateStartElectionDataPicker" Grid.Column="1" HorizontalAlignment="Left" Margin="9.2,55,0,0" FontSize="{StaticResource FontSizeSimplyText}" Grid.Row="1" VerticalAlignment="Top" Height="35" Width="200" SelectedDateChanged="DateStartElectionDataPicker_SelectedDateChanged"/>
+                        <Label FontSize="{StaticResource FontSizeSimplyText}" Margin="0,100,10.8,0" Height="35" VerticalAlignment="Top" Content="Конец голосования:" HorizontalAlignment="Right"  Grid.Row="1" Width="193"/>
+                        <DatePicker Name="DateEndElectionDataPicker" Grid.Column="1" HorizontalAlignment="Left" Margin="9.2,100,0,0" FontSize="{StaticResource FontSizeSimplyText}" Grid.Row="1" VerticalAlignment="Top" Height="35" Width="200"/>
+                        <Button x:Name="AddElectionButton" Content="Добавить голосование" FontSize="{StaticResource FontSizeSimplyText}" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Height="35" Width="300" Margin="0,150,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Click="AddElectionButton_Click"/>
+                    </Grid>
                 </StackPanel>
             </ScrollViewer>
 
+
         </Grid>
-        <Grid x:Name="CreateElectionGrid" Visibility="Hidden">
-            <Label Content="Create Election"></Label>
-        </Grid>
+
+
 
     </Grid>
 </Window>

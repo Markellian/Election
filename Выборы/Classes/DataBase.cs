@@ -57,13 +57,15 @@ namespace Выборы.Classes
             return election;
         }
 
-        public static bool AddElection(Election election)
+        public static bool AddElection(string name, DateTime start, DateTime end)//Election election)
         {
+            
             Elections elections = new Elections(){
-                Name = election.Name,
-                DateStart = election.DateStart,
-                DateEnd = election.DateEnd
+                Name = name,// election.Name,
+                DateStart = start,// election.DateStart,
+                DateEnd = end,// election.DateEnd
             };
+
             using (var db = new ElectionsDataBase())
             {
                 try

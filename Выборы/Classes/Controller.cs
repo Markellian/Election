@@ -12,5 +12,10 @@ namespace Выборы.Classes
         {
             return DataBase.GetUser(login, password);
         }
+
+        public static bool AddElection(string name, DateTime start, DateTime end)
+        {
+            return DataBase.AddElection(name, start, end);
+        }
     }
 }
