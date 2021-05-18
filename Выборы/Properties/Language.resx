@@ -123,4 +123,7 @@
   <data name="Invalid_user" xml:space="preserve">
     <value>Invalid user</value>
   </data>
+  <data name="RegistrationLabelHelperMessage" xml:space="preserve">
+    <value>Login must be unique and at least 6 characters</value>
+  </data>
 </root>

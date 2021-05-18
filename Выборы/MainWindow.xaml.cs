@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -159,6 +160,126 @@ namespace Выборы
             {
                 MessageBox.Show("Не удалось сохранить голосование");
             }
+        }
+
+        private void RegistrateButton_Click(object sender, RoutedEventArgs e)
+        {
+            string login = RegistrationLoginTextBox.Text;
+            string wrongLoginMessage = Controller.IsLoginValidate(login);
+            if (wrongLoginMessage != "")
+            {
+                MessageBox.Show(wrongLoginMessage);
+                return;
+            }
+            string password = RegistrationPasswordPasswordBox.Password;
+            string wrongPasswordMessage = Controller.IsPasswordValidate(password);
+            if (wrongPasswordMessage != "")
+            {
+                MessageBox.Show(wrongPasswordMessage);
+                return;
+            }
+            
+            string password2 = RegistrationPasswordDoublePasswordBox.Password;
+            if (string.IsNullOrEmpty(password2))
+            {
+                MessageBox.Show("Введите повторный пароль");
+                return;
+            }
+            if (password != password2)
+            {
+                MessageBox.Show("Пароли не совпадают");
+                return;
+            }
+
+            string passportSeries = RegistrationSeriesPassportTextBox.Text;
+            string passportNumber = RegistrationNumberPassportTextBox.Text;
+            string wrongPassportMessage = Controller.IsPassportValidate(passportSeries, passportNumber);
+            if (wrongPassportMessage != "")
+            {
+                MessageBox.Show(wrongPassportMessage);
+                return;
+            }
+
+            string firstName = RegistrationFirstNameTextBox.Text;
+            if (string.IsNullOrEmpty(firstName))
+            {
+                MessageBox.Show("Введите фамилию");
+                return;
+            }
+            string name = RegistrationNameTextBox.Text;
+            if (string.IsNullOrEmpty(name))
+            {
+                MessageBox.Show("Введите имя");
+                return;
+            }
+            string lastName = RegistrationLastNameTextBox.Text;
+            
+            string email = RegistrationEmailTextBox.Text;
+            string wrongEmailMessage = Controller.IsEmailValidate(email);
+            if (wrongEmailMessage != "")
+            {
+                MessageBox.Show(wrongEmailMessage);
+                return;
+            }
+
+            string phone = RegistrationPhoneTextBox.Text;
+            string wrongPhoneMessage = Controller.IsPhoneValidate(phone);
+            if (wrongEmailMessage != "")
+            {
+                MessageBox.Show(wrongPhoneMessage);
+                return;
+            }
+
+            DateTime? bith = RegistrationBirthdayDatePicker.SelectedDate;
+            if (bith == null)
+            {
+                MessageBox.Show("Укажите дату рождения");
+                return;
+            }
+
+            //если сюда дошло, то все данные заполнены верно
+            var result = Controller.AddUser(login, password, passportSeries, passportNumber, firstName, name, lastName, email, phone, (DateTime)bith);
+            if (result is string)
+            {
+                MessageBox.Show(result);
+            }
+            else if (result is User)
+            {
+                MessageBox.Show("Регистрация прошла успешно");
+                RegistrationGrid.Visibility = Visibility.Hidden;
+                MainGrid.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void RegistrationLoginTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string message = Controller.IsLoginValidate(RegistrationLoginTextBox.Text);
+            if(message != "")
+            {
+                RegistrationLoginTextBox.BorderBrush = Brushes.Red;
+                RegistrationLoginHelperLabel.ToolTip = Properties.Language.RegistrationLabelHelperMessage + ". " + message;
+                RegistrationLoginHelperLabel.Background = Brushes.LightPink;
+            }
+            else
+            {
+                RegistrationLoginTextBox.BorderBrush = Brushes.Green;
+                RegistrationLoginHelperLabel.ToolTip = Properties.Language.RegistrationLabelHelperMessage;
+                RegistrationLoginHelperLabel.Background = null;
+            }
+        }
+
+        private void RegistrationPassportData_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string message = Controller.IsPassportValidate(RegistrationSeriesPassportTextBox.Text, RegistrationNumberPassportTextBox.Text);
+            if (message != "")
+            {
+
+            }
+        }
+
+        private void RegistrationGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+
         }
     }
 }

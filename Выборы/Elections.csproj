@@ -200,6 +200,7 @@
       <DependentUpon>ElectionsDataBase.edmx</DependentUpon>
       <LastGenOutput>ElectionsDataBase.cs</LastGenOutput>
     </Content>
+    <Resource Include="Resources\HelperItem.png" />
     <Resource Include="Resources\OnOff.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

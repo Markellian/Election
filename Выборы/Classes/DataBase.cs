@@ -109,6 +109,63 @@ namespace Выборы.Classes
             return user;
         }
 
+        public static bool IfExistsUserByLogin(string login)
+        {
+            using (var db = new ElectionsDataBase())
+            {
+                return db.Users.Where(l => l.Login == login).FirstOrDefault() == null ? false : true;
+            }
+        }
+        public static dynamic AddUser(string login, string password, string passport, string firstName,
+                                    string name, string lastName, string email, string phone, DateTime bith)
+        {
+            Users users = new Users()
+            {
+                Login = login, 
+                Password = GetHash(password),
+                Passport = passport,
+                Name = name,
+                First_name = firstName,
+                Last_name = lastName == "" ? null : lastName,
+                Email = email,
+                Phone = phone == "" ? null: phone,
+                Birthday = bith.ToUniversalTime(),
+                Role_id = 2
+
+            };
+
+            using (var db = new ElectionsDataBase())
+            {
+                db.Users.Add(users);
+                try
+                {
+
+
+                    if (db.SaveChanges() == 1)
+                    {
+                        return new User()
+                        {
+                            Login = login,
+                            Password = password,
+                            Passport = passport,
+                            Name = name,
+                            First_name = firstName,
+                            Last_name = lastName,
+                            Email = email,
+                            Phone = phone,
+                            Birthday = bith.ToUniversalTime(),
+                            Role_id = 2
+                        };
+                    }
+                    else return null;
+                }
+                catch (System.Data.Entity.Infrastructure.DbUpdateException e)
+                {
+                    return e.Message;
+                }
+            }
+        }
+
         public static string GetHash(string str)
         {
             byte[] bytes = Encoding.Unicode.GetBytes(str);

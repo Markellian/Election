@@ -77,5 +77,14 @@ namespace Выборы.Properties {
                 return ResourceManager.GetString("Invalid_user", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Login must be unique and at least 6 characters.
+        /// </summary>
+        public static string RegistrationLabelHelperMessage {
+            get {
+                return ResourceManager.GetString("RegistrationLabelHelperMessage", resourceCulture);
+            }
+        }
     }
 }

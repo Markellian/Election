@@ -120,4 +120,7 @@
   <data name="Invalid_user" xml:space="preserve">
     <value>Неверный пользоваетль</value>
   </data>
+  <data name="RegistrationLabelHelperMessage" xml:space="preserve">
+    <value>Логин должен быть уникальным и не короче 6 символов</value>
+  </data>
 </root>
