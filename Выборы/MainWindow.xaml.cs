@@ -87,16 +87,16 @@ namespace Выборы
 
                 if (user == null)
                 {
-                    MenuMyProfileButton.Visibility = Visibility.Hidden;
+                    MenuMyProfileButton.Visibility = Visibility.Collapsed;
                     UserEnterMainMenuButton.Visibility = Visibility.Visible;
                     UserExitMainMenuButton.Visibility = Visibility.Hidden;
+                    MenuNavigationPanelCreateElection.Visibility = Visibility.Collapsed;
+                    MenuNavigationPanelAdministration.Visibility = Visibility.Collapsed;
 
                     MenuNavigationPanel.Margin = new Thickness(10, 10, UserEnterMainMenuButton.Width + UserEnterMainMenuButton.Margin.Right + 10, 0);
-                    
                 }
                 else
-                {
-                    
+                {                    
                     MenuMyProfileButton.Visibility = Visibility.Visible;
                     UserEnterMainMenuButton.Visibility = Visibility.Hidden;
                     UserExitMainMenuButton.Visibility = Visibility.Visible;
@@ -106,6 +106,12 @@ namespace Выборы
                     if (user.Role_id == 1)
                     {
                         MenuNavigationPanelCreateElection.Visibility = Visibility.Visible;
+                        MenuNavigationPanelAdministration.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        MenuNavigationPanelCreateElection.Visibility = Visibility.Collapsed;
+                        MenuNavigationPanelAdministration.Visibility = Visibility.Collapsed;
                     }
                     
                 }
@@ -158,10 +164,11 @@ namespace Выборы
                 MessageBox.Show("Введите дату окончания голосования");
                 return;
             }
-
-            if (!Controller.AddElection(name, (DateTime)start, (DateTime)end))
+            string message = Controller.AddElection(name, (DateTime)start, (DateTime)end);
+            MessageBox.Show(message);
+            if (message == Properties.Language.ElectionСreated)
             {
-                MessageBox.Show("Не удалось сохранить голосование");
+                ChangeGridVisibility(NewsGrid, CreateElectionGrid);
             }
         }
 
@@ -355,6 +362,17 @@ namespace Выборы
                 ChangeGridVisibility(last, now);
                 LastGrid.Remove(last);
             }
+        }
+
+        private void MenuNavigationPanelUsers_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void UsersGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            UsersDataGrid.ItemsSource = Controller.GetAllUsers();
+            RolesComboBox.ItemsSource = Controller.GetRolesNames(); 
         }
     }
 }

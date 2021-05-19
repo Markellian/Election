@@ -7,12 +7,12 @@
       <Diagram DiagramId="ccd0a3980ad342a48d340ca6f4a4bae5" Name="Diagram1">
         <EntityTypeShape EntityType="ElectionsDataBaseModel.Blocks" Width="1.5" PointX="5.25" PointY="1.375" />
         <EntityTypeShape EntityType="ElectionsDataBaseModel.Elections" Width="1.5" PointX="3" PointY="5.75" />
-        <EntityTypeShape EntityType="ElectionsDataBaseModel.Role" Width="1.5" PointX="0.75" PointY="2" />
         <EntityTypeShape EntityType="ElectionsDataBaseModel.sysdiagrams" Width="1.5" PointX="5.75" PointY="5.75" />
         <EntityTypeShape EntityType="ElectionsDataBaseModel.Users" Width="1.5" PointX="3" PointY="1" />
         <AssociationConnector Association="ElectionsDataBaseModel.FK_Blocks_Elections" />
         <AssociationConnector Association="ElectionsDataBaseModel.FK_Blocks_Users" />
-        <AssociationConnector Association="ElectionsDataBaseModel.FK_Users_Role" />
+        <EntityTypeShape EntityType="ElectionsDataBaseModel.Roles" Width="1.5" PointX="0.75" PointY="6" />
+        <AssociationConnector Association="ElectionsDataBaseModel.FK_Users_Role1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

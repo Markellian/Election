@@ -120,11 +120,20 @@
   <data name="Back" xml:space="preserve">
     <value>Back</value>
   </data>
+  <data name="ElectionWithThisNameIsExists" xml:space="preserve">
+    <value>An election with the same name already exists</value>
+  </data>
+  <data name="ElectionСreated" xml:space="preserve">
+    <value>Election successfully created</value>
+  </data>
   <data name="EnterLogin" xml:space="preserve">
     <value>Enter login</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Exit</value>
+  </data>
+  <data name="FailedToCreateElection" xml:space="preserve">
+    <value>Failed to create election</value>
   </data>
   <data name="FieldIsRequired" xml:space="preserve">
     <value>This field is required</value>

@@ -70,6 +70,24 @@ namespace Выборы.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на An election with the same name already exists.
+        /// </summary>
+        public static string ElectionWithThisNameIsExists {
+            get {
+                return ResourceManager.GetString("ElectionWithThisNameIsExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Election successfully created.
+        /// </summary>
+        public static string ElectionСreated {
+            get {
+                return ResourceManager.GetString("ElectionСreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Enter login.
         /// </summary>
         public static string EnterLogin {
@@ -84,6 +102,15 @@ namespace Выборы.Properties {
         public static string Exit {
             get {
                 return ResourceManager.GetString("Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Failed to create election.
+        /// </summary>
+        public static string FailedToCreateElection {
+            get {
+                return ResourceManager.GetString("FailedToCreateElection", resourceCulture);
             }
         }
         

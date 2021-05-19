@@ -26,12 +26,12 @@
           <Property Name="DateStart" Type="datetime" Nullable="false" />
           <Property Name="DateEnd" Type="datetime" Nullable="false" />
         </EntityType>
-        <EntityType Name="Role">
+        <EntityType Name="Roles">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -84,10 +84,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Users_Role">
-          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
           <End Role="Users" Type="Self.Users" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Role">
+            <Principal Role="Roles">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Users">
@@ -98,7 +98,7 @@
         <EntityContainer Name="Хранилище ElectionsDataBaseModelContainer">
           <EntitySet Name="Blocks" EntityType="Self.Blocks" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Elections" EntityType="Self.Elections" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Blocks_Elections" Association="Self.FK_Blocks_Elections">
@@ -110,7 +110,7 @@
             <End Role="Blocks" EntitySet="Blocks" />
           </AssociationSet>
           <AssociationSet Name="FK_Users_Role" Association="Self.FK_Users_Role">
-            <End Role="Role" EntitySet="Role" />
+            <End Role="Roles" EntitySet="Roles" />
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
@@ -121,7 +121,6 @@
         <EntityContainer Name="ElectionsDataBase" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Blocks" EntityType="ElectionsDataBaseModel.Blocks" />
           <EntitySet Name="Elections" EntityType="ElectionsDataBaseModel.Elections" />
-          <EntitySet Name="Role" EntityType="ElectionsDataBaseModel.Role" />
           <EntitySet Name="sysdiagrams" EntityType="ElectionsDataBaseModel.sysdiagrams" />
           <EntitySet Name="Users" EntityType="ElectionsDataBaseModel.Users" />
           <AssociationSet Name="FK_Blocks_Elections" Association="ElectionsDataBaseModel.FK_Blocks_Elections">
@@ -132,8 +131,9 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="Blocks" EntitySet="Blocks" />
           </AssociationSet>
-          <AssociationSet Name="FK_Users_Role" Association="ElectionsDataBaseModel.FK_Users_Role">
-            <End Role="Role" EntitySet="Role" />
+          <EntitySet Name="Roles" EntityType="ElectionsDataBaseModel.Roles" />
+          <AssociationSet Name="FK_Users_Role1" Association="ElectionsDataBaseModel.FK_Users_Role1">
+            <End Role="Roles" EntitySet="Roles" />
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
@@ -161,14 +161,6 @@
           <Property Name="DateEnd" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Blocks" Relationship="ElectionsDataBaseModel.FK_Blocks_Elections" FromRole="Elections" ToRole="Blocks" />
         </EntityType>
-        <EntityType Name="Role">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Users" Relationship="ElectionsDataBaseModel.FK_Users_Role" FromRole="Role" ToRole="Users" />
-        </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -195,7 +187,7 @@
           <Property Name="Birthday" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Role_id" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Blocks" Relationship="ElectionsDataBaseModel.FK_Blocks_Users" FromRole="Users" ToRole="Blocks" />
-          <NavigationProperty Name="Role" Relationship="ElectionsDataBaseModel.FK_Users_Role" FromRole="Users" ToRole="Role" />
+          <NavigationProperty Name="Roles" Relationship="ElectionsDataBaseModel.FK_Users_Role1" FromRole="Users" ToRole="Roles" />
         </EntityType>
         <Association Name="FK_Blocks_Elections">
           <End Type="ElectionsDataBaseModel.Elections" Role="Elections" Multiplicity="1" />
@@ -221,11 +213,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Users_Role">
-          <End Type="ElectionsDataBaseModel.Role" Role="Role" Multiplicity="1" />
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Users" Relationship="ElectionsDataBaseModel.FK_Users_Role1" FromRole="Roles" ToRole="Users" />
+        </EntityType>
+        <Association Name="FK_Users_Role1">
+          <End Type="ElectionsDataBaseModel.Roles" Role="Roles" Multiplicity="1" />
           <End Type="ElectionsDataBaseModel.Users" Role="Users" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Role">
+            <Principal Role="Roles">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Users">
@@ -262,14 +262,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Role">
-            <EntityTypeMapping TypeName="ElectionsDataBaseModel.Role">
-              <MappingFragment StoreEntitySet="Role">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="sysdiagrams">
             <EntityTypeMapping TypeName="ElectionsDataBaseModel.sysdiagrams">
               <MappingFragment StoreEntitySet="sysdiagrams">
@@ -294,6 +286,14 @@
                 <ScalarProperty Name="Passport" ColumnName="Passport" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="ElectionsDataBaseModel.Roles">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

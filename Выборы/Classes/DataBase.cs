@@ -172,6 +172,43 @@ namespace Выборы.Classes
             }
         }
 
+        public static List<User> GetAllUsers()
+        {
+            List<User> list = new List<User>();
+            using (var db = new ElectionsDataBase())
+            {
+                foreach (var users in db.Users)
+                {
+                    User user = new User()
+                    {
+                        Login = users.Login,
+                        Passport = users.Passport.Insert(4, " "),
+                        Name = users.Name,
+                        First_name = users.First_name,
+                        Last_name = users.Last_name,
+                        Email = users.Email,
+                        Phone = users.Phone,
+                        Birthday = users.Birthday,
+                        Roles = users.Roles
+                    };
+                    list.Add(user);
+                }
+            }
+            return list;
+        }
+
+        public static List<Roles> GetAllRoles()
+        {
+            List<Roles> list = new List<Roles>();
+            using (var db = new ElectionsDataBase())
+            {
+                foreach (var role in db.Roles)
+                {
+                    list.Add(role);
+                }
+                return list;
+            }
+        }
         public static string GetHash(string str)
         {
             byte[] bytes = Encoding.Unicode.GetBytes(str);

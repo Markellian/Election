@@ -120,11 +120,20 @@
   <data name="Back" xml:space="preserve">
     <value>Назад</value>
   </data>
+  <data name="ElectionWithThisNameIsExists" xml:space="preserve">
+    <value>Выборы с таким названием уже существует</value>
+  </data>
+  <data name="ElectionСreated" xml:space="preserve">
+    <value>Выборы успешно созданы</value>
+  </data>
   <data name="EnterLogin" xml:space="preserve">
     <value>Введите логин</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Выход</value>
+  </data>
+  <data name="FailedToCreateElection" xml:space="preserve">
+    <value>Не удалось создать выборы</value>
   </data>
   <data name="FieldIsRequired" xml:space="preserve">
     <value>Поле обязательно к заполнению</value>

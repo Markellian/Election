@@ -34,6 +34,6 @@ namespace Выборы
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Blocks> Blocks { get; set; }
-        public virtual Role Role { get; set; }
+        public virtual Roles Roles { get; set; }
     }
 }

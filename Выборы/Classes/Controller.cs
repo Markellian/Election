@@ -14,9 +14,21 @@ namespace Выборы.Classes
             return DataBase.GetUser(login, password);
         }
 
-        public static bool AddElection(string name, DateTime start, DateTime end)
+        public static string AddElection(string name, DateTime start, DateTime end)
         {
-            return DataBase.AddElection(name, start, end);
+            if (DataBase.GetElection(name) != null)
+            {
+                return Properties.Language.ElectionWithThisNameIsExists;
+            }
+            var election = DataBase.AddElection(name, start, end);
+            if (election)
+            {
+                return Properties.Language.FailedToCreateElection;
+            }
+            else
+            {
+                return Properties.Language.ElectionСreated;
+            }
         }
 
         public static string IsLoginValidate(string login)
@@ -100,6 +112,19 @@ namespace Выборы.Classes
                                     string name, string lastName, string Email, string phone, DateTime bith)
         {
             return DataBase.AddUser(login, password, passportSeries+passportNumber, firstName, name, lastName, Email, phone, bith);
+        }
+    
+        public static List<User> GetAllUsers()
+        {
+            return DataBase.GetAllUsers();
+        }  
+
+        public static List<string> GetRolesNames()
+        {
+            var roles = DataBase.GetAllRoles();
+            List<string> list = new List<string>();
+            foreach (var role in roles) list.Add(role.Name);
+            return list;
         }
     }
 }

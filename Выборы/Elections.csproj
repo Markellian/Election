@@ -94,7 +94,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ElectionsDataBase.tt</DependentUpon>
     </Compile>
-    <Compile Include="Role.cs">
+    <Compile Include="Roles.cs">
       <DependentUpon>ElectionsDataBase.tt</DependentUpon>
     </Compile>
     <Compile Include="sysdiagrams.cs">
