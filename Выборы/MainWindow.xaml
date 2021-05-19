@@ -29,6 +29,7 @@
                 <ColumnDefinition Width="161*"/>
                 <ColumnDefinition Width="320*"/>
             </Grid.ColumnDefinitions>
+            <Button Content="{x:Static res:Language.Back}" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="{StaticResource FontSizeSimplyText}" Click="ComeBackButton_Click"/>
             <Label FontSize="{StaticResource FontSizeHead}" Content="Авторизация" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
             <Label FontSize="{StaticResource FontSizeSimplyText}"  Content="Логин " HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.Column="1" Grid.Row="2"/>
             <TextBox x:Name="AuthLoginTextBox" VerticalContentAlignment="Center" FontSize="{StaticResource FontSizeSimplyText}" TextWrapping="Wrap" Grid.Column="2" Grid.Row="2" Height="35" Grid.ColumnSpan="2"/>
@@ -42,7 +43,9 @@
 
         </Grid>
 
-        <Grid x:Name="RegistrationGrid" Visibility="Visible" IsVisibleChanged="RegistrationGrid_IsVisibleChanged">
+        <Grid x:Name="RegistrationGrid" Visibility="Hidden" IsVisibleChanged="RegistrationGrid_IsVisibleChanged">
+            <Button Panel.ZIndex="1" Content="{x:Static res:Language.Back}" Margin="10,10" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Left" VerticalAlignment="Top" Click="ComeBackButton_Click"/>
+
             <ScrollViewer>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -57,7 +60,7 @@
                     <Label Content="Логин:" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" Margin="0,11,9.8,0" Grid.Row="1" VerticalAlignment="Top" Height="35" Width="71"/>
                     <TextBox x:Name="RegistrationLoginTextBox" Grid.Column="1" HorizontalAlignment="Left" Margin="0.2,11,0,0" FontSize="{StaticResource FontSizeSimplyText}" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300" MaxLength="50" Height="35" VerticalContentAlignment="Center" TextChanged="RegistrationLoginTextBox_TextChanged"/>
                     <Label Content="Пароль:" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" Margin="0,56,9.8,0" Grid.Row="1" VerticalAlignment="Top" Height="35" Width="83"/>
-                    <PasswordBox x:Name="RegistrationPasswordPasswordBox" Grid.Column="1" HorizontalAlignment="Left" Margin="0.2,56,0,0" FontSize="{StaticResource FontSizeSimplyText}" Grid.Row="1" VerticalAlignment="Top" Width="300" MaxLength="50" Height="35" VerticalContentAlignment="Center"/>
+                    <PasswordBox x:Name="RegistrationPasswordPasswordBox" Grid.Column="1" HorizontalAlignment="Left" Margin="0.2,56,0,0" FontSize="{StaticResource FontSizeSimplyText}" Grid.Row="1" VerticalAlignment="Top" Width="300" MaxLength="50" Height="35" VerticalContentAlignment="Center" PasswordChanged="RegistrationPasswordPasswordBox_PasswordChanged"/>
                     <Label Content="Повторите пароль:" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" Margin="0,101,9.8,0" Grid.Row="1" VerticalAlignment="Top" Height="35" Width="184"/>
                     <PasswordBox x:Name="RegistrationPasswordDoublePasswordBox" Grid.Column="1" HorizontalAlignment="Left" Margin="0.2,101,0,0" FontSize="{StaticResource FontSizeSimplyText}" Grid.Row="1" VerticalAlignment="Top" Width="300" MaxLength="50" Height="35" VerticalContentAlignment="Center"/>
                     <Label Content="Серия паспорта:" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" Margin="0,146,29.8,0" Grid.Row="1" VerticalAlignment="Top" Height="35" RenderTransformOrigin="0.186,0.454" Width="160"/>
@@ -73,7 +76,7 @@
                     <Label Content="Отчество:" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" Margin="0,281,9.8,0" Grid.Row="1" VerticalAlignment="Top" Height="35" Width="99"/>
                     <TextBox x:Name="RegistrationLastNameTextBox" Grid.Column="1" HorizontalAlignment="Left" Margin="0.2,281,0,0" FontSize="{StaticResource FontSizeSimplyText}" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300" MaxLength="50" Height="35" VerticalContentAlignment="Center"/>
                     <Label Content="Email:" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" Margin="0,326,9.8,0" Grid.Row="1" VerticalAlignment="Top" Height="35" Width="61"/>
-                    <TextBox x:Name="RegistrationEmailTextBox" Grid.Column="1" HorizontalAlignment="Left" Margin="0.2,326,0,0" FontSize="{StaticResource FontSizeSimplyText}" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300" MaxLength="50" Height="35" VerticalContentAlignment="Center"/>
+                    <TextBox x:Name="RegistrationEmailTextBox" Grid.Column="1" HorizontalAlignment="Left" Margin="0.2,326,0,0" FontSize="{StaticResource FontSizeSimplyText}" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300" MaxLength="50" Height="35" VerticalContentAlignment="Center" TextChanged="RegistrationEmailTextBox_TextChanged"/>
                     <Label Content="Телефон:" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" Margin="0,370,9.8,0" Grid.Row="1" VerticalAlignment="Top" Height="35" />
                     <TextBox x:Name="RegistrationPhoneTextBox" Grid.Column="1" HorizontalAlignment="Left" Margin="0.2,370,0,0" FontSize="{StaticResource FontSizeSimplyText}" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="176" MaxLength="11" Height="35" VerticalContentAlignment="Center"/>
                     <Label Content="Дата рождения:" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" Margin="0,415,9.8,0" Grid.Row="1" VerticalAlignment="Top" Height="35" />
@@ -82,42 +85,59 @@
                     <Label x:Name="RegistrationLoginHelperLabel" Grid.Column="1" HorizontalAlignment="Left" Margin="305.2,17.4,0,0" Grid.Row="1" VerticalAlignment="Top" Width="23" Height="22">
                         <Image Source="Resources/HelperItem.png" Opacity="1"/>
                         <Label.ToolTip>
-                            <TextBlock Text="{x:Static res:Language.RegistrationLabelHelperMessage}"/>
+                            <TextBlock Text="{x:Static res:Language.RegistrationLoginLabelHelperMessage}"/>
                         </Label.ToolTip>
                     </Label>
-                    <Label  Grid.Column="1" HorizontalAlignment="Left" Margin="305.2,63.4,0,0" Grid.Row="1" VerticalAlignment="Top" Width="23" Height="22">
+                    <Label x:Name="RegistrationPassworgHelperLabel" Grid.Column="1" HorizontalAlignment="Left" Margin="305.2,63.4,0,0" Grid.Row="1" VerticalAlignment="Top" Width="23" Height="22">
                         <Image Source="Resources/HelperItem.png" Opacity="1"/>
-                        <Label.ToolTip>Пароль должен быть не короче 6 символов</Label.ToolTip>
+                        <Label.ToolTip>
+                            <TextBlock Text="{x:Static res:Language.RegistrationPasswordLabelHelperMessage}"/>
+                        </Label.ToolTip>
                     </Label>
-                    <Label  Grid.Column="1" HorizontalAlignment="Left" Margin="305.2,152.4,0,0" Grid.Row="1" VerticalAlignment="Top" Width="23" Height="22">
+                    <Label x:Name="RegistrationPasportHelperLabel" Grid.Column="1" HorizontalAlignment="Left" Margin="305.2,152.4,0,0" Grid.Row="1" VerticalAlignment="Top" Width="23" Height="22">
                         <Image Source="Resources/HelperItem.png" Opacity="1"/>
-                        <Label.ToolTip>Серия - 4 цифры, номер - 6 цифр</Label.ToolTip>
+                        <Label.ToolTip>
+                            <TextBlock Text="{x:Static res:Language.RegistrationPassportLabelHelperMessage}"/>
+                        </Label.ToolTip>
                     </Label>
                     <Label  Grid.Column="1" HorizontalAlignment="Left" Margin="305.2,197.4,0,0" Grid.Row="1" VerticalAlignment="Top" Width="23" Height="22">
                         <Image Source="Resources/HelperItem.png" Opacity="1"/>
-                        <Label.ToolTip>Поле обязательно к заполнению</Label.ToolTip>
+                        <Label.ToolTip>
+                            <TextBlock Text="{x:Static res:Language.FieldIsRequired}"/>
+                        </Label.ToolTip>
                     </Label>
                     <Label  Grid.Column="1" HorizontalAlignment="Left" Margin="305.2,243.4,0,0" Grid.Row="1" VerticalAlignment="Top" Width="23" Height="22">
                         <Image Source="Resources/HelperItem.png" Opacity="1"/>
-                        <Label.ToolTip>Поле обязательно к заполнению</Label.ToolTip>
+                        <Label.ToolTip>
+                            <TextBlock Text="{x:Static res:Language.FieldIsRequired}"/>
+                        </Label.ToolTip>
                     </Label>
-                    <Label  Grid.Column="1" HorizontalAlignment="Left" Margin="305.2,332.4,0,0" Grid.Row="1" VerticalAlignment="Top" Width="23" Height="22">
+                    <Label Name="RegistrationEmailHelperLabel" Grid.Column="1" HorizontalAlignment="Left" Margin="305.2,332.4,0,0" Grid.Row="1" VerticalAlignment="Top" Width="23" Height="22">
                         <Image Source="Resources/HelperItem.png" Opacity="1"/>
-                        <Label.ToolTip>Шаблон: email@email.email</Label.ToolTip>
+                        <Label.ToolTip>
+                            <TextBlock Text="{x:Static res:Language.RegistrationEmailLabelHelperMessage}"/>
+                        </Label.ToolTip>
                     </Label>
-                    <Label  Grid.Column="1" HorizontalAlignment="Left" Margin="181.2,375.4,0,0" Grid.Row="1" VerticalAlignment="Top" Width="23" Height="22">
+                    <Label Name="RegistrationPhoneHelperLabel" Grid.Column="1" HorizontalAlignment="Left" Margin="181.2,375.4,0,0" Grid.Row="1" VerticalAlignment="Top" Width="23" Height="22">
                         <Image Source="Resources/HelperItem.png" Opacity="1"/>
-                        <Label.ToolTip>Номер телефона - 11 цифр. Например: 77777777777. Поле не обязательно к заполнению</Label.ToolTip>
+                        <Label.ToolTip>
+                            <TextBlock>
+                                <Run Text="{x:Static res:Language.RegistrationPhoneLabelHelperMessage}"/>
+                                <Run Text=". Поле не обязательно к заполнению"/>
+                            </TextBlock>
+                        </Label.ToolTip>
                     </Label>
                     <Label  Grid.Column="1" HorizontalAlignment="Left" Margin="181.2,421.4,0,0" Grid.Row="1" VerticalAlignment="Top" Width="23" Height="22">
                         <Image Source="Resources/HelperItem.png" Opacity="1"/>
-                        <Label.ToolTip>Поле обязательно к заполнению</Label.ToolTip>
+                        <Label.ToolTip>
+                            <TextBlock Text="{x:Static res:Language.FieldIsRequired}"/>
+                        </Label.ToolTip>
                     </Label>
                 </Grid>
             </ScrollViewer>
         </Grid>
 
-        <Grid x:Name="MainGrid" Visibility="Hidden" IsVisibleChanged="MainGrid_IsVisibleChanged">
+        <Grid x:Name="MainGrid" Visibility="Visible" IsVisibleChanged="MainGrid_IsVisibleChanged">
 
             <Button x:Name="UserEnterMainMenuButton" Content="Войти" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Height="35" Width="75" Click="FromMainToAuth_Click"/>
             <Button x:Name="UserExitMainMenuButton" Visibility="Hidden" Background="Red" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" Margin="0,10,9.6,0" VerticalAlignment="Top" Height="35" Width="35" Click="UserExitMainMenuButton_Click">

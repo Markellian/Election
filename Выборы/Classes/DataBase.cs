@@ -48,13 +48,11 @@ namespace Выборы.Classes
 
         public static Election GetElection(string electionName)
         {
-            Election election;
             using(var db = new ElectionsDataBase())
             {
-                var elec = (from e in db.Elections where e.Name == electionName select e).ToList().First();
-                election = new Election(elec);
+                var elec = (from e in db.Elections where e.Name == electionName select e).ToList().FirstOrDefault();
+                return elec == null ? null : new Election(elec);
             }
-            return election;
         }
 
         public static bool AddElection(string name, DateTime start, DateTime end)//Election election)
@@ -116,6 +114,14 @@ namespace Выборы.Classes
                 return db.Users.Where(l => l.Login == login).FirstOrDefault() == null ? false : true;
             }
         }
+        public static bool IfExistsUserByPassport(string passport)
+        {
+            using (var db = new ElectionsDataBase())
+            {
+                return db.Users.Where(p => p.Passport == passport).FirstOrDefault() == null ? false : true;
+            }
+        }
+
         public static dynamic AddUser(string login, string password, string passport, string firstName,
                                     string name, string lastName, string email, string phone, DateTime bith)
         {

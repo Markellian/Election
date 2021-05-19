@@ -117,10 +117,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Back" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+  <data name="EnterLogin" xml:space="preserve">
+    <value>Введите логин</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Выход</value>
+  </data>
+  <data name="FieldIsRequired" xml:space="preserve">
+    <value>Поле обязательно к заполнению</value>
+  </data>
   <data name="Invalid_user" xml:space="preserve">
     <value>Неверный пользоваетль</value>
   </data>
+  <data name="LoginLengthMustBe" xml:space="preserve">
+    <value>Логин должен быть не короче 6 символов</value>
+  </data>
+  <data name="RegistrationEmailLabelHelperMessage" xml:space="preserve">
+    <value>Шаблон: email@email.email</value>
+  </data>
   <data name="RegistrationLabelHelperMessage" xml:space="preserve">
     <value>Логин должен быть уникальным и не короче 6 символов</value>
+  </data>
+  <data name="RegistrationPassportLabelHelperMessage" xml:space="preserve">
+    <value>Серия - 4 цифры, номер - 6 цифр</value>
+  </data>
+  <data name="RegistrationPasswordLabelHelperMessage" xml:space="preserve">
+    <value>Пароль должен быть не короче 6 символов</value>
+  </data>
+  <data name="RegistrationPhoneLabelHelperMessage" xml:space="preserve">
+    <value>Номер телефона - 11 цифр. Например: 77777777777</value>
+  </data>
+  <data name="UserWithThisLoginIsRaegistered" xml:space="preserve">
+    <value>Пользователь с таким логином уже зарегистрирован</value>
   </data>
 </root>

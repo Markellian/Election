@@ -61,6 +61,42 @@ namespace Выборы.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Back.
+        /// </summary>
+        public static string Back {
+            get {
+                return ResourceManager.GetString("Back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Enter login.
+        /// </summary>
+        public static string EnterLogin {
+            get {
+                return ResourceManager.GetString("EnterLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Exit.
+        /// </summary>
+        public static string Exit {
+            get {
+                return ResourceManager.GetString("Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на This field is required.
+        /// </summary>
+        public static string FieldIsRequired {
+            get {
+                return ResourceManager.GetString("FieldIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Invalid condidate.
         /// </summary>
         public static string Invalid_condidate {
@@ -79,11 +115,65 @@ namespace Выборы.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Login must be at least 6 characters.
+        /// </summary>
+        public static string LoginLengthMustBe {
+            get {
+                return ResourceManager.GetString("LoginLengthMustBe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Template: email@email.email.
+        /// </summary>
+        public static string RegistrationEmailLabelHelperMessage {
+            get {
+                return ResourceManager.GetString("RegistrationEmailLabelHelperMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Login must be unique and at least 6 characters.
         /// </summary>
-        public static string RegistrationLabelHelperMessage {
+        public static string RegistrationLoginLabelHelperMessage {
             get {
-                return ResourceManager.GetString("RegistrationLabelHelperMessage", resourceCulture);
+                return ResourceManager.GetString("RegistrationLoginLabelHelperMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Series - 4 digits, number - 6 digits.
+        /// </summary>
+        public static string RegistrationPassportLabelHelperMessage {
+            get {
+                return ResourceManager.GetString("RegistrationPassportLabelHelperMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Password must be at least 6 characters.
+        /// </summary>
+        public static string RegistrationPasswordLabelHelperMessage {
+            get {
+                return ResourceManager.GetString("RegistrationPasswordLabelHelperMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Phone number - 11 digits. For example: 77777777777.
+        /// </summary>
+        public static string RegistrationPhoneLabelHelperMessage {
+            get {
+                return ResourceManager.GetString("RegistrationPhoneLabelHelperMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на User with this login is already registered.
+        /// </summary>
+        public static string UserWithThisLoginIsRaegistered {
+            get {
+                return ResourceManager.GetString("UserWithThisLoginIsRaegistered", resourceCulture);
             }
         }
     }

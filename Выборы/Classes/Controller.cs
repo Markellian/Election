@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Выборы.Classes
 {
-    class Controller
+    public class Controller
     {
         public static User AuthUser(string login, string password)
         {
@@ -23,18 +23,19 @@ namespace Выборы.Classes
         {
             if (string.IsNullOrEmpty(login))
             {
-                return "Введите логин";
+                return Properties.Language.EnterLogin;
             }
             if (login.Length < 6)
             {
-                return "Логин должен быть не короче 6 символов";
+                return Properties.Language.LoginLengthMustBe;
             }
             if (DataBase.IfExistsUserByLogin(login))
             {
-                return "Пользователь с таким логином уже зарегистрирован";
+                return Properties.Language.UserWithThisLoginIsRaegistered;
             }            
             return "";
         }
+        
         public static string IsPasswordValidate(string password)
         {
             if (string.IsNullOrEmpty(password))
@@ -54,6 +55,7 @@ namespace Выборы.Classes
             {
                 return "Введите серию и номер паспорта";
             }
+
             if (series.Length != 4 || !int.TryParse(series, out int a))
             {
                 return "Некорректная серия паспотра. Серия паспорта состоит из 4 цифр";
@@ -62,10 +64,13 @@ namespace Выборы.Classes
             {
                 return "Некорректный номер паспотра. Номер паспорта состоит из 6 цифр";
             }
-
+            if (DataBase.IfExistsUserByPassport(series + number))
+            {
+                return "Пользователь с такими паспортными данными уже зарегистрирован";
+            }
             return "";
         }
-
+        
         public static string IsEmailValidate(string email)
         {
             if (string.IsNullOrEmpty(email))
@@ -74,21 +79,20 @@ namespace Выборы.Classes
             }
             if (!Regex.IsMatch(email, ".+@.+\\..+"))
             {
-                return "Неверный формат email: email@email.email";
+                return "Неверный формат email";
             }
             return "";
         }
 
         public static string IsPhoneValidate(string phone)
         {
-            if (string.IsNullOrEmpty(phone))
+            if (phone != "")
             {
-                return "Введите телефон";
-            }
-            if (!(phone.Length == 11 || phone=="") || !int.TryParse(phone, out int p))
-            {
-                return "Указан неверный номер телфона";
-            }
+                if (!(phone.Length == 11 && Int64.TryParse(phone, out long p))) 
+                {
+                    return "Номер телефона должен состоять из 11 цифр";
+                }
+            }            
             return "";
         }
 

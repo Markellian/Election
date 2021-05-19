@@ -24,6 +24,7 @@ namespace Выборы
     public partial class MainWindow : Window
     {
         User user;
+        List<Grid> LastGrid = new List<Grid>();
         public MainWindow()
         {
             InitializeComponent();
@@ -64,6 +65,7 @@ namespace Выборы
         private void FromAuthToRegistration_Click(object sender, RoutedEventArgs e)
         {
             ChangeGridVisibility(RegistrationGrid, AuthGrid);
+            LastGrid.Add(AuthGrid);
         }
 
         private void UserExitMainMenuButton_Click(object sender, RoutedEventArgs e)
@@ -75,6 +77,7 @@ namespace Выборы
         private void FromMainToAuth_Click(object sender, RoutedEventArgs e)
         {
             ChangeGridVisibility(AuthGrid, MainGrid);
+            LastGrid.Add(MainGrid);
         }
 
         private void MainGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -200,6 +203,7 @@ namespace Выборы
                 return;
             }
 
+
             string firstName = RegistrationFirstNameTextBox.Text;
             if (string.IsNullOrEmpty(firstName))
             {
@@ -224,7 +228,7 @@ namespace Выборы
 
             string phone = RegistrationPhoneTextBox.Text;
             string wrongPhoneMessage = Controller.IsPhoneValidate(phone);
-            if (wrongEmailMessage != "")
+            if (wrongPhoneMessage != "")
             {
                 MessageBox.Show(wrongPhoneMessage);
                 return;
@@ -257,15 +261,37 @@ namespace Выборы
             if(message != "")
             {
                 RegistrationLoginTextBox.BorderBrush = Brushes.Red;
-                RegistrationLoginHelperLabel.ToolTip = Properties.Language.RegistrationLabelHelperMessage + ". " + message;
+                RegistrationLoginHelperLabel.ToolTip = Properties.Language.RegistrationLoginLabelHelperMessage + ". " + message;
                 RegistrationLoginHelperLabel.Background = Brushes.LightPink;
             }
             else
             {
                 RegistrationLoginTextBox.BorderBrush = Brushes.Green;
-                RegistrationLoginHelperLabel.ToolTip = Properties.Language.RegistrationLabelHelperMessage;
+                RegistrationLoginHelperLabel.ToolTip = Properties.Language.RegistrationLoginLabelHelperMessage;
                 RegistrationLoginHelperLabel.Background = null;
             }
+        }
+
+
+        private void RegistrationGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            RegistrationLoginTextBox.Text = "";
+            RegistrationPasswordPasswordBox.Password = "";
+            RegistrationPasswordDoublePasswordBox.Password = "";
+            RegistrationSeriesPassportTextBox.Text = "";
+            RegistrationNumberPassportTextBox.Text = "";
+            RegistrationFirstNameTextBox.Text = "";
+            RegistrationNameTextBox.Text = "";
+            RegistrationLastNameTextBox.Text = "";
+            RegistrationEmailTextBox.Text = "";
+            RegistrationPhoneTextBox.Text = "";
+            RegistrationBirthdayDatePicker.SelectedDate = null;
+
+            RegistrationLoginTextBox_TextChanged(null, null);
+            RegistrationPasswordPasswordBox_PasswordChanged(null, null);
+            RegistrationPassportData_TextChanged(null, null);
+            RegistrationEmailTextBox_TextChanged(null, null);
+            
         }
 
         private void RegistrationPassportData_TextChanged(object sender, TextChangedEventArgs e)
@@ -273,13 +299,62 @@ namespace Выборы
             string message = Controller.IsPassportValidate(RegistrationSeriesPassportTextBox.Text, RegistrationNumberPassportTextBox.Text);
             if (message != "")
             {
-
+                RegistrationSeriesPassportTextBox.BorderBrush = Brushes.Red;
+                RegistrationNumberPassportTextBox.BorderBrush = Brushes.Red;
+                RegistrationPasportHelperLabel.Background = Brushes.LightPink;
+                RegistrationPasportHelperLabel.ToolTip = Properties.Language.RegistrationPassportLabelHelperMessage + ". " + message;
+            }
+            else
+            {
+                RegistrationSeriesPassportTextBox.BorderBrush = Brushes.Green;
+                RegistrationNumberPassportTextBox.BorderBrush = Brushes.Green;
+                RegistrationPasportHelperLabel.Background = null;
             }
         }
 
-        private void RegistrationGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
+        
 
+        private void RegistrationPasswordPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            string message = Controller.IsPasswordValidate(RegistrationPasswordPasswordBox.Password);
+            if (message != "")
+            {
+                RegistrationPasswordPasswordBox.BorderBrush = Brushes.Red;
+                RegistrationPassworgHelperLabel.Background = Brushes.LightPink;
+            }
+            else
+            {
+                RegistrationPasswordPasswordBox.BorderBrush = Brushes.Green;
+                RegistrationPassworgHelperLabel.Background = null;
+            }
+        }
+
+        private void RegistrationEmailTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string message = Controller.IsEmailValidate(RegistrationEmailTextBox.Text);
+            if (message != "")
+            {
+                RegistrationEmailTextBox.BorderBrush = Brushes.Red;
+                RegistrationEmailHelperLabel.Background = Brushes.LightPink;
+                RegistrationEmailHelperLabel.ToolTip = Properties.Language.RegistrationEmailLabelHelperMessage + ". " + message;
+            }
+            else
+            {
+                RegistrationEmailTextBox.BorderBrush = Brushes.Green;
+                RegistrationEmailHelperLabel.Background = null;
+                RegistrationEmailHelperLabel.ToolTip = Properties.Language.RegistrationEmailLabelHelperMessage + ". " + Properties.Language.FieldIsRequired;
+            }
+        }
+
+        private void ComeBackButton_Click(object sender, RoutedEventArgs e)
+        {
+            var last = LastGrid.LastOrDefault();
+            var now = (Grid)((Button)sender).Parent;
+            if (last != null && now.GetType() == typeof(Grid))
+            {
+                ChangeGridVisibility(last, now);
+                LastGrid.Remove(last);
+            }
         }
     }
 }

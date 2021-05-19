@@ -117,13 +117,43 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="EnterLogin" xml:space="preserve">
+    <value>Enter login</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="FieldIsRequired" xml:space="preserve">
+    <value>This field is required</value>
+  </data>
   <data name="Invalid_condidate" xml:space="preserve">
     <value>Invalid condidate</value>
   </data>
   <data name="Invalid_user" xml:space="preserve">
     <value>Invalid user</value>
   </data>
-  <data name="RegistrationLabelHelperMessage" xml:space="preserve">
+  <data name="LoginLengthMustBe" xml:space="preserve">
+    <value>Login must be at least 6 characters</value>
+  </data>
+  <data name="RegistrationEmailLabelHelperMessage" xml:space="preserve">
+    <value>Template: email@email.email</value>
+  </data>
+  <data name="RegistrationLoginLabelHelperMessage" xml:space="preserve">
     <value>Login must be unique and at least 6 characters</value>
+  </data>
+  <data name="RegistrationPassportLabelHelperMessage" xml:space="preserve">
+    <value>Series - 4 digits, number - 6 digits</value>
+  </data>
+  <data name="RegistrationPasswordLabelHelperMessage" xml:space="preserve">
+    <value>Password must be at least 6 characters</value>
+  </data>
+  <data name="RegistrationPhoneLabelHelperMessage" xml:space="preserve">
+    <value>Phone number - 11 digits. For example: 77777777777</value>
+  </data>
+  <data name="UserWithThisLoginIsRaegistered" xml:space="preserve">
+    <value>User with this login is already registered</value>
   </data>
 </root>
