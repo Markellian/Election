@@ -191,7 +191,7 @@
                         <Grid.Resources>
                             <sys:Double x:Key="FontSizeSimplyText">14</sys:Double>
                         </Grid.Resources>
-                        <DataGrid x:Name="UsersDataGrid" AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,10,120,0">
+                        <DataGrid x:Name="UsersDataGrid" AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,10,120,0" CanUserAddRows="False">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Логин" Binding="{Binding Login}"/>
                                 <DataGridTextColumn Header="Серия и номер паспорта" Binding="{Binding Passport}"/>
@@ -200,12 +200,12 @@
                                 <DataGridTextColumn Header="Отчество" Binding="{Binding Last_name}"/>
                                 <DataGridTextColumn Header="Email" Binding="{Binding Email}"/>
                                 <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}"/>
-                                <DataGridTextColumn Header="Роль" Binding="{Binding Role.Name}"/>
+                                <DataGridTextColumn Header="Роль" Binding="{Binding Roles.Name}"/>
                             </DataGrid.Columns>
                         </DataGrid>
-                        <Button Content="Удалить" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" VerticalAlignment="Top" Height="35" Margin="0,10,10,0" Width="100"/>
-                        <ComboBox x:Name="RolesComboBox" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" VerticalAlignment="Top" VerticalContentAlignment="Center" Height="35" Margin="0,55,10,0" Width="100"/>
-                        <Button Content="Изменить роль" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" VerticalAlignment="Top" Height="35" Margin="0,100,10,0" Width="100"/>
+                        <Button Content="Удалить" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" VerticalAlignment="Top" Height="35" Margin="0,10,10,0" Width="100" Click="DeleteUserButton_Click"/>
+                        <ComboBox x:Name="RolesComboBox" DisplayMemberPath="Name" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" VerticalAlignment="Top" VerticalContentAlignment="Center" Height="35" Margin="0,55,10,0" Width="100"/>
+                        <Button Content="Изменить роль" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" VerticalAlignment="Top" Height="35" Margin="0,100,10,0" Width="100" Click="ChangeUserRoleButton_Click"/>
                     </Grid>
                 </StackPanel>
             </ScrollViewer>

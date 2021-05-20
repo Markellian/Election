@@ -119,12 +119,19 @@ namespace Выборы.Classes
             return DataBase.GetAllUsers();
         }  
 
-        public static List<string> GetRolesNames()
+        public static List<Roles> GetAllRoles()
         {
-            var roles = DataBase.GetAllRoles();
-            List<string> list = new List<string>();
-            foreach (var role in roles) list.Add(role.Name);
-            return list;
+            return DataBase.GetAllRoles();
+        }
+    
+        public static bool DeleteUser(User user)
+        {
+            return DataBase.DeleteUser(user.Id);
+        }    
+    
+        public static bool ChahgeRole(User user, Roles role)
+        {
+            return DataBase.ChangeRole(user.Id, role.Id);
         }
     }
 }

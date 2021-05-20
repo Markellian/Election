@@ -181,6 +181,7 @@ namespace Выборы.Classes
                 {
                     User user = new User()
                     {
+                        Id = users.Id,
                         Login = users.Login,
                         Passport = users.Passport.Insert(4, " "),
                         Name = users.Name,
@@ -209,6 +210,32 @@ namespace Выборы.Classes
                 return list;
             }
         }
+
+        public static bool DeleteUser(int id)
+        {
+            using (var db = new ElectionsDataBase())
+            {
+                Users user = db.Users.Find(id);
+                if (user == null) return false;
+                db.Users.Remove(user);
+                db.SaveChanges();
+                return true;
+            }
+        }
+
+        public static bool ChangeRole(int userId, int roleId)
+        {
+            using (var db = new ElectionsDataBase())
+            {
+                var user = db.Users.Find(userId);
+                var role = db.Roles.Find(roleId);
+                if (user == null || role == null) return false; //проверка на существование записей
+                user.Role_id = roleId;
+                db.SaveChanges();
+                return true;
+            }
+        }
+
         public static string GetHash(string str)
         {
             byte[] bytes = Encoding.Unicode.GetBytes(str);

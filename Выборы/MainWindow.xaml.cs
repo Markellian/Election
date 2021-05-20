@@ -17,21 +17,22 @@ using Выборы.Classes;
 
 
 namespace Выборы
-{    
+{
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
         User user;
-        List<Grid> LastGrid = new List<Grid>();
+        List<Grid> lastGrid = new List<Grid>();
+        Grid nowMenuGrid;
         public MainWindow()
         {
             InitializeComponent();
             Controller controller = new Controller();
 
         }
-        
+
         /// <summary>
         /// Авторизация пользователя на странице авторизации
         /// </summary>
@@ -65,7 +66,7 @@ namespace Выборы
         private void FromAuthToRegistration_Click(object sender, RoutedEventArgs e)
         {
             ChangeGridVisibility(RegistrationGrid, AuthGrid);
-            LastGrid.Add(AuthGrid);
+            lastGrid.Add(AuthGrid);
         }
 
         private void UserExitMainMenuButton_Click(object sender, RoutedEventArgs e)
@@ -77,7 +78,7 @@ namespace Выборы
         private void FromMainToAuth_Click(object sender, RoutedEventArgs e)
         {
             ChangeGridVisibility(AuthGrid, MainGrid);
-            LastGrid.Add(MainGrid);
+            lastGrid.Add(MainGrid);
         }
 
         private void MainGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -96,7 +97,7 @@ namespace Выборы
                     MenuNavigationPanel.Margin = new Thickness(10, 10, UserEnterMainMenuButton.Width + UserEnterMainMenuButton.Margin.Right + 10, 0);
                 }
                 else
-                {                    
+                {
                     MenuMyProfileButton.Visibility = Visibility.Visible;
                     UserEnterMainMenuButton.Visibility = Visibility.Hidden;
                     UserExitMainMenuButton.Visibility = Visibility.Visible;
@@ -113,15 +114,15 @@ namespace Выборы
                         MenuNavigationPanelCreateElection.Visibility = Visibility.Collapsed;
                         MenuNavigationPanelAdministration.Visibility = Visibility.Collapsed;
                     }
-                    
+
                 }
             }
         }
 
         private void MenuNavigationPanelCreateElection_Click(object sender, RoutedEventArgs e)
         {
-            NewsGrid.Visibility = Visibility.Hidden;
-            CreateElectionGrid.Visibility = Visibility.Visible;
+            ChangeGridVisibility(CreateElectionGrid, nowMenuGrid);
+            nowMenuGrid = CreateElectionGrid;
         }
         private void ChangeGridVisibility(Grid makeVisible, Grid makeHidden)
         {
@@ -136,7 +137,7 @@ namespace Выборы
         }
 
         private void DateStartElectionDataPicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        {            
+        {
             DateEndElectionDataPicker.DisplayDateStart = ((DatePicker)sender).SelectedDate;
             if (DateStartElectionDataPicker.SelectedDate > DateEndElectionDataPicker.SelectedDate)
             {
@@ -188,7 +189,7 @@ namespace Выборы
                 MessageBox.Show(wrongPasswordMessage);
                 return;
             }
-            
+
             string password2 = RegistrationPasswordDoublePasswordBox.Password;
             if (string.IsNullOrEmpty(password2))
             {
@@ -224,7 +225,7 @@ namespace Выборы
                 return;
             }
             string lastName = RegistrationLastNameTextBox.Text;
-            
+
             string email = RegistrationEmailTextBox.Text;
             string wrongEmailMessage = Controller.IsEmailValidate(email);
             if (wrongEmailMessage != "")
@@ -265,7 +266,7 @@ namespace Выборы
         private void RegistrationLoginTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             string message = Controller.IsLoginValidate(RegistrationLoginTextBox.Text);
-            if(message != "")
+            if (message != "")
             {
                 RegistrationLoginTextBox.BorderBrush = Brushes.Red;
                 RegistrationLoginHelperLabel.ToolTip = Properties.Language.RegistrationLoginLabelHelperMessage + ". " + message;
@@ -298,7 +299,7 @@ namespace Выборы
             RegistrationPasswordPasswordBox_PasswordChanged(null, null);
             RegistrationPassportData_TextChanged(null, null);
             RegistrationEmailTextBox_TextChanged(null, null);
-            
+
         }
 
         private void RegistrationPassportData_TextChanged(object sender, TextChangedEventArgs e)
@@ -319,7 +320,7 @@ namespace Выборы
             }
         }
 
-        
+
 
         private void RegistrationPasswordPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
@@ -355,24 +356,75 @@ namespace Выборы
 
         private void ComeBackButton_Click(object sender, RoutedEventArgs e)
         {
-            var last = LastGrid.LastOrDefault();
+            var last = lastGrid.LastOrDefault();
             var now = (Grid)((Button)sender).Parent;
             if (last != null && now.GetType() == typeof(Grid))
             {
                 ChangeGridVisibility(last, now);
-                LastGrid.Remove(last);
+                lastGrid.Remove(last);
             }
         }
 
         private void MenuNavigationPanelUsers_Click(object sender, RoutedEventArgs e)
         {
-
+            ChangeGridVisibility(UsersGrid, nowMenuGrid);
+            nowMenuGrid = UsersGrid;
         }
 
         private void UsersGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             UsersDataGrid.ItemsSource = Controller.GetAllUsers();
-            RolesComboBox.ItemsSource = Controller.GetRolesNames(); 
+            RolesComboBox.ItemsSource = Controller.GetAllRoles();
+        }
+
+        private void DeleteUserButton_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = UsersDataGrid.SelectedItem;
+            if (selectedItem != null)
+            {
+                if (Controller.DeleteUser((User)selectedItem))
+                {
+                    MessageBox.Show("Пользователь удален успешно");
+                    UsersDataGrid.ItemsSource = null;
+                    UsersDataGrid.ItemsSource = UsersDataGrid.ItemsSource = Controller.GetAllUsers();
+                }
+                else
+                {
+                    MessageBox.Show("Ошибка удаления пользователя");
+                }
+                
+            }
+            else
+            {
+                MessageBox.Show("Выберите пользователя");
+            }
+        }
+
+        private void ChangeUserRoleButton_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedRole = RolesComboBox.SelectedItem;
+            var selectedUser = UsersDataGrid.SelectedItem;
+
+            if (selectedRole == null)
+            {
+                MessageBox.Show("Выберите роль");
+                return;
+            }
+            if (selectedUser == null)
+            {
+                MessageBox.Show("Выберите пользователя");
+                return;
+            }
+            if (Controller.ChahgeRole((User)selectedUser, (Roles)selectedRole))
+            {
+                MessageBox.Show("Изменение роли прошло успешно");
+                UsersDataGrid.ItemsSource = null;
+                UsersDataGrid.ItemsSource = UsersDataGrid.ItemsSource = Controller.GetAllUsers();
+            }
+            else
+            {
+                MessageBox.Show("Ошибка изменения роли");
+            }
         }
     }
 }
