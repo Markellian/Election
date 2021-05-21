@@ -23,9 +23,9 @@ namespace Выборы.Classes.Tests
             
             Chain chain = new Chain(new Election("Выборы на пост главного дворника", DateTime.Parse("10.10.2019 20:00:00"), DateTime.Parse("10.12.2019 20:00:00")));
             
-            Assert.IsFalse(chain.Add(null, new Candidate()));
+            //Assert.IsFalse(chain.Add(null, new Candidate()));
 
-            Assert.IsFalse(chain.Add(new User(), null));
+            //Assert.IsFalse(chain.Add(new User(), null));
             
             //Assert.IsTrue(chain.Add(new User(), new Candidate()));
         }

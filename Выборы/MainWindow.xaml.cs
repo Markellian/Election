@@ -26,11 +26,11 @@ namespace Выборы
         User user;
         List<Grid> lastGrid = new List<Grid>();
         Grid nowMenuGrid;
+        List<string> listOptions = new List<string>();
         public MainWindow()
         {
             InitializeComponent();
             Controller controller = new Controller();
-
         }
 
         /// <summary>
@@ -134,6 +134,12 @@ namespace Выборы
         {
             DateStartElectionDataPicker.DisplayDateStart = DateTime.Now;
             DateEndElectionDataPicker.DisplayDateStart = DateTime.Now;
+            ElectionNameTextBox.Text = "";
+            InterviewRadioButton.IsChecked = true;
+
+            InterviewOptionsCreateGrid.Visibility = Visibility.Visible;
+            ElectionOptionsCreateStackPanel.Visibility = Visibility.Hidden;
+            
         }
 
         private void DateStartElectionDataPicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
@@ -165,11 +171,15 @@ namespace Выборы
                 MessageBox.Show("Введите дату окончания голосования");
                 return;
             }
-            string message = Controller.AddElection(name, (DateTime)start, (DateTime)end);
-            MessageBox.Show(message);
-            if (message == Properties.Language.ElectionСreated)
+            if (listOptions == null || listOptions.Count == 0)
             {
-                ChangeGridVisibility(NewsGrid, CreateElectionGrid);
+                MessageBox.Show("Добавьте варинты голосования");
+                return;
+            }
+            if (InterviewRadioButton.IsChecked == true)
+            {
+                string message = Controller.AddInterview(name, (DateTime)start, (DateTime)end, listOptions);
+                MessageBox.Show(message);
             }
         }
 
@@ -425,6 +435,47 @@ namespace Выборы
             {
                 MessageBox.Show("Ошибка изменения роли");
             }
+        }
+
+        private void AddOptionButton_Click(object sender, RoutedEventArgs e)
+        {
+            var optionName = OptionsTextBox.Text;
+            if (string.IsNullOrEmpty(optionName))
+            {
+                MessageBox.Show("Введите название опции");
+                return;
+            }
+            if (listOptions.Contains(optionName))
+            {
+                MessageBox.Show("Такой вариант уже добавлен");
+                return;
+            }
+            listOptions.Add(optionName);
+            InterviewOptionsComboBox.ItemsSource = null;
+            InterviewOptionsComboBox.ItemsSource = listOptions;
+            if (listOptions.Count > 0) InterviewOptionsComboBox.SelectedItem = listOptions.Last();
+        }
+
+        private void InterviewOptionsCreateStackPanel_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            OptionsTextBox.Text = "";
+            InterviewOptionsComboBox.ItemsSource = null;
+            listOptions.Clear();
+        }
+
+        private void DeleteOptionButton_Click(object sender, RoutedEventArgs e)
+        {
+            var item = InterviewOptionsComboBox.SelectedItem;
+            if (item == null)
+            {
+                MessageBox.Show("Выберите, какую опцию удалить");
+                return;
+            }
+            listOptions.Remove((string)item);
+            InterviewOptionsComboBox.ItemsSource = null;
+            InterviewOptionsComboBox.ItemsSource = listOptions;
+            if (listOptions.Count > 0 ) InterviewOptionsComboBox.SelectedItem = listOptions.Last();
+
         }
     }
 }

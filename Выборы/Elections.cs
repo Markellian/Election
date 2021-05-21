@@ -18,14 +18,20 @@ namespace Выборы
         public Elections()
         {
             this.Blocks = new HashSet<Blocks>();
+            this.ElectionOptions = new HashSet<ElectionOptions>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
         public System.DateTime DateStart { get; set; }
         public System.DateTime DateEnd { get; set; }
+        public int Voiteing_type_id { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Blocks> Blocks { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ElectionOptions> ElectionOptions { get; set; }
+        public virtual Transactions Transactions { get; set; }
+        public virtual VoitingTypes VoitingTypes { get; set; }
     }
 }

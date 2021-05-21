@@ -19,8 +19,8 @@ namespace Выборы
         public Block(Election election)
         {
             User_id = 0;
-            DataCreated = election.DateStart.ToUniversalTime();            
-            Data = "";
+            DateCreated = election.DateStart.ToUniversalTime();            
+            Transation_id = null;
             PreviousHash = election.Name;
             Hash = MakeHash();
         }
@@ -30,15 +30,16 @@ namespace Выборы
         /// <param name="user">Идентификатор пользователя</param>
         /// <param name="candidate">кандидат, за которого отдан голос</param>
         /// <param name="block">последний блок</param>
-        public Block(User user, Candidate candidate, Block block)
+        public Block(User user, Block block, Transactions transactions)
         {
             if (block == null)
             {
                 throw new ArgumentException("Пустой блок", nameof(block));
             }
             User_id = user.Id;
-            DataCreated = DateTime.UtcNow;
-            Data = candidate.Id.ToString();
+            DateCreated = DateTime.UtcNow;
+            Transation_id = transactions.Id;
+            Election_id = block.Election_id;
             PreviousHash = block.Hash;
             Hash = MakeHash();
 
@@ -51,8 +52,8 @@ namespace Выборы
         {
             string text = "";
             text += User_id.ToString();
-            text += DataCreated.ToString("O");
-            text += Data.ToString();
+            text += DateCreated.ToString("O");
+            text += Transation_id.ToString();
             text += Election_id.ToString();
             text += PreviousHash;
             return text;

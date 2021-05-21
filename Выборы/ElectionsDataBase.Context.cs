@@ -26,9 +26,13 @@ namespace Выборы
         }
     
         public virtual DbSet<Blocks> Blocks { get; set; }
+        public virtual DbSet<ElectionOptions> ElectionOptions { get; set; }
         public virtual DbSet<Elections> Elections { get; set; }
-        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
-        public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<PoolOptions> PoolOptions { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
+        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
+        public virtual DbSet<Transactions> Transactions { get; set; }
+        public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<VoitingTypes> VoitingTypes { get; set; }
     }
 }

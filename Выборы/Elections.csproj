@@ -83,9 +83,13 @@
     <Compile Include="Blocks.cs">
       <DependentUpon>ElectionsDataBase.tt</DependentUpon>
     </Compile>
+    <Compile Include="Classes\Const.cs" />
     <Compile Include="Classes\Controller.cs" />
     <Compile Include="Classes\DataBase.cs" />
     <Compile Include="Classes\Election.cs" />
+    <Compile Include="ElectionOptions.cs">
+      <DependentUpon>ElectionsDataBase.tt</DependentUpon>
+    </Compile>
     <Compile Include="Elections.cs">
       <DependentUpon>ElectionsDataBase.tt</DependentUpon>
     </Compile>
@@ -94,13 +98,22 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ElectionsDataBase.tt</DependentUpon>
     </Compile>
+    <Compile Include="PoolOptions.cs">
+      <DependentUpon>ElectionsDataBase.tt</DependentUpon>
+    </Compile>
     <Compile Include="Roles.cs">
       <DependentUpon>ElectionsDataBase.tt</DependentUpon>
     </Compile>
     <Compile Include="sysdiagrams.cs">
       <DependentUpon>ElectionsDataBase.tt</DependentUpon>
     </Compile>
+    <Compile Include="Transactions.cs">
+      <DependentUpon>ElectionsDataBase.tt</DependentUpon>
+    </Compile>
     <Compile Include="Users.cs">
+      <DependentUpon>ElectionsDataBase.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VoitingTypes.cs">
       <DependentUpon>ElectionsDataBase.tt</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">

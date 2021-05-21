@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Classes\ChainTests.cs" />
     <Compile Include="Classes\ControllerTests.cs" />
+    <Compile Include="Classes\DataBaseTests.cs" />
     <Compile Include="Classes\ElectionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

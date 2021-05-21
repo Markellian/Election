@@ -12,34 +12,24 @@ namespace Выборы
     using System;
     using System.Collections.Generic;
     
-    public partial class Users
+    public partial class Transactions
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Users()
+        public Transactions()
         {
             this.Blocks = new HashSet<Blocks>();
-            this.ElectionOptions = new HashSet<ElectionOptions>();
-            this.Transactions = new HashSet<Transactions>();
+            this.Elections = new HashSet<Elections>();
         }
     
         public int Id { get; set; }
-        public string Login { get; set; }
-        public string Password { get; set; }
-        public string Passport { get; set; }
-        public string First_name { get; set; }
-        public string Name { get; set; }
-        public string Last_name { get; set; }
-        public string Email { get; set; }
-        public string Phone { get; set; }
-        public System.DateTime Birthday { get; set; }
-        public int Role_id { get; set; }
+        public int Voiting_type_id { get; set; }
+        public int Option_id { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Blocks> Blocks { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ElectionOptions> ElectionOptions { get; set; }
-        public virtual Roles Roles { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Transactions> Transactions { get; set; }
+        public virtual ICollection<Elections> Elections { get; set; }
+        public virtual PoolOptions PoolOptions { get; set; }
+        public virtual Users Users { get; set; }
     }
 }

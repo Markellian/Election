@@ -14,14 +14,13 @@ namespace Выборы.Classes
             return DataBase.GetUser(login, password);
         }
 
-        public static string AddElection(string name, DateTime start, DateTime end)
+        public static string AddInterview(string name, DateTime start, DateTime end, List<string> options)
         {
             if (DataBase.GetElection(name) != null)
             {
                 return Properties.Language.ElectionWithThisNameIsExists;
             }
-            var election = DataBase.AddElection(name, start, end);
-            if (election)
+            if (DataBase.AddInterviewWithOptions(name, start, end, options) == null)
             {
                 return Properties.Language.FailedToCreateElection;
             }

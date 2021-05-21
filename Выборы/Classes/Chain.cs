@@ -34,13 +34,18 @@ namespace Выборы.Classes
         /// <param name="user">Пользователь, который инициирует добавление</param>
         /// <param name="candidate">Кандидат, за которого отдается голос</param>
         /// <returns>true - добавление прошло успешно. false - ошибка добавления</returns>
-        public bool Add(User user, Candidate candidate)
+        public bool Add(User user, VoitingTypes voiting, Candidate candidate)
         {
             if (user == null || candidate == null)
             {
                 return false;
             }
-            Block newBlock = new Block(user, candidate, Last);
+            var tran = new Transactions()
+            {
+                Voiting_type_id = voiting.Id,
+                Option_id = candidate.Id
+            };
+            Block newBlock = new Block(user, Last, tran);
             var res = DataBase.AddBlock(newBlock);
             if (res)
             {

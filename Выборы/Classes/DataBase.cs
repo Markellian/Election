@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Выборы.Classes
 {
-    class DataBase
+    public class DataBase
     {
         public static List<Block> GetChain(int election_id)
         {
@@ -33,8 +33,8 @@ namespace Выборы.Classes
                 Blocks blocks = new Blocks()
                 {
                     User_id = block.User_id,
-                    DataCreated = block.DataCreated,
-                    Data = block.Data,
+                    DateCreated = block.DateCreated,
+                    Transation_id = block.Transation_id,
                     Hash = block.Hash,
                     PreviousHash = block.PreviousHash,
                     Election_id = block.Election_id
@@ -55,13 +55,14 @@ namespace Выборы.Classes
             }
         }
 
-        public static bool AddElection(string name, DateTime start, DateTime end)//Election election)
+        public static bool AddElection(string name, DateTime start, DateTime end, VoitingType voitingType)
         {
             
             Elections elections = new Elections(){
                 Name = name,// election.Name,
                 DateStart = start,// election.DateStart,
                 DateEnd = end,// election.DateEnd
+                Voiteing_type_id = (int)voitingType
             };
 
             using (var db = new ElectionsDataBase())
@@ -79,6 +80,44 @@ namespace Выборы.Classes
             }
         }
 
+        /// <summary>
+        /// Ищет в базе данных опцию с указанным именем
+        /// </summary>
+        /// <param name="name">название опции</param>
+        /// <returns>в случае успеха возвращает Id опции, иначе -1</returns>
+        public static PoolOptions IfExistsOptionByName(string name)
+        {
+            using (var db = new ElectionsDataBase())
+            {
+                var options = from o in db.PoolOptions where o.Name == name select o;
+                if (options != null)
+                {
+                    var option = options.ToList().FirstOrDefault();
+                    if (option != null) return option;                    
+                }
+                return null;
+            }
+        }
+        
+        public static PoolOptions AddPoolOption(string name)
+        {
+            using (var db = new ElectionsDataBase())
+            {
+                PoolOptions poolOptions = new PoolOptions() { Name = name };
+                try
+                {
+                    db.PoolOptions.Add(poolOptions);
+                    db.SaveChanges();
+                    return poolOptions;
+                }
+                catch (InvalidOperationException)
+                {
+                    return null;
+                }
+                
+            }
+        }
+        
         public static User GetUser(string login, string password)
         {
             User user = null;
@@ -248,6 +287,55 @@ namespace Выборы.Classes
             }
 
             return hashString;
+        }
+
+
+        public static Elections AddInterviewWithOptions(string name, DateTime start, DateTime end, List<string> listOptions)
+        {
+            if (GetElection(name) != null) return null;
+            if (listOptions == null) return null;
+            using (var db = new ElectionsDataBase())
+            {
+                using (var transaction = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+
+
+                        Elections elections = new Elections()
+                        {
+                            Name = name,
+                            DateStart = start,
+                            DateEnd = end,
+                            Voiteing_type_id = 1 //Interview
+                        };
+                        db.Elections.Add(elections);
+                        db.SaveChanges();
+                        foreach (var optionName in listOptions)
+                        {
+                            PoolOptions option = DataBase.IfExistsOptionByName(optionName);
+                            if (option == null)
+                            {
+                                option = new PoolOptions() { Name = optionName };
+                                db.PoolOptions.Add(option);
+                                db.SaveChanges();
+                            }
+
+                            db.ElectionOptions.Add(new ElectionOptions() { Election_id = elections.Id, Option_id = option.Id });
+                            db.SaveChanges();
+                        }
+                        db.SaveChanges();
+                        transaction.Commit();
+                        return elections;
+                    }
+                    catch (Exception)
+                    {
+                        transaction.Rollback();
+                        return null;
+                    }
+                }
+            }
+            
         }
     }
 }
