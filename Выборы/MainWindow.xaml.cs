@@ -27,6 +27,7 @@ namespace Выборы
         List<Grid> lastGrid = new List<Grid>();
         Grid nowMenuGrid;
         List<string> listOptions = new List<string>();
+        List<Candidate> listCandidates = new List<Candidate>();
         public MainWindow()
         {
             InitializeComponent();
@@ -127,7 +128,7 @@ namespace Выборы
         private void ChangeGridVisibility(Grid makeVisible, Grid makeHidden)
         {
             makeVisible.Visibility = Visibility.Visible;
-            makeHidden.Visibility = Visibility.Hidden;
+            makeHidden.Visibility = Visibility.Collapsed;
         }
 
         private void CreateElectionGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -138,7 +139,7 @@ namespace Выборы
             InterviewRadioButton.IsChecked = true;
 
             InterviewOptionsCreateGrid.Visibility = Visibility.Visible;
-            ElectionOptionsCreateStackPanel.Visibility = Visibility.Hidden;
+            ElectionOptionsCreateGrid.Visibility = Visibility.Hidden;
             
         }
 
@@ -171,14 +172,25 @@ namespace Выборы
                 MessageBox.Show("Введите дату окончания голосования");
                 return;
             }
-            if (listOptions == null || listOptions.Count == 0)
-            {
-                MessageBox.Show("Добавьте варинты голосования");
-                return;
-            }
+            
             if (InterviewRadioButton.IsChecked == true)
             {
+                if (listOptions == null || listOptions.Count == 0)
+                {
+                    MessageBox.Show("Добавьте варинты голосования");
+                    return;
+                }
                 string message = Controller.AddInterview(name, (DateTime)start, (DateTime)end, listOptions);
+                MessageBox.Show(message);
+            }
+            if (ElectionRadioButton.IsChecked == true)
+            {
+                if (listCandidates == null || listCandidates.Count == 0)
+                {
+                    MessageBox.Show("Добавьте кандидатов голосования");
+                    return;
+                }
+                string message = Controller.AddElection(name, (DateTime)start, (DateTime)end, listCandidates);
                 MessageBox.Show(message);
             }
         }
@@ -476,6 +488,69 @@ namespace Выборы
             InterviewOptionsComboBox.ItemsSource = listOptions;
             if (listOptions.Count > 0 ) InterviewOptionsComboBox.SelectedItem = listOptions.Last();
 
+        }
+
+        private void InterviewRadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            ChangeGridVisibility(InterviewOptionsCreateGrid, ElectionOptionsCreateGrid);
+        }
+        private void ElectionRadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            ChangeGridVisibility(ElectionOptionsCreateGrid, InterviewOptionsCreateGrid);
+        }
+
+        private void ElectionOptionsCreateGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (ElectionOptionsCreateGrid.Visibility == Visibility.Visible)
+            {
+                CandidatsComboBox.ItemsSource = Controller.GetCandidates();
+            }
+        }
+
+        private void AddCandidateOptionToChoosedButton_Click(object sender, RoutedEventArgs e)
+        {
+            Candidate item = (Candidate)CandidatsComboBox.SelectedItem;
+            if (item == null)
+            {
+                MessageBox.Show("Выберите кандидата");
+                return;
+            }
+            if (listCandidates.Contains(item))
+            {
+                MessageBox.Show("Этот кандидат уже добавлен");
+                return;
+            }
+            listCandidates.Add(item);
+            CandidatsChoosedComboBox.ItemsSource = null;
+            CandidatsChoosedComboBox.ItemsSource = listCandidates;
+            CandidatsChoosedComboBox.SelectedItem = listCandidates.Last();
+
+            List<Candidate> l = (List<Candidate>)CandidatsComboBox.ItemsSource;
+            l.Remove(item);
+            CandidatsComboBox.ItemsSource = null;
+            CandidatsComboBox.ItemsSource = l;
+
+
+        }
+
+        private void DeleteCandidateOptionToChoosedButton_Click(object sender, RoutedEventArgs e)
+        {
+            Candidate item = (Candidate)CandidatsChoosedComboBox.SelectedItem;
+            if (item == null)
+            {
+                MessageBox.Show("Выберите кандидата");
+                return;
+            }
+            listCandidates.Remove(item);
+            CandidatsChoosedComboBox.ItemsSource = null;
+            CandidatsChoosedComboBox.ItemsSource = listCandidates;
+            if (listCandidates.Count > 0) CandidatsChoosedComboBox.SelectedItem = listCandidates.Last();
+
+            List<Candidate> l = (List<Candidate>)CandidatsComboBox.ItemsSource;
+            l.Add(item);
+            CandidatsComboBox.ItemsSource = null;
+            CandidatsComboBox.ItemsSource = l;
+            CandidatsComboBox.SelectedItem = item;
         }
     }
 }

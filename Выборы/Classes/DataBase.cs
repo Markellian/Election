@@ -9,6 +9,11 @@ namespace Выборы.Classes
 {
     public class DataBase
     {
+        /// <summary>
+        /// Получение цепочки блоков для определенного голосования
+        /// </summary>
+        /// <param name="election_id">ID голосования</param>
+        /// <returns>Цепочку блоков</returns>
         public static List<Block> GetChain(int election_id)
         {
             List<Block> blockchain;
@@ -34,7 +39,7 @@ namespace Выборы.Classes
                 {
                     User_id = block.User_id,
                     DateCreated = block.DateCreated,
-                    Transation_id = block.Transation_id,
+                    Option_id = block.Option_id,
                     Hash = block.Hash,
                     PreviousHash = block.PreviousHash,
                     Election_id = block.Election_id
@@ -52,31 +57,6 @@ namespace Выборы.Classes
             {
                 var elec = (from e in db.Elections where e.Name == electionName select e).ToList().FirstOrDefault();
                 return elec == null ? null : new Election(elec);
-            }
-        }
-
-        public static bool AddElection(string name, DateTime start, DateTime end, VoitingType voitingType)
-        {
-            
-            Elections elections = new Elections(){
-                Name = name,// election.Name,
-                DateStart = start,// election.DateStart,
-                DateEnd = end,// election.DateEnd
-                Voiteing_type_id = (int)voitingType
-            };
-
-            using (var db = new ElectionsDataBase())
-            {
-                try
-                {
-                    db.Elections.Add(elections);
-                    db.SaveChanges();
-                    return true;
-                }
-                catch (InvalidOperationException)
-                {
-                    return false;
-                }
             }
         }
 
@@ -289,11 +269,17 @@ namespace Выборы.Classes
             return hashString;
         }
 
-
+        public static List<Users> GetCandidates()
+        {
+            using (var db = new ElectionsDataBase())
+            {
+                return (from u in db.Users where u.Role_id == 3 select u).ToList();
+            }
+        }
         public static Elections AddInterviewWithOptions(string name, DateTime start, DateTime end, List<string> listOptions)
         {
             if (GetElection(name) != null) return null;
-            if (listOptions == null) return null;
+            if (listOptions == null || listOptions.Count == 0) return null;
             using (var db = new ElectionsDataBase())
             {
                 using (var transaction = db.Database.BeginTransaction())
@@ -336,6 +322,43 @@ namespace Выборы.Classes
                 }
             }
             
+        }
+    
+        public static Elections AddElectionWithCandidates(string name, DateTime start, DateTime end, List<Candidate> candidates)
+        {
+            if (GetElection(name) != null) return null;
+            if (candidates == null || candidates.Count == 0) return null;
+            using (var db = new ElectionsDataBase())
+            {
+                using (var transaction = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        Elections elections = new Elections()
+                        {
+                            Name = name,
+                            DateStart = start,
+                            DateEnd = end,
+                            Voiteing_type_id = 2 //Election
+                        };
+                        db.Elections.Add(elections);
+                        db.SaveChanges();
+                        foreach (var candidate in candidates)
+                        {
+                            db.ElectionOptions.Add(new ElectionOptions() { Election_id = elections.Id, Option_id = candidate.Id });
+                            db.SaveChanges();
+                        }
+                        db.SaveChanges();
+                        transaction.Commit();
+                        return elections;
+                    }
+                    catch (Exception)
+                    {
+                        transaction.Rollback();
+                        return null;
+                    }
+                }
+            }
         }
     }
 }

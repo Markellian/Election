@@ -184,11 +184,8 @@
                         <DatePicker Name="DateStartElectionDataPicker" Grid.Column="1" HorizontalAlignment="Left" Margin="9.2,55,0,0" FontSize="{StaticResource FontSizeSimplyText}" Grid.Row="1" VerticalAlignment="Top" Height="35" Width="200" SelectedDateChanged="DateStartElectionDataPicker_SelectedDateChanged"/>
                         <Label FontSize="{StaticResource FontSizeSimplyText}" Margin="0,100,10.8,0" Height="35" VerticalAlignment="Top" Content="Конец голосования:" HorizontalAlignment="Right"  Grid.Row="1" Width="193"/>
                         <DatePicker Name="DateEndElectionDataPicker" Grid.Column="1" HorizontalAlignment="Left" Margin="9.2,100,0,0" FontSize="{StaticResource FontSizeSimplyText}" Grid.Row="1" VerticalAlignment="Top" Height="35" Width="200"/>
-                        <StackPanel Margin="-20,145,0,0" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Top" Orientation="Horizontal" HorizontalAlignment="Center">
-                            <RadioButton x:Name="InterviewRadioButton" Content="Опрос" FontSize="{StaticResource FontSizeSimplyText}" VerticalContentAlignment="Center"/>
-                            <RadioButton x:Name="ElectionRadioButton" Content="Выборы" IsChecked="True" FontSize="{StaticResource FontSizeSimplyText}" Margin="25,0,0,0" VerticalContentAlignment="Center"/>
-                        </StackPanel>
-                        <Grid x:Name="InterviewOptionsCreateGrid" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,175,-0.2,45.4" IsVisibleChanged="InterviewOptionsCreateStackPanel_IsVisibleChanged">
+
+                        <Grid x:Name="InterviewOptionsCreateGrid" Visibility="Collapsed" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,175,-0.2,45.4" IsVisibleChanged="InterviewOptionsCreateStackPanel_IsVisibleChanged">
                             <Grid HorizontalAlignment="Center" VerticalAlignment="Top" Margin="60,0" >
                                 <Label Content="Вариант опроса:" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="37" Width="162"/>
                                 <TextBox x:Name="OptionsTextBox" VerticalContentAlignment="Center" Width="200" Height="35" FontSize="{StaticResource FontSizeSimplyText}" Grid.Column="0" Margin="167,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -197,11 +194,56 @@
                                 <ComboBox FontSize="{StaticResource FontSizeSimplyText}" VerticalContentAlignment="Center" x:Name="InterviewOptionsComboBox" Height="35" Margin="397,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="183"/>
                             </Grid>
                         </Grid>
-                        <Grid x:Name="ElectionOptionsCreateStackPanel" Visibility="Collapsed">
+                        <Grid x:Name="ElectionOptionsCreateGrid" Visibility="Visible" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,175,-0.2,45.4" IsVisibleChanged="ElectionOptionsCreateGrid_IsVisibleChanged">
+                            <Grid VerticalAlignment="Top" Margin="60,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="28"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="28"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Content="Кандидат:" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="37" Width="100" Margin="0,0,0,-0.2"/>
+                                <ComboBox x:Name="CandidatsComboBox" VerticalContentAlignment="Center" FontSize="{StaticResource FontSizeSimplyText}" Grid.Column="1">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock>
+                                                <Run Text="{Binding Passport}"/>
+                                                <Run Text=" "/>
+                                                <Run Text="{Binding First_name}"/>
+                                                <Run Text=" "/>
+                                                <Run Text="{Binding Name}"/>
+                                                <Run Text=" "/>
+                                                <Run Text="{Binding Last_name}"/>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                <Button Content="+" FontSize="{StaticResource FontSizeSimplyText}" Margin="4,0,4,0" HorizontalAlignment="Left" Width="20" VerticalContentAlignment="Center" VerticalAlignment="Top" Height="35" Grid.Column="2" Click="AddCandidateOptionToChoosedButton_Click"/>
+                                <ComboBox FontSize="{StaticResource FontSizeSimplyText}" VerticalContentAlignment="Center" x:Name="CandidatsChoosedComboBox" Grid.Column="3">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock>
+                                                <Run Text="{Binding Passport}"/>
+                                                <Run Text=" "/>
+                                                <Run Text="{Binding First_name}"/>
+                                                <Run Text=" "/>
+                                                <Run Text="{Binding Name}"/>
+                                                <Run Text=" "/>
+                                                <Run Text="{Binding Last_name}"/>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
 
+                                <Button Content="-" FontSize="{StaticResource FontSizeSimplyText}" Margin="4,0,4,0" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="4" Height="35" Width="20" VerticalContentAlignment="Center" Click="DeleteCandidateOptionToChoosedButton_Click"/>
+                            </Grid>
                         </Grid>
+                        <StackPanel Margin="-20,145,0,0" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Top" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <RadioButton x:Name="InterviewRadioButton" Content="Опрос" FontSize="{StaticResource FontSizeSimplyText}" VerticalContentAlignment="Center" Checked="InterviewRadioButton_Checked"/>
+                            <RadioButton x:Name="ElectionRadioButton" Content="Выборы" IsChecked="True" FontSize="{StaticResource FontSizeSimplyText}" Margin="25,0,0,0" VerticalContentAlignment="Center" Checked="ElectionRadioButton_Checked"/>
+                        </StackPanel>
                         <Button x:Name="AddElectionButton" Content="Добавить голосование" FontSize="{StaticResource FontSizeSimplyText}" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Height="35" Width="300" Margin="200,218,224.8,0" HorizontalAlignment="Center" VerticalAlignment="Top" Click="AddElectionButton_Click"/>
-
                     </Grid>
                     <Grid x:Name="UsersGrid" Visibility="Collapsed" IsVisibleChanged="UsersGrid_IsVisibleChanged">
                         <Grid.Resources>

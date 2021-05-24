@@ -31,7 +31,6 @@ namespace Выборы
         public virtual ICollection<Blocks> Blocks { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ElectionOptions> ElectionOptions { get; set; }
-        public virtual Transactions Transactions { get; set; }
         public virtual VoitingTypes VoitingTypes { get; set; }
     }
 }

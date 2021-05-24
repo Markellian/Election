@@ -19,7 +19,6 @@ namespace Выборы
         {
             this.Blocks = new HashSet<Blocks>();
             this.ElectionOptions = new HashSet<ElectionOptions>();
-            this.Transactions = new HashSet<Transactions>();
         }
     
         public int Id { get; set; }
@@ -39,7 +38,5 @@ namespace Выборы
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ElectionOptions> ElectionOptions { get; set; }
         public virtual Roles Roles { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Transactions> Transactions { get; set; }
     }
 }

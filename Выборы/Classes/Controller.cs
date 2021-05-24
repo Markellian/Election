@@ -30,6 +30,21 @@ namespace Выборы.Classes
             }
         }
 
+        public static string AddElection(string name, DateTime start, DateTime end, List<Candidate> candidates)
+        {
+            if (DataBase.GetElection(name) != null)
+            {
+                return Properties.Language.ElectionWithThisNameIsExists;
+            }
+            if (DataBase.AddElectionWithCandidates(name, start, end, candidates) == null)
+            {
+                return Properties.Language.FailedToCreateElection;
+            }
+            else
+            {
+                return Properties.Language.ElectionСreated;
+            }
+        }
         public static string IsLoginValidate(string login)
         {
             if (string.IsNullOrEmpty(login))
@@ -121,6 +136,19 @@ namespace Выборы.Classes
         public static List<Roles> GetAllRoles()
         {
             return DataBase.GetAllRoles();
+        }
+
+        public static List<Candidate> GetCandidates()
+        {
+            List<Candidate> list = new List<Candidate>();
+            var candidates = DataBase.GetCandidates();
+            if (candidates == null || candidates.Count == 0) return null;
+            foreach (var candidate in candidates)
+            {
+                list.Add(new Candidate(candidate));
+            }
+
+            return list;
         }
     
         public static bool DeleteUser(User user)
