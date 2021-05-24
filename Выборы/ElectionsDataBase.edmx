@@ -34,6 +34,7 @@
           <Property Name="DateStart" Type="datetime" Nullable="false" />
           <Property Name="DateEnd" Type="datetime" Nullable="false" />
           <Property Name="Voiteing_type_id" Type="int" Nullable="false" />
+          <Property Name="Description" Type="text" />
         </EntityType>
         <EntityType Name="PoolOptions">
           <Key>
@@ -271,6 +272,7 @@
           <NavigationProperty Name="Blocks" Relationship="ElectionsDataBaseModel.FK_Blocks_Elections" FromRole="Elections" ToRole="Blocks" />
           <NavigationProperty Name="ElectionOptions" Relationship="ElectionsDataBaseModel.FK_ElectionOptions_Elections" FromRole="Elections" ToRole="ElectionOptions" />
           <NavigationProperty Name="VoitingTypes" Relationship="ElectionsDataBaseModel.FK_Elections_VoitingTypes" FromRole="Elections" ToRole="VoitingTypes" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PoolOptions">
           <Key>
@@ -429,6 +431,7 @@
           <EntitySetMapping Name="Elections">
             <EntityTypeMapping TypeName="ElectionsDataBaseModel.Elections">
               <MappingFragment StoreEntitySet="Elections">
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Voiteing_type_id" ColumnName="Voiteing_type_id" />
                 <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
                 <ScalarProperty Name="DateStart" ColumnName="DateStart" />

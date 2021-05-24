@@ -11,12 +11,7 @@ namespace Выборы.Classes.Tests
     [TestClass()]
     public class ChainTests
     {
-        [TestMethod()]
-        public void ChainConstructorTest()
-        {
-            Chain chain = new Chain(Election.GetElection("Любимый цвет"));            
-            Assert.IsNotNull(chain);
-        }
+        
         [TestMethod()]
         public void ChainAddTest()
         {

@@ -26,6 +26,7 @@ namespace Выборы
         public System.DateTime DateStart { get; set; }
         public System.DateTime DateEnd { get; set; }
         public int Voiteing_type_id { get; set; }
+        public string Description { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Blocks> Blocks { get; set; }

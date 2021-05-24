@@ -51,7 +51,7 @@ namespace Выборы.Classes
             }
         }
 
-        public static Election GetElection(string electionName)
+        public static Election GetElectionByName(string electionName)
         {
             using(var db = new ElectionsDataBase())
             {
@@ -276,9 +276,9 @@ namespace Выборы.Classes
                 return (from u in db.Users where u.Role_id == 3 select u).ToList();
             }
         }
-        public static Elections AddInterviewWithOptions(string name, DateTime start, DateTime end, List<string> listOptions)
+        public static Elections AddInterviewWithOptions(string name, DateTime start, DateTime end, string description, List<string> listOptions)
         {
-            if (GetElection(name) != null) return null;
+            if (GetElectionByName(name) != null) return null;
             if (listOptions == null || listOptions.Count == 0) return null;
             using (var db = new ElectionsDataBase())
             {
@@ -293,6 +293,7 @@ namespace Выборы.Classes
                             Name = name,
                             DateStart = start,
                             DateEnd = end,
+                            Description = description,
                             Voiteing_type_id = 1 //Interview
                         };
                         db.Elections.Add(elections);
@@ -324,9 +325,9 @@ namespace Выборы.Classes
             
         }
     
-        public static Elections AddElectionWithCandidates(string name, DateTime start, DateTime end, List<Candidate> candidates)
+        public static Elections AddElectionWithCandidates(string name, DateTime start, DateTime end, string description, List<Candidate> candidates)
         {
-            if (GetElection(name) != null) return null;
+            if (GetElectionByName(name) != null) return null;
             if (candidates == null || candidates.Count == 0) return null;
             using (var db = new ElectionsDataBase())
             {
@@ -339,6 +340,7 @@ namespace Выборы.Classes
                             Name = name,
                             DateStart = start,
                             DateEnd = end,
+                            Description = description,
                             Voiteing_type_id = 2 //Election
                         };
                         db.Elections.Add(elections);
@@ -357,6 +359,30 @@ namespace Выборы.Classes
                         transaction.Rollback();
                         return null;
                     }
+                }
+            }
+        }
+    
+        public static List<Elections> GetElections()
+        {
+            using (var db = new ElectionsDataBase())
+            {
+                return (from e in db.Elections select e).ToList();
+            }
+        }
+
+        public static Elections GetElectionById(int Id)
+        {
+            using (var db = new ElectionsDataBase())
+            {
+                var elections = (from e in db.Elections where e.Id == Id select e).ToList();
+                if (elections != null && elections.Count != 0)
+                {
+                    return elections.FirstOrDefault();
+                }
+                else
+                {
+                    return null;
                 }
             }
         }

@@ -14,13 +14,13 @@ namespace Выборы.Classes
             return DataBase.GetUser(login, password);
         }
 
-        public static string AddInterview(string name, DateTime start, DateTime end, List<string> options)
+        public static string AddInterview(string name, DateTime start, DateTime end, string description, List<string> options)
         {
-            if (DataBase.GetElection(name) != null)
+            if (DataBase.GetElectionByName(name) != null)
             {
                 return Properties.Language.ElectionWithThisNameIsExists;
             }
-            if (DataBase.AddInterviewWithOptions(name, start, end, options) == null)
+            if (DataBase.AddInterviewWithOptions(name, start, end, description, options) == null)
             {
                 return Properties.Language.FailedToCreateElection;
             }
@@ -30,13 +30,13 @@ namespace Выборы.Classes
             }
         }
 
-        public static string AddElection(string name, DateTime start, DateTime end, List<Candidate> candidates)
+        public static string AddElection(string name, DateTime start, DateTime end, string description, List<Candidate> candidates)
         {
-            if (DataBase.GetElection(name) != null)
+            if (DataBase.GetElectionByName(name) != null)
             {
                 return Properties.Language.ElectionWithThisNameIsExists;
             }
-            if (DataBase.AddElectionWithCandidates(name, start, end, candidates) == null)
+            if (DataBase.AddElectionWithCandidates(name, start, end, description, candidates) == null)
             {
                 return Properties.Language.FailedToCreateElection;
             }
@@ -151,6 +151,19 @@ namespace Выборы.Classes
             return list;
         }
     
+        public static List<Election> GetElections()
+        {
+            List<Election> list = new List<Election>();
+            var elections = DataBase.GetElections();
+            if (elections == null || elections.Count == 0) return null;
+            foreach (var election in elections)
+            {
+                list.Add(new Election(election));
+            }
+            list.Sort((x,y) => y.Id.CompareTo(x.Id));
+            return list;
+        }
+
         public static bool DeleteUser(User user)
         {
             return DataBase.DeleteUser(user.Id);
@@ -159,6 +172,11 @@ namespace Выборы.Classes
         public static bool ChahgeRole(User user, Roles role)
         {
             return DataBase.ChangeRole(user.Id, role.Id);
+        }
+    
+        public static Election GetElectionById(int Id)
+        {
+            return new Election(DataBase.GetElectionById(Id));
         }
     }
 }

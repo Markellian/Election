@@ -22,7 +22,7 @@ namespace Выборы.Classes.Tests
         public void AddElectionWithOptionsTest()
         {
             List<string> l = new List<string>() {"зеленый", "голубой", "красный" };
-            DataBase.AddInterviewWithOptions("любимый цвет", DateTime.Parse("2/2/18"), DateTime.Parse("2/2/28"), l);
+            DataBase.AddInterviewWithOptions("любимый цвет0", DateTime.Parse("2/2/18"), DateTime.Parse("2/2/20"), "Выбираем самый любимый цвет. Если нет любимого, то голосуйте за первый вариант", l);
         }
     }
 }

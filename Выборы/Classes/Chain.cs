@@ -40,12 +40,7 @@ namespace Выборы.Classes
             {
                 return false;
             }
-            var tran = new Transactions()
-            {
-                Voiting_type_id = voiting.Id,
-                Option_id = candidate.Id
-            };
-            Block newBlock = new Block(user, Last, tran);
+            Block newBlock = new Block(user, Last, candidate.Id);
             var res = DataBase.AddBlock(newBlock);
             if (res)
             {
