@@ -191,10 +191,22 @@ namespace Выборы.Classes
 
             foreach (Block block in chain.Blocks.Skip(1))
             {
-                options.Find((o) => o.Id == block.Id).Voites++;
+                Option option = options.Find((o) => o.Id == block.Option_id);
+                option.Voites++;
             }
             
             return options;
+        }
+
+        public static bool Vote(User user, Election election, Option option)
+        {
+            Chain chain = new Chain(election);
+            return chain.Add(user, option.Id);
+        }
+
+        public static int? IfUserVoted(User user, Election election)
+        {
+            return DataBase.IfUserVoted(user, election);
         }
     }
 }

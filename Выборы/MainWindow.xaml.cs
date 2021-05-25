@@ -28,6 +28,7 @@ namespace Выборы
         List<Grid> lastGrid = new List<Grid>();
         Grid nowMenuGrid;
         List<string> listOptions = new List<string>();
+        List<Option> options;
         List<User> listCandidates = new List<User>();
         public MainWindow()
         {
@@ -75,6 +76,7 @@ namespace Выборы
         {
             user = null;
             MainGrid_IsVisibleChanged(MainGrid, new DependencyPropertyChangedEventArgs());
+            ChangeGridVisibility(NewsGrid, nowMenuGrid);
         }
 
         private void FromMainToAuth_Click(object sender, RoutedEventArgs e)
@@ -127,8 +129,8 @@ namespace Выборы
         }
         private void ChangeGridVisibility(Grid makeVisible, Grid makeHidden)
         {
-            makeVisible.Visibility = Visibility.Visible;
             makeHidden.Visibility = Visibility.Collapsed;
+            makeVisible.Visibility = Visibility.Visible;
         }
 
         private void CreateElectionGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -568,7 +570,7 @@ namespace Выборы
 
                 var news = Controller.GetElections();
                 if (news == null || news.Count == 0) return;
-
+                NewsStackPanel.Children.Clear();
                 foreach (var election in news)
                 {
                     Grid grid = new Grid();
@@ -680,11 +682,83 @@ namespace Выборы
                     ElectionDateLabel.Content = election.DateStart.ToString("d") + " - " + election.DateEnd.ToString("d");
                     ElectionDescriptionTextBlock.Text = election.Description;
 
-                    List<Option> options = Controller.GetOptions(election);
+                    options = Controller.GetOptions(election);
+                    int countVoit = 0;
+                    foreach (var o in options) countVoit += o.Voites;
+                    OptionsStackPanel.Children.Clear();
+                    int? option_id = null;
+                    if (user!=null) option_id = Controller.IfUserVoted(user, election);
 
-                    foreach(var option in options)
+                    foreach (var option in options)
                     {
-                        OptionsStackPanel.Children.Add(new Label() { Content = option.Name + " - " + option.Voites.ToString() });
+                        RadioButton radioButton = new RadioButton() 
+                        { 
+                            VerticalContentAlignment = VerticalAlignment.Center,
+                            FontSize = 20,
+                        };
+                        radioButton.Content = new StackPanel()
+                        {
+                            Orientation = Orientation.Horizontal,
+                            Children =
+                            {
+                                new TextBlock(){Text = option.Name},
+                                new TextBlock(){Text = " - " + option.Voites},
+                                new TextBlock(){Text = " (%)"},
+                            }
+                        };
+                        var countTextBlock = (TextBlock)((StackPanel)radioButton.Content).Children[2];
+                        if (countVoit != 0) countTextBlock.Text = countTextBlock.Text.Insert(2, ((Double)option.Voites / (Double)countVoit * 100).ToString("00.##"));
+                        else countTextBlock.Text = countTextBlock.Text.Insert(2,"0");
+
+                        if (user!= null && option_id != null && option.Id == option_id)
+                        {
+                            ((TextBlock)((StackPanel)radioButton.Content).Children[0]).Foreground = Brushes.Green;
+                        }
+                        OptionsStackPanel.Children.Add(radioButton);
+                    }
+                    if(election.DateStart > DateTime.UtcNow)
+                    {
+                        VoteImpossibleLabel.Visibility = Visibility.Visible;
+                        VoteButton.Visibility = Visibility.Collapsed;
+                        
+                        string str = "Голосование начнется через ";
+                        var time = election.DateEnd - DateTime.Now;
+                        str += time.Days.ToString() + "д ";
+                        str += time.Hours.ToString() + "ч ";
+                        str += time.Minutes.ToString() + "м";
+                        VoteImpossibleLabel.Content = str;
+                        VoteImpossibleLabel.Foreground = Brushes.Blue;
+                    }
+                    else if (election.DateEnd < DateTime.UtcNow)
+                    {
+                        VoteImpossibleLabel.Visibility = Visibility.Visible;
+                        VoteButton.Visibility = Visibility.Collapsed;
+
+                        VoteImpossibleLabel.Content = "Голосование завершено";
+                        VoteImpossibleLabel.Foreground = Brushes.Red;
+                    }else if (user == null)
+                    {
+                        VoteImpossibleLabel.Visibility = Visibility.Visible;
+                        VoteButton.Visibility = Visibility.Collapsed;
+
+                        VoteImpossibleLabel.Content = "Чтобы проголосовать, необходимо авторизироваться";
+                        VoteImpossibleLabel.Foreground = Brushes.Red;
+                    }
+                    else
+                    {
+                        if (option_id != null)
+                        {
+                            VoteImpossibleLabel.Content = "Вы уже проголосовали";
+                            VoteImpossibleLabel.Foreground = Brushes.Green;
+
+                            VoteImpossibleLabel.Visibility = Visibility.Visible;
+                            VoteButton.Visibility = Visibility.Collapsed;
+                        }
+                        else
+                        {
+                            VoteImpossibleLabel.Visibility = Visibility.Collapsed;
+                            VoteButton.Visibility = Visibility.Visible;
+                        }
                     }
                 }
             }
@@ -693,6 +767,49 @@ namespace Выборы
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             ChangeGridVisibility(NewsGrid, nowMenuGrid);
+        }
+
+        private void VoteButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (user == null)
+            {
+                MessageBox.Show("Чтобы учавствовать в голосовании, необходимо авторизироваться");
+                return;
+            }
+            if (election == null)
+            {
+                MessageBox.Show("Ошибка! не выбрано голосование!");
+                return;
+            }
+            string option = null;
+            foreach (RadioButton obj in OptionsStackPanel.Children)
+            {
+                if (obj.IsChecked == true)
+                {
+                    option = ((TextBlock)((StackPanel)obj.Content).Children[0]).Text;
+                    break;
+                };
+            }
+            if (option == null)
+            {
+                MessageBox.Show("Ошибка! Не удалось найти выбранную опцию");
+                return;
+            }
+            Option opt = options.Find((o) => o.Name == option);
+            if (opt == null)
+            {
+                MessageBox.Show("Ошибка! Не удалось найти выбранную опцию");
+                return;
+            }
+            if (Controller.Vote(user, election, opt))
+            {
+                MessageBox.Show("Вы проголосовали");
+                ElectionGrid_IsVisibleChanged(null, new DependencyPropertyChangedEventArgs());
+            }
+            else
+            {
+                MessageBox.Show("Ошибка голосования!");
+            }
         }
     }
 }

@@ -53,7 +53,7 @@ namespace Выборы
                 throw new ArgumentException("Пустой блок", nameof(block));
             }
             User_id = user.Id;
-            DateCreated = DateTime.UtcNow;
+            DateCreated = DateTime.Now.ToUniversalTime();
             Option_id = option_id;
             Election_id = block.Election_id;
             PreviousHash = block.Hash;
@@ -68,7 +68,7 @@ namespace Выборы
         {
             string text = "";
             text += User_id.ToString();
-            text += DateCreated.ToString("O");
+            text += DateCreated.ToString("G");
             text += Option_id.ToString();
             text += Election_id.ToString();
             text += PreviousHash;

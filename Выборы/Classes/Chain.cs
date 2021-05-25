@@ -18,22 +18,34 @@ namespace Выборы.Classes
         //Конструктор для создания цепочки блоков
         public Chain(Election election)
         {
-            List<Block> blocks = DataBase.GetChain(election.Id);
-            Blocks = new List<Block>(blocks.Count() * 2);
-
-            var genesisBlock = blocks.Find((b) => b.PreviousHash.Trim() == election.Name);
-            Blocks.Add(genesisBlock);
-            string hash = genesisBlock.Hash;
-            do
+            try
             {
-                Block block = blocks.Find((b) => b.PreviousHash == hash);
-                if (block != null && block.MakeHash() == block.Hash)
+                List<Block> blocks = DataBase.GetChain(election.Id);
+                Blocks = new List<Block>(blocks.Count() * 2);
+
+                var genesisBlock = blocks.Find((b) => b.PreviousHash.Trim() == election.Name);
+                Blocks.Add(genesisBlock);
+                string hash = genesisBlock.Hash;
+                do
                 {
-                    Blocks.Add(block);
-                    hash = block.Hash;
-                }
-                else hash = null;
-            } while (hash != null);
+                    Block block = blocks.Find((b) => b.PreviousHash == hash);
+                    if (block != null && block.MakeHash() == block.Hash)
+                    {
+                        Blocks.Add(block);
+                        hash = block.Hash;
+                    }
+                    else
+                    {
+                        hash = null;
+                    }
+
+                } while (hash != null);
+                Last = Blocks.Last();
+            }
+            catch (NullReferenceException)
+            {
+                return;
+            }
         }
 
                
@@ -43,13 +55,13 @@ namespace Выборы.Classes
         /// <param name="user">Пользователь, который инициирует добавление</param>
         /// <param name="candidate">Кандидат, за которого отдается голос</param>
         /// <returns>true - добавление прошло успешно. false - ошибка добавления</returns>
-        public bool Add(User user, VoitingType voiting, User candidate)
+        public bool Add(User user, int option_id)
         {
-            if (user == null || candidate == null)
+            if (user == null)
             {
                 return false;
             }
-            Block newBlock = new Block(user, Last, candidate.Id);
+            Block newBlock = new Block(user, Last, option_id);
             var res = DataBase.AddBlock(newBlock);
             if (res)
             {
@@ -60,9 +72,8 @@ namespace Выборы.Classes
             else
             {
                 return false;
-            }
-            
-        }         
+            }            
+        }      
     
     }
 }

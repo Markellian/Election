@@ -381,5 +381,17 @@ namespace Выборы.Classes
                 return res.ToList(); 
             }
         }
+
+        public static int? IfUserVoted(User user, Election election)
+        {
+            using (var db = new ElectionsDataBase())
+            {
+                var res = from b in db.Blocks
+                          where b.Election_id == election.Id &&
+                                b.User_id == user.Id
+                          select b.Option_id;
+                return res.FirstOrDefault();
+            }
+        }
     }
 }
