@@ -16,7 +16,7 @@ namespace Выборы.Classes.Tests
         public void ChainAddTest()
         {
             
-            Chain chain = new Chain(new Election("Выборы на пост главного дворника", DateTime.Parse("10.10.2019 20:00:00"), DateTime.Parse("10.12.2019 20:00:00")));
+            //Chain chain = new Chain(new Election("Выборы на пост главного дворника", DateTime.Parse("10.10.2019 20:00:00"), DateTime.Parse("10.12.2019 20:00:00")));
             
             //Assert.IsFalse(chain.Add(null, new Candidate()));
 

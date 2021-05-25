@@ -30,7 +30,7 @@ namespace Выборы.Classes
             }
         }
 
-        public static string AddElection(string name, DateTime start, DateTime end, string description, List<Candidate> candidates)
+        public static string AddElection(string name, DateTime start, DateTime end, string description, List<User> candidates)
         {
             if (DataBase.GetElectionByName(name) != null)
             {
@@ -133,35 +133,24 @@ namespace Выборы.Classes
             return DataBase.GetAllUsers();
         }  
 
-        public static List<Roles> GetAllRoles()
+        public static List<Role> GetAllRoles()
         {
             return DataBase.GetAllRoles();
         }
 
-        public static List<Candidate> GetCandidates()
+        public static List<User> GetCandidates()
         {
-            List<Candidate> list = new List<Candidate>();
             var candidates = DataBase.GetCandidates();
             if (candidates == null || candidates.Count == 0) return null;
-            foreach (var candidate in candidates)
-            {
-                list.Add(new Candidate(candidate));
-            }
-
-            return list;
+            return candidates;
         }
     
         public static List<Election> GetElections()
         {
-            List<Election> list = new List<Election>();
             var elections = DataBase.GetElections();
             if (elections == null || elections.Count == 0) return null;
-            foreach (var election in elections)
-            {
-                list.Add(new Election(election));
-            }
-            list.Sort((x,y) => y.Id.CompareTo(x.Id));
-            return list;
+            elections.Sort((x,y) => y.Id.CompareTo(x.Id));
+            return elections;
         }
 
         public static bool DeleteUser(User user)
@@ -169,14 +158,43 @@ namespace Выборы.Classes
             return DataBase.DeleteUser(user.Id);
         }    
     
-        public static bool ChahgeRole(User user, Roles role)
+        public static bool ChahgeRole(User user, Role role)
         {
             return DataBase.ChangeRole(user.Id, role.Id);
         }
     
         public static Election GetElectionById(int Id)
         {
-            return new Election(DataBase.GetElectionById(Id));
+            return DataBase.GetElectionById(Id);
+        }
+    
+        public static List<Option> GetOptions(Election election)
+        {
+            Chain chain = new Chain(election);
+            List<Option> options = new List<Option>();
+            if (election.Voiteing_type_id == 1)
+            {
+                var list = DataBase.GetOptions(election);
+                foreach (var option in list)
+                {
+                    options.Add(new Option() { Name = option.Name, Voites = 0, Id = option.Id });
+                }
+            }
+            if (election.Voiteing_type_id == 2)
+            {
+                var list = DataBase.GetCandidates(election);
+                foreach (var candidate in list)
+                {
+                    options.Add(new Option() { Name = candidate.ToString(), Voites = 0, Id = candidate.Id });
+                }
+            }
+
+            foreach (Block block in chain.Blocks.Skip(1))
+            {
+                options.Find((o) => o.Id == block.Id).Voites++;
+            }
+            
+            return options;
         }
     }
 }

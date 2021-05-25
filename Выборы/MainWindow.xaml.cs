@@ -28,7 +28,7 @@ namespace Выборы
         List<Grid> lastGrid = new List<Grid>();
         Grid nowMenuGrid;
         List<string> listOptions = new List<string>();
-        List<Candidate> listCandidates = new List<Candidate>();
+        List<User> listCandidates = new List<User>();
         public MainWindow()
         {
             InitializeComponent();
@@ -87,7 +87,6 @@ namespace Выборы
         {
             if (((Grid)sender).Visibility == Visibility.Visible)
             {
-
                 if (user == null)
                 {
                     MenuMyProfileButton.Visibility = Visibility.Collapsed;
@@ -134,14 +133,18 @@ namespace Выборы
 
         private void CreateElectionGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            DateStartElectionDataPicker.DisplayDateStart = DateTime.Now;
-            DateEndElectionDataPicker.DisplayDateStart = DateTime.Now;
-            ElectionNameTextBox.Text = "";
-            InterviewRadioButton.IsChecked = true;
+            if (CreateElectionGrid.Visibility == Visibility.Visible)
+            {
+                nowMenuGrid = CreateElectionGrid;
 
-            InterviewOptionsCreateGrid.Visibility = Visibility.Visible;
-            ElectionOptionsCreateGrid.Visibility = Visibility.Hidden;
-            
+                DateStartElectionDataPicker.DisplayDateStart = DateTime.Now;
+                DateEndElectionDataPicker.DisplayDateStart = DateTime.Now;
+                ElectionNameTextBox.Text = "";
+                InterviewRadioButton.IsChecked = true;
+
+                InterviewOptionsCreateGrid.Visibility = Visibility.Visible;
+                ElectionOptionsCreateGrid.Visibility = Visibility.Hidden;
+            }
         }
 
         private void DateStartElectionDataPicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
@@ -155,7 +158,7 @@ namespace Выборы
 
         private void AddElectionButton_Click(object sender, RoutedEventArgs e)
         {
-            string name = ElectionNameTextBox.Text;
+            string name = ElectionNameTextBox.Text.Trim();
             DateTime? start = DateStartElectionDataPicker.SelectedDate;
             DateTime? end = DateEndElectionDataPicker.SelectedDate;
             if (string.IsNullOrEmpty(name))
@@ -199,7 +202,7 @@ namespace Выборы
 
         private void RegistrateButton_Click(object sender, RoutedEventArgs e)
         {
-            string login = RegistrationLoginTextBox.Text;
+            string login = RegistrationLoginTextBox.Text.Trim();
             string wrongLoginMessage = Controller.IsLoginValidate(login);
             if (wrongLoginMessage != "")
             {
@@ -236,21 +239,21 @@ namespace Выборы
             }
 
 
-            string firstName = RegistrationFirstNameTextBox.Text;
+            string firstName = RegistrationFirstNameTextBox.Text.Trim();
             if (string.IsNullOrEmpty(firstName))
             {
                 MessageBox.Show("Введите фамилию");
                 return;
             }
-            string name = RegistrationNameTextBox.Text;
+            string name = RegistrationNameTextBox.Text.Trim();
             if (string.IsNullOrEmpty(name))
             {
                 MessageBox.Show("Введите имя");
                 return;
             }
-            string lastName = RegistrationLastNameTextBox.Text;
+            string lastName = RegistrationLastNameTextBox.Text.Trim();
 
-            string email = RegistrationEmailTextBox.Text;
+            string email = RegistrationEmailTextBox.Text.Trim();
             string wrongEmailMessage = Controller.IsEmailValidate(email);
             if (wrongEmailMessage != "")
             {
@@ -258,7 +261,7 @@ namespace Выборы
                 return;
             }
 
-            string phone = RegistrationPhoneTextBox.Text;
+            string phone = RegistrationPhoneTextBox.Text.Trim();
             string wrongPhoneMessage = Controller.IsPhoneValidate(phone);
             if (wrongPhoneMessage != "")
             {
@@ -304,7 +307,6 @@ namespace Выборы
             }
         }
 
-
         private void RegistrationGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             RegistrationLoginTextBox.Text = "";
@@ -343,8 +345,6 @@ namespace Выборы
                 RegistrationPasportHelperLabel.Background = null;
             }
         }
-
-
 
         private void RegistrationPasswordPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
@@ -397,8 +397,13 @@ namespace Выборы
 
         private void UsersGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            UsersDataGrid.ItemsSource = Controller.GetAllUsers();
-            RolesComboBox.ItemsSource = Controller.GetAllRoles();
+            if (UsersGrid.Visibility == Visibility.Visible)
+            {
+                nowMenuGrid = UsersGrid;
+
+                UsersDataGrid.ItemsSource = Controller.GetAllUsers();
+                RolesComboBox.ItemsSource = Controller.GetAllRoles();
+            }
         }
 
         private void DeleteUserButton_Click(object sender, RoutedEventArgs e)
@@ -439,7 +444,7 @@ namespace Выборы
                 MessageBox.Show("Выберите пользователя");
                 return;
             }
-            if (Controller.ChahgeRole((User)selectedUser, (Roles)selectedRole))
+            if (Controller.ChahgeRole((User)selectedUser, (Role)selectedRole))
             {
                 MessageBox.Show("Изменение роли прошло успешно");
                 UsersDataGrid.ItemsSource = null;
@@ -511,7 +516,7 @@ namespace Выборы
 
         private void AddCandidateOptionToChoosedButton_Click(object sender, RoutedEventArgs e)
         {
-            Candidate item = (Candidate)CandidatsComboBox.SelectedItem;
+            User item = (User)CandidatsComboBox.SelectedItem;
             if (item == null)
             {
                 MessageBox.Show("Выберите кандидата");
@@ -527,7 +532,7 @@ namespace Выборы
             CandidatsChoosedComboBox.ItemsSource = listCandidates;
             CandidatsChoosedComboBox.SelectedItem = listCandidates.Last();
 
-            List<Candidate> l = (List<Candidate>)CandidatsComboBox.ItemsSource;
+            List<User> l = (List<User>)CandidatsComboBox.ItemsSource;
             l.Remove(item);
             CandidatsComboBox.ItemsSource = null;
             CandidatsComboBox.ItemsSource = l;
@@ -537,7 +542,7 @@ namespace Выборы
 
         private void DeleteCandidateOptionToChoosedButton_Click(object sender, RoutedEventArgs e)
         {
-            Candidate item = (Candidate)CandidatsChoosedComboBox.SelectedItem;
+            User item = (User)CandidatsChoosedComboBox.SelectedItem;
             if (item == null)
             {
                 MessageBox.Show("Выберите кандидата");
@@ -548,7 +553,7 @@ namespace Выборы
             CandidatsChoosedComboBox.ItemsSource = listCandidates;
             if (listCandidates.Count > 0) CandidatsChoosedComboBox.SelectedItem = listCandidates.Last();
 
-            List<Candidate> l = (List<Candidate>)CandidatsComboBox.ItemsSource;
+            List<User> l = (List<User>)CandidatsComboBox.ItemsSource;
             l.Add(item);
             CandidatsComboBox.ItemsSource = null;
             CandidatsComboBox.ItemsSource = l;
@@ -559,6 +564,8 @@ namespace Выборы
         {
             if (NewsGrid.Visibility == Visibility.Visible)
             {
+                nowMenuGrid = NewsGrid;
+
                 var news = Controller.GetElections();
                 if (news == null || news.Count == 0) return;
 
@@ -651,9 +658,41 @@ namespace Выборы
             var item = ((Grid)sender).Children[0];
             if (item.GetType().Name == nameof(Label))
             {
-                ChangeGridVisibility(ElectionGrid, NewsGrid);
                 election = Controller.GetElectionById(Int32.Parse(((Label)item).Content.ToString()));
+                if (election != null)
+                {
+                    ChangeGridVisibility(ElectionGrid, NewsGrid);
+                }
             }            
+        }
+
+        private void ElectionGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+           
+
+            if (ElectionGrid.Visibility == Visibility.Visible)
+            {
+                nowMenuGrid = ElectionGrid;
+
+                if (election != null)
+                {
+                    ElectionNameLabel.Content = election.Name;
+                    ElectionDateLabel.Content = election.DateStart.ToString("d") + " - " + election.DateEnd.ToString("d");
+                    ElectionDescriptionTextBlock.Text = election.Description;
+
+                    List<Option> options = Controller.GetOptions(election);
+
+                    foreach(var option in options)
+                    {
+                        OptionsStackPanel.Children.Add(new Label() { Content = option.Name + " - " + option.Voites.ToString() });
+                    }
+                }
+            }
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeGridVisibility(NewsGrid, nowMenuGrid);
         }
     }
 }

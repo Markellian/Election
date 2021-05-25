@@ -12,19 +12,28 @@ namespace Выборы.Classes
     public class Chain
     {
         //Цепочка блоков
-        private List<Block> Blocks { get; set; }
+        public List<Block> Blocks { get; set; }
         //Последний блок
         private Block Last { get; set; }
         //Конструктор для создания цепочки блоков
         public Chain(Election election)
         {
-            Blocks = DataBase.GetChain(election.Id);
-            if (Blocks.Count() == 0)
+            List<Block> blocks = DataBase.GetChain(election.Id);
+            Blocks = new List<Block>(blocks.Count() * 2);
+
+            var genesisBlock = blocks.Find((b) => b.PreviousHash.Trim() == election.Name);
+            Blocks.Add(genesisBlock);
+            string hash = genesisBlock.Hash;
+            do
             {
-                Blocks.Add(new Block(election));
-            }
-            Last = Blocks.Last();          
-            
+                Block block = blocks.Find((b) => b.PreviousHash == hash);
+                if (block != null && block.MakeHash() == block.Hash)
+                {
+                    Blocks.Add(block);
+                    hash = block.Hash;
+                }
+                else hash = null;
+            } while (hash != null);
         }
 
                
@@ -34,7 +43,7 @@ namespace Выборы.Classes
         /// <param name="user">Пользователь, который инициирует добавление</param>
         /// <param name="candidate">Кандидат, за которого отдается голос</param>
         /// <returns>true - добавление прошло успешно. false - ошибка добавления</returns>
-        public bool Add(User user, VoitingTypes voiting, Candidate candidate)
+        public bool Add(User user, VoitingType voiting, User candidate)
         {
             if (user == null || candidate == null)
             {
@@ -54,5 +63,6 @@ namespace Выборы.Classes
             }
             
         }         
+    
     }
 }

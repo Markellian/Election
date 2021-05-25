@@ -12,26 +12,38 @@ namespace Выборы
     using System;
     using System.Collections.Generic;
     
-    public partial class Elections
+    public partial class User
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Elections()
+        public User()
         {
-            this.Blocks = new HashSet<Blocks>();
-            this.ElectionOptions = new HashSet<ElectionOptions>();
+            this.Blocks = new HashSet<Block>();
+            this.ElectionOptions = new HashSet<ElectionOption>();
         }
     
         public int Id { get; set; }
+        public string Login { get; set; }
+        public string Password { get; set; }
+        public string Passport { get; set; }
+        public string First_name { get; set; }
         public string Name { get; set; }
-        public System.DateTime DateStart { get; set; }
-        public System.DateTime DateEnd { get; set; }
-        public int Voiteing_type_id { get; set; }
-        public string Description { get; set; }
+        public string Last_name { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
+        public System.DateTime Birthday { get; set; }
+        public int Role_id { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Blocks> Blocks { get; set; }
+        public virtual ICollection<Block> Blocks { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ElectionOptions> ElectionOptions { get; set; }
-        public virtual VoitingTypes VoitingTypes { get; set; }
+        public virtual ICollection<ElectionOption> ElectionOptions { get; set; }
+        public virtual Role Role { get; set; }
+
+        public override string ToString()
+        {
+            string res = Passport + " " + First_name + " " + Name;
+            if (!string.IsNullOrEmpty(Last_name)) res += " " + Last_name;
+            return res;
+        }
     }
 }

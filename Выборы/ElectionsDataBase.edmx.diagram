@@ -4,14 +4,14 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="ccd0a3980ad342a48d340ca6f4a4bae5" Name="Diagram1" ZoomLevel="86">
-        <EntityTypeShape EntityType="ElectionsDataBaseModel.Blocks" Width="1.5" PointX="8.25" PointY="2.5" />
-        <EntityTypeShape EntityType="ElectionsDataBaseModel.ElectionOptions" Width="1.5" PointX="5.25" PointY="2.875" />
-        <EntityTypeShape EntityType="ElectionsDataBaseModel.Elections" Width="1.5" PointX="6" PointY="7.5" />
-        <EntityTypeShape EntityType="ElectionsDataBaseModel.PoolOptions" Width="1.5" PointX="3" PointY="11" />
-        <EntityTypeShape EntityType="ElectionsDataBaseModel.Roles" Width="1.5" PointX="0.75" PointY="3" />
-        <EntityTypeShape EntityType="ElectionsDataBaseModel.Users" Width="1.5" PointX="3" PointY="2" />
-        <EntityTypeShape EntityType="ElectionsDataBaseModel.VoitingTypes" Width="1.5" PointX="3.75" PointY="8" />
+      <Diagram DiagramId="ccd0a3980ad342a48d340ca6f4a4bae5" Name="Diagram1" ZoomLevel="71">
+        <EntityTypeShape EntityType="ElectionsDataBaseModel.Block" Width="1.5" PointX="8.25" PointY="2.5" />
+        <EntityTypeShape EntityType="ElectionsDataBaseModel.ElectionOption" Width="1.5" PointX="5.25" PointY="2.875" />
+        <EntityTypeShape EntityType="ElectionsDataBaseModel.Election" Width="1.5" PointX="6" PointY="7.5" />
+        <EntityTypeShape EntityType="ElectionsDataBaseModel.PoolOption" Width="1.5" PointX="3" PointY="11" />
+        <EntityTypeShape EntityType="ElectionsDataBaseModel.Role" Width="1.5" PointX="0.75" PointY="3" />
+        <EntityTypeShape EntityType="ElectionsDataBaseModel.User" Width="1.5" PointX="3" PointY="2" />
+        <EntityTypeShape EntityType="ElectionsDataBaseModel.VoitingType" Width="1.5" PointX="3.75" PointY="8" />
         <AssociationConnector Association="ElectionsDataBaseModel.FK_Blocks_Elections" />
         <AssociationConnector Association="ElectionsDataBaseModel.FK_Blocks_Users" />
         <AssociationConnector Association="ElectionsDataBaseModel.FK_ElectionOptions_Elections" />

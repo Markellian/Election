@@ -12,31 +12,18 @@ namespace Выборы
     using System;
     using System.Collections.Generic;
     
-    public partial class Users
+    public partial class VoitingType
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Users()
+        public VoitingType()
         {
-            this.Blocks = new HashSet<Blocks>();
-            this.ElectionOptions = new HashSet<ElectionOptions>();
+            this.Elections = new HashSet<Election>();
         }
     
         public int Id { get; set; }
-        public string Login { get; set; }
-        public string Password { get; set; }
-        public string Passport { get; set; }
-        public string First_name { get; set; }
         public string Name { get; set; }
-        public string Last_name { get; set; }
-        public string Email { get; set; }
-        public string Phone { get; set; }
-        public System.DateTime Birthday { get; set; }
-        public int Role_id { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Blocks> Blocks { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ElectionOptions> ElectionOptions { get; set; }
-        public virtual Roles Roles { get; set; }
+        public virtual ICollection<Election> Elections { get; set; }
     }
 }

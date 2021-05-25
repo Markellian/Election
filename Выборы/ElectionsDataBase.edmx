@@ -10,7 +10,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="User_id" Type="int" Nullable="false" />
+          <Property Name="User_id" Type="int" />
           <Property Name="DateCreated" Type="datetime" Nullable="false" />
           <Property Name="Option_id" Type="int" />
           <Property Name="Hash" Type="nchar" MaxLength="64" Nullable="false" />
@@ -86,7 +86,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Blocks_Users">
-          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
           <End Role="Blocks" Type="Self.Blocks" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
@@ -199,68 +199,68 @@
     <edmx:ConceptualModels>
       <Schema Namespace="ElectionsDataBaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="ElectionsDataBase" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Blocks" EntityType="ElectionsDataBaseModel.Blocks" />
-          <EntitySet Name="ElectionOptions" EntityType="ElectionsDataBaseModel.ElectionOptions" />
-          <EntitySet Name="Elections" EntityType="ElectionsDataBaseModel.Elections" />
-          <EntitySet Name="PoolOptions" EntityType="ElectionsDataBaseModel.PoolOptions" />
-          <EntitySet Name="Roles" EntityType="ElectionsDataBaseModel.Roles" />
-          <EntitySet Name="Users" EntityType="ElectionsDataBaseModel.Users" />
-          <EntitySet Name="VoitingTypes" EntityType="ElectionsDataBaseModel.VoitingTypes" />
+          <EntitySet Name="Blocks" EntityType="ElectionsDataBaseModel.Block" />
+          <EntitySet Name="ElectionOptions" EntityType="ElectionsDataBaseModel.ElectionOption" />
+          <EntitySet Name="Elections" EntityType="ElectionsDataBaseModel.Election" />
+          <EntitySet Name="PoolOptions" EntityType="ElectionsDataBaseModel.PoolOption" />
+          <EntitySet Name="Roles" EntityType="ElectionsDataBaseModel.Role" />
+          <EntitySet Name="Users" EntityType="ElectionsDataBaseModel.User" />
+          <EntitySet Name="VoitingTypes" EntityType="ElectionsDataBaseModel.VoitingType" />
           <AssociationSet Name="FK_Blocks_Elections" Association="ElectionsDataBaseModel.FK_Blocks_Elections">
-            <End Role="Elections" EntitySet="Elections" />
-            <End Role="Blocks" EntitySet="Blocks" />
+            <End Role="Election" EntitySet="Elections" />
+            <End Role="Block" EntitySet="Blocks" />
           </AssociationSet>
           <AssociationSet Name="FK_Blocks_Users" Association="ElectionsDataBaseModel.FK_Blocks_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Blocks" EntitySet="Blocks" />
+            <End Role="User" EntitySet="Users" />
+            <End Role="Block" EntitySet="Blocks" />
           </AssociationSet>
           <AssociationSet Name="FK_ElectionOptions_Elections" Association="ElectionsDataBaseModel.FK_ElectionOptions_Elections">
-            <End Role="Elections" EntitySet="Elections" />
-            <End Role="ElectionOptions" EntitySet="ElectionOptions" />
+            <End Role="Election" EntitySet="Elections" />
+            <End Role="ElectionOption" EntitySet="ElectionOptions" />
           </AssociationSet>
           <AssociationSet Name="FK_ElectionOptions_PoolOptions" Association="ElectionsDataBaseModel.FK_ElectionOptions_PoolOptions">
-            <End Role="PoolOptions" EntitySet="PoolOptions" />
-            <End Role="ElectionOptions" EntitySet="ElectionOptions" />
+            <End Role="PoolOption" EntitySet="PoolOptions" />
+            <End Role="ElectionOption" EntitySet="ElectionOptions" />
           </AssociationSet>
           <AssociationSet Name="FK_ElectionOptions_Users" Association="ElectionsDataBaseModel.FK_ElectionOptions_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="ElectionOptions" EntitySet="ElectionOptions" />
+            <End Role="User" EntitySet="Users" />
+            <End Role="ElectionOption" EntitySet="ElectionOptions" />
           </AssociationSet>
           <AssociationSet Name="FK_Elections_VoitingTypes" Association="ElectionsDataBaseModel.FK_Elections_VoitingTypes">
-            <End Role="VoitingTypes" EntitySet="VoitingTypes" />
-            <End Role="Elections" EntitySet="Elections" />
+            <End Role="VoitingType" EntitySet="VoitingTypes" />
+            <End Role="Election" EntitySet="Elections" />
           </AssociationSet>
           <AssociationSet Name="FK_Users_Role" Association="ElectionsDataBaseModel.FK_Users_Role">
-            <End Role="Roles" EntitySet="Roles" />
-            <End Role="Users" EntitySet="Users" />
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="User" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
-        <EntityType Name="Blocks">
+        <EntityType Name="Block">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="User_id" Type="Int32" Nullable="false" />
+          <Property Name="User_id" Type="Int32" />
           <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Option_id" Type="Int32" />
           <Property Name="Hash" Type="String" Nullable="false" MaxLength="64" FixedLength="true" Unicode="true" />
           <Property Name="PreviousHash" Type="String" Nullable="false" MaxLength="64" FixedLength="true" Unicode="true" />
           <Property Name="Election_id" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Elections" Relationship="ElectionsDataBaseModel.FK_Blocks_Elections" FromRole="Blocks" ToRole="Elections" />
-          <NavigationProperty Name="Users" Relationship="ElectionsDataBaseModel.FK_Blocks_Users" FromRole="Blocks" ToRole="Users" />
+          <NavigationProperty Name="Election" Relationship="ElectionsDataBaseModel.FK_Blocks_Elections" FromRole="Block" ToRole="Election" />
+          <NavigationProperty Name="User" Relationship="ElectionsDataBaseModel.FK_Blocks_Users" FromRole="Block" ToRole="User" />
         </EntityType>
-        <EntityType Name="ElectionOptions">
+        <EntityType Name="ElectionOption">
           <Key>
             <PropertyRef Name="Election_id" />
             <PropertyRef Name="Option_id" />
           </Key>
           <Property Name="Election_id" Type="Int32" Nullable="false" />
           <Property Name="Option_id" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Elections" Relationship="ElectionsDataBaseModel.FK_ElectionOptions_Elections" FromRole="ElectionOptions" ToRole="Elections" />
-          <NavigationProperty Name="PoolOptions" Relationship="ElectionsDataBaseModel.FK_ElectionOptions_PoolOptions" FromRole="ElectionOptions" ToRole="PoolOptions" />
-          <NavigationProperty Name="Users" Relationship="ElectionsDataBaseModel.FK_ElectionOptions_Users" FromRole="ElectionOptions" ToRole="Users" />
+          <NavigationProperty Name="Election" Relationship="ElectionsDataBaseModel.FK_ElectionOptions_Elections" FromRole="ElectionOption" ToRole="Election" />
+          <NavigationProperty Name="PoolOption" Relationship="ElectionsDataBaseModel.FK_ElectionOptions_PoolOptions" FromRole="ElectionOption" ToRole="PoolOption" />
+          <NavigationProperty Name="User" Relationship="ElectionsDataBaseModel.FK_ElectionOptions_Users" FromRole="ElectionOption" ToRole="User" />
         </EntityType>
-        <EntityType Name="Elections">
+        <EntityType Name="Election">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -269,28 +269,28 @@
           <Property Name="DateStart" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateEnd" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Voiteing_type_id" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Blocks" Relationship="ElectionsDataBaseModel.FK_Blocks_Elections" FromRole="Elections" ToRole="Blocks" />
-          <NavigationProperty Name="ElectionOptions" Relationship="ElectionsDataBaseModel.FK_ElectionOptions_Elections" FromRole="Elections" ToRole="ElectionOptions" />
-          <NavigationProperty Name="VoitingTypes" Relationship="ElectionsDataBaseModel.FK_Elections_VoitingTypes" FromRole="Elections" ToRole="VoitingTypes" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Blocks" Relationship="ElectionsDataBaseModel.FK_Blocks_Elections" FromRole="Election" ToRole="Block" />
+          <NavigationProperty Name="ElectionOptions" Relationship="ElectionsDataBaseModel.FK_ElectionOptions_Elections" FromRole="Election" ToRole="ElectionOption" />
+          <NavigationProperty Name="VoitingType" Relationship="ElectionsDataBaseModel.FK_Elections_VoitingTypes" FromRole="Election" ToRole="VoitingType" />
         </EntityType>
-        <EntityType Name="PoolOptions">
+        <EntityType Name="PoolOption">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="ElectionOptions" Relationship="ElectionsDataBaseModel.FK_ElectionOptions_PoolOptions" FromRole="PoolOptions" ToRole="ElectionOptions" />
+          <NavigationProperty Name="ElectionOptions" Relationship="ElectionsDataBaseModel.FK_ElectionOptions_PoolOptions" FromRole="PoolOption" ToRole="ElectionOption" />
         </EntityType>
-        <EntityType Name="Roles">
+        <EntityType Name="Role">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Users" Relationship="ElectionsDataBaseModel.FK_Users_Role" FromRole="Roles" ToRole="Users" />
+          <NavigationProperty Name="Users" Relationship="ElectionsDataBaseModel.FK_Users_Role" FromRole="Role" ToRole="User" />
         </EntityType>
-        <EntityType Name="Users">
+        <EntityType Name="User">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -305,98 +305,98 @@
           <Property Name="Phone" Type="String" MaxLength="11" FixedLength="true" Unicode="true" />
           <Property Name="Birthday" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Role_id" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Blocks" Relationship="ElectionsDataBaseModel.FK_Blocks_Users" FromRole="Users" ToRole="Blocks" />
-          <NavigationProperty Name="ElectionOptions" Relationship="ElectionsDataBaseModel.FK_ElectionOptions_Users" FromRole="Users" ToRole="ElectionOptions" />
-          <NavigationProperty Name="Roles" Relationship="ElectionsDataBaseModel.FK_Users_Role" FromRole="Users" ToRole="Roles" />
+          <NavigationProperty Name="Blocks" Relationship="ElectionsDataBaseModel.FK_Blocks_Users" FromRole="User" ToRole="Block" />
+          <NavigationProperty Name="ElectionOptions" Relationship="ElectionsDataBaseModel.FK_ElectionOptions_Users" FromRole="User" ToRole="ElectionOption" />
+          <NavigationProperty Name="Role" Relationship="ElectionsDataBaseModel.FK_Users_Role" FromRole="User" ToRole="Role" />
         </EntityType>
-        <EntityType Name="VoitingTypes">
+        <EntityType Name="VoitingType">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Elections" Relationship="ElectionsDataBaseModel.FK_Elections_VoitingTypes" FromRole="VoitingTypes" ToRole="Elections" />
+          <NavigationProperty Name="Elections" Relationship="ElectionsDataBaseModel.FK_Elections_VoitingTypes" FromRole="VoitingType" ToRole="Election" />
         </EntityType>
         <Association Name="FK_Blocks_Elections">
-          <End Type="ElectionsDataBaseModel.Elections" Role="Elections" Multiplicity="1" />
-          <End Type="ElectionsDataBaseModel.Blocks" Role="Blocks" Multiplicity="*" />
+          <End Type="ElectionsDataBaseModel.Election" Role="Election" Multiplicity="1" />
+          <End Type="ElectionsDataBaseModel.Block" Role="Block" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Elections">
+            <Principal Role="Election">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Blocks">
+            <Dependent Role="Block">
               <PropertyRef Name="Election_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Blocks_Users">
-          <End Type="ElectionsDataBaseModel.Users" Role="Users" Multiplicity="1" />
-          <End Type="ElectionsDataBaseModel.Blocks" Role="Blocks" Multiplicity="*" />
+          <End Type="ElectionsDataBaseModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="ElectionsDataBaseModel.Block" Role="Block" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Users">
+            <Principal Role="User">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Blocks">
+            <Dependent Role="Block">
               <PropertyRef Name="User_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ElectionOptions_Elections">
-          <End Type="ElectionsDataBaseModel.Elections" Role="Elections" Multiplicity="1" />
-          <End Type="ElectionsDataBaseModel.ElectionOptions" Role="ElectionOptions" Multiplicity="*" />
+          <End Type="ElectionsDataBaseModel.Election" Role="Election" Multiplicity="1" />
+          <End Type="ElectionsDataBaseModel.ElectionOption" Role="ElectionOption" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Elections">
+            <Principal Role="Election">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="ElectionOptions">
+            <Dependent Role="ElectionOption">
               <PropertyRef Name="Election_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ElectionOptions_PoolOptions">
-          <End Type="ElectionsDataBaseModel.PoolOptions" Role="PoolOptions" Multiplicity="1" />
-          <End Type="ElectionsDataBaseModel.ElectionOptions" Role="ElectionOptions" Multiplicity="*" />
+          <End Type="ElectionsDataBaseModel.PoolOption" Role="PoolOption" Multiplicity="1" />
+          <End Type="ElectionsDataBaseModel.ElectionOption" Role="ElectionOption" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="PoolOptions">
+            <Principal Role="PoolOption">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="ElectionOptions">
+            <Dependent Role="ElectionOption">
               <PropertyRef Name="Option_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ElectionOptions_Users">
-          <End Type="ElectionsDataBaseModel.Users" Role="Users" Multiplicity="1" />
-          <End Type="ElectionsDataBaseModel.ElectionOptions" Role="ElectionOptions" Multiplicity="*" />
+          <End Type="ElectionsDataBaseModel.User" Role="User" Multiplicity="1" />
+          <End Type="ElectionsDataBaseModel.ElectionOption" Role="ElectionOption" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Users">
+            <Principal Role="User">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="ElectionOptions">
+            <Dependent Role="ElectionOption">
               <PropertyRef Name="Option_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Elections_VoitingTypes">
-          <End Type="ElectionsDataBaseModel.VoitingTypes" Role="VoitingTypes" Multiplicity="1" />
-          <End Type="ElectionsDataBaseModel.Elections" Role="Elections" Multiplicity="*" />
+          <End Type="ElectionsDataBaseModel.VoitingType" Role="VoitingType" Multiplicity="1" />
+          <End Type="ElectionsDataBaseModel.Election" Role="Election" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="VoitingTypes">
+            <Principal Role="VoitingType">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Elections">
+            <Dependent Role="Election">
               <PropertyRef Name="Voiteing_type_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Users_Role">
-          <End Type="ElectionsDataBaseModel.Roles" Role="Roles" Multiplicity="1" />
-          <End Type="ElectionsDataBaseModel.Users" Role="Users" Multiplicity="*" />
+          <End Type="ElectionsDataBaseModel.Role" Role="Role" Multiplicity="1" />
+          <End Type="ElectionsDataBaseModel.User" Role="User" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Roles">
+            <Principal Role="Role">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Users">
+            <Dependent Role="User">
               <PropertyRef Name="Role_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -408,7 +408,7 @@
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="Хранилище ElectionsDataBaseModelContainer" CdmEntityContainer="ElectionsDataBase">
           <EntitySetMapping Name="Blocks">
-            <EntityTypeMapping TypeName="ElectionsDataBaseModel.Blocks">
+            <EntityTypeMapping TypeName="ElectionsDataBaseModel.Block">
               <MappingFragment StoreEntitySet="Blocks">
                 <ScalarProperty Name="Election_id" ColumnName="Election_id" />
                 <ScalarProperty Name="PreviousHash" ColumnName="PreviousHash" />
@@ -421,7 +421,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ElectionOptions">
-            <EntityTypeMapping TypeName="ElectionsDataBaseModel.ElectionOptions">
+            <EntityTypeMapping TypeName="ElectionsDataBaseModel.ElectionOption">
               <MappingFragment StoreEntitySet="ElectionOptions">
                 <ScalarProperty Name="Option_id" ColumnName="Option_id" />
                 <ScalarProperty Name="Election_id" ColumnName="Election_id" />
@@ -429,7 +429,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Elections">
-            <EntityTypeMapping TypeName="ElectionsDataBaseModel.Elections">
+            <EntityTypeMapping TypeName="ElectionsDataBaseModel.Election">
               <MappingFragment StoreEntitySet="Elections">
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Voiteing_type_id" ColumnName="Voiteing_type_id" />
@@ -441,7 +441,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PoolOptions">
-            <EntityTypeMapping TypeName="ElectionsDataBaseModel.PoolOptions">
+            <EntityTypeMapping TypeName="ElectionsDataBaseModel.PoolOption">
               <MappingFragment StoreEntitySet="PoolOptions">
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -449,7 +449,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Roles">
-            <EntityTypeMapping TypeName="ElectionsDataBaseModel.Roles">
+            <EntityTypeMapping TypeName="ElectionsDataBaseModel.Role">
               <MappingFragment StoreEntitySet="Roles">
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -457,7 +457,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="ElectionsDataBaseModel.Users">
+            <EntityTypeMapping TypeName="ElectionsDataBaseModel.User">
               <MappingFragment StoreEntitySet="Users">
                 <ScalarProperty Name="Role_id" ColumnName="Role_id" />
                 <ScalarProperty Name="Birthday" ColumnName="Birthday" />
@@ -474,7 +474,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="VoitingTypes">
-            <EntityTypeMapping TypeName="ElectionsDataBaseModel.VoitingTypes">
+            <EntityTypeMapping TypeName="ElectionsDataBaseModel.VoitingType">
               <MappingFragment StoreEntitySet="VoitingTypes">
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -495,7 +495,7 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />

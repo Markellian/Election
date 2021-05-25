@@ -25,12 +25,12 @@ namespace Выборы
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Blocks> Blocks { get; set; }
-        public virtual DbSet<ElectionOptions> ElectionOptions { get; set; }
-        public virtual DbSet<Elections> Elections { get; set; }
-        public virtual DbSet<PoolOptions> PoolOptions { get; set; }
-        public virtual DbSet<Roles> Roles { get; set; }
-        public virtual DbSet<Users> Users { get; set; }
-        public virtual DbSet<VoitingTypes> VoitingTypes { get; set; }
+        public virtual DbSet<Block> Blocks { get; set; }
+        public virtual DbSet<ElectionOption> ElectionOptions { get; set; }
+        public virtual DbSet<Election> Elections { get; set; }
+        public virtual DbSet<PoolOption> PoolOptions { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<VoitingType> VoitingTypes { get; set; }
     }
 }

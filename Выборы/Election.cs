@@ -12,18 +12,26 @@ namespace Выборы
     using System;
     using System.Collections.Generic;
     
-    public partial class PoolOptions
+    public partial class Election
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public PoolOptions()
+        public Election()
         {
-            this.ElectionOptions = new HashSet<ElectionOptions>();
+            this.Blocks = new HashSet<Block>();
+            this.ElectionOptions = new HashSet<ElectionOption>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
+        public System.DateTime DateStart { get; set; }
+        public System.DateTime DateEnd { get; set; }
+        public int Voiteing_type_id { get; set; }
+        public string Description { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ElectionOptions> ElectionOptions { get; set; }
+        public virtual ICollection<Block> Blocks { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ElectionOption> ElectionOptions { get; set; }
+        public virtual VoitingType VoitingType { get; set; }
     }
 }

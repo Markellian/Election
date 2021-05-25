@@ -16,36 +16,17 @@ namespace Выборы.Classes
         /// <returns>Цепочку блоков</returns>
         public static List<Block> GetChain(int election_id)
         {
-            List<Block> blockchain;
-
             using(var db = new ElectionsDataBase())
             {
-                var res = from blocks in db.Blocks where blocks.Election_id == election_id select blocks;
-                blockchain = new List<Block>(res.Count() * 2);
-                foreach (var block in res)
-                {
-                    blockchain.Add((Block)block);
-                }
+                return (from blocks in db.Blocks where blocks.Election_id == election_id select blocks).ToList();
             }           
-
-            return blockchain;
         }
 
         public static bool AddBlock(Block block)
         {
             using (var db = new ElectionsDataBase())
             {
-                Blocks blocks = new Blocks()
-                {
-                    User_id = block.User_id,
-                    DateCreated = block.DateCreated,
-                    Option_id = block.Option_id,
-                    Hash = block.Hash,
-                    PreviousHash = block.PreviousHash,
-                    Election_id = block.Election_id
-                };
-            
-                db.Blocks.Add(blocks);
+                db.Blocks.Add(block);
                 var res = db.SaveChanges();
                 return res==1;
             }
@@ -55,8 +36,7 @@ namespace Выборы.Classes
         {
             using(var db = new ElectionsDataBase())
             {
-                var elec = (from e in db.Elections where e.Name == electionName select e).ToList().FirstOrDefault();
-                return elec == null ? null : new Election(elec);
+                return (from e in db.Elections where e.Name == electionName select e).ToList().FirstOrDefault();                
             }
         }
 
@@ -65,7 +45,7 @@ namespace Выборы.Classes
         /// </summary>
         /// <param name="name">название опции</param>
         /// <returns>в случае успеха возвращает Id опции, иначе -1</returns>
-        public static PoolOptions IfExistsOptionByName(string name)
+        public static PoolOption IfExistsOptionByName(string name)
         {
             using (var db = new ElectionsDataBase())
             {
@@ -79,11 +59,11 @@ namespace Выборы.Classes
             }
         }
         
-        public static PoolOptions AddPoolOption(string name)
+        public static PoolOption AddPoolOption(string name)
         {
             using (var db = new ElectionsDataBase())
             {
-                PoolOptions poolOptions = new PoolOptions() { Name = name };
+                PoolOption poolOptions = new PoolOption() { Name = name };
                 try
                 {
                     db.PoolOptions.Add(poolOptions);
@@ -144,7 +124,7 @@ namespace Выборы.Classes
         public static dynamic AddUser(string login, string password, string passport, string firstName,
                                     string name, string lastName, string email, string phone, DateTime bith)
         {
-            Users users = new Users()
+            User users = new User()
             {
                 Login = login, 
                 Password = GetHash(password),
@@ -196,30 +176,17 @@ namespace Выборы.Classes
             List<User> list = new List<User>();
             using (var db = new ElectionsDataBase())
             {
-                foreach (var users in db.Users)
-                {
-                    User user = new User()
-                    {
-                        Id = users.Id,
-                        Login = users.Login,
-                        Passport = users.Passport.Insert(4, " "),
-                        Name = users.Name,
-                        First_name = users.First_name,
-                        Last_name = users.Last_name,
-                        Email = users.Email,
-                        Phone = users.Phone,
-                        Birthday = users.Birthday,
-                        Roles = users.Roles
-                    };
+                foreach (var user in db.Users)
+                {                    
                     list.Add(user);
                 }
             }
             return list;
         }
 
-        public static List<Roles> GetAllRoles()
+        public static List<Role> GetAllRoles()
         {
-            List<Roles> list = new List<Roles>();
+            List<Role> list = new List<Role>();
             using (var db = new ElectionsDataBase())
             {
                 foreach (var role in db.Roles)
@@ -234,7 +201,7 @@ namespace Выборы.Classes
         {
             using (var db = new ElectionsDataBase())
             {
-                Users user = db.Users.Find(id);
+                User user = db.Users.Find(id);
                 if (user == null) return false;
                 db.Users.Remove(user);
                 db.SaveChanges();
@@ -255,7 +222,7 @@ namespace Выборы.Classes
             }
         }
 
-        public static string GetHash(string str)
+        private static string GetHash(string str)
         {
             byte[] bytes = Encoding.Unicode.GetBytes(str);
             byte[] result = new SHA256Managed().ComputeHash(bytes);
@@ -269,14 +236,14 @@ namespace Выборы.Classes
             return hashString;
         }
 
-        public static List<Users> GetCandidates()
+        public static List<User> GetCandidates()
         {
             using (var db = new ElectionsDataBase())
             {
                 return (from u in db.Users where u.Role_id == 3 select u).ToList();
             }
         }
-        public static Elections AddInterviewWithOptions(string name, DateTime start, DateTime end, string description, List<string> listOptions)
+        public static Election AddInterviewWithOptions(string name, DateTime start, DateTime end, string description, List<string> listOptions)
         {
             if (GetElectionByName(name) != null) return null;
             if (listOptions == null || listOptions.Count == 0) return null;
@@ -286,9 +253,7 @@ namespace Выборы.Classes
                 {
                     try
                     {
-
-
-                        Elections elections = new Elections()
+                        Election elections = new Election()
                         {
                             Name = name,
                             DateStart = start,
@@ -300,18 +265,22 @@ namespace Выборы.Classes
                         db.SaveChanges();
                         foreach (var optionName in listOptions)
                         {
-                            PoolOptions option = DataBase.IfExistsOptionByName(optionName);
+                            PoolOption option = DataBase.IfExistsOptionByName(optionName);
                             if (option == null)
                             {
-                                option = new PoolOptions() { Name = optionName };
+                                option = new PoolOption() { Name = optionName };
                                 db.PoolOptions.Add(option);
                                 db.SaveChanges();
                             }
 
-                            db.ElectionOptions.Add(new ElectionOptions() { Election_id = elections.Id, Option_id = option.Id });
+                            db.ElectionOptions.Add(new ElectionOption() { Election_id = elections.Id, Option_id = option.Id });
                             db.SaveChanges();
                         }
                         db.SaveChanges();
+                        db.Blocks.Add(new Block(elections));
+
+                        db.SaveChanges();
+
                         transaction.Commit();
                         return elections;
                     }
@@ -325,7 +294,7 @@ namespace Выборы.Classes
             
         }
     
-        public static Elections AddElectionWithCandidates(string name, DateTime start, DateTime end, string description, List<Candidate> candidates)
+        public static Election AddElectionWithCandidates(string name, DateTime start, DateTime end, string description, List<User> candidates)
         {
             if (GetElectionByName(name) != null) return null;
             if (candidates == null || candidates.Count == 0) return null;
@@ -335,7 +304,7 @@ namespace Выборы.Classes
                 {
                     try
                     {
-                        Elections elections = new Elections()
+                        Election elections = new Election()
                         {
                             Name = name,
                             DateStart = start,
@@ -347,9 +316,11 @@ namespace Выборы.Classes
                         db.SaveChanges();
                         foreach (var candidate in candidates)
                         {
-                            db.ElectionOptions.Add(new ElectionOptions() { Election_id = elections.Id, Option_id = candidate.Id });
+                            db.ElectionOptions.Add(new ElectionOption() { Election_id = elections.Id, Option_id = candidate.Id });
                             db.SaveChanges();
                         }
+                        db.SaveChanges();
+                        db.Blocks.Add(new Block(elections));
                         db.SaveChanges();
                         transaction.Commit();
                         return elections;
@@ -363,7 +334,7 @@ namespace Выборы.Classes
             }
         }
     
-        public static List<Elections> GetElections()
+        public static List<Election> GetElections()
         {
             using (var db = new ElectionsDataBase())
             {
@@ -371,7 +342,7 @@ namespace Выборы.Classes
             }
         }
 
-        public static Elections GetElectionById(int Id)
+        public static Election GetElectionById(int Id)
         {
             using (var db = new ElectionsDataBase())
             {
@@ -384,6 +355,30 @@ namespace Выборы.Classes
                 {
                     return null;
                 }
+            }
+        }
+
+        public static List<PoolOption> GetOptions(Election election)
+        {
+            using (var db = new ElectionsDataBase())
+            {
+                var res = from po in db.PoolOptions
+                          join eo in db.ElectionOptions on po.Id equals eo.Option_id
+                          where eo.Election_id == election.Id
+                          select po;
+                return res.ToList();
+            }
+        }
+
+        public static List<User> GetCandidates(Election election)
+        {
+            using (var db = new ElectionsDataBase())
+            {
+                var res = from u in db.Users
+                          join eo in db.ElectionOptions on u.Id equals eo.Option_id
+                          where eo.Election_id == election.Id
+                          select u;
+                return res.ToList(); 
             }
         }
     }

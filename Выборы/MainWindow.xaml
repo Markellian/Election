@@ -148,7 +148,7 @@
             </Button>
 
             <Menu x:Name="MenuNavigationPanel" Height="35" Margin="10,10,95,0" VerticalAlignment="Top" VerticalContentAlignment="Center">
-                <MenuItem Header="Главная" FontSize="{StaticResource FontSizeSimplyText}" Height="35"/>
+                <MenuItem Header="Новости" FontSize="{StaticResource FontSizeSimplyText}" Height="35" Click="MenuItem_Click"/>
                 <MenuItem x:Name="MenuMyProfileButton" Header="Мой профиль" Visibility="Visible" FontSize="{StaticResource FontSizeSimplyText}">
 
                 </MenuItem>
@@ -165,7 +165,7 @@
 
             <ScrollViewer Margin="10,50,10,10">
                 <StackPanel>
-                    <Grid x:Name="NewsGrid" Visibility="Visible" IsVisibleChanged="NewsGrid_IsVisibleChanged">
+                    <Grid x:Name="NewsGrid" Visibility="Collapsed" IsVisibleChanged="NewsGrid_IsVisibleChanged">
                         <Label Content="Новости" FontSize="{StaticResource FontSizeHead}" HorizontalContentAlignment="Center" Height="50" VerticalAlignment="Top" Margin="0"/>
                         <StackPanel Name="NewsStackPanel" Margin="0,50,0,0" VerticalAlignment="Top"/>
                     </Grid>
@@ -268,8 +268,16 @@
                         <ComboBox x:Name="RolesComboBox" DisplayMemberPath="Name" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" VerticalAlignment="Top" VerticalContentAlignment="Center" Height="35" Margin="0,55,10,0" Width="100"/>
                         <Button Content="Изменить роль" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Right" VerticalAlignment="Top" Height="35" Margin="0,100,10,0" Width="100" Click="ChangeUserRoleButton_Click"/>
                     </Grid>
-                    <Grid x:Name="ElectionGrid" Visibility="Collapsed">
-                        
+                    <Grid x:Name="ElectionGrid" Visibility="Visible" IsVisibleChanged="ElectionGrid_IsVisibleChanged">
+                        <StackPanel Orientation="Vertical">
+                            <Label Content="Название голосования" x:Name="ElectionNameLabel" FontSize="{StaticResource FontSizeHead}" HorizontalContentAlignment="Center" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="50" Margin="0,0,-0.2,-0.4"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Дата проведения голосования: " FontSize="{StaticResource FontSizeSimplyText}" Margin="40,00,0,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                                <Label x:Name="ElectionDateLabel" Content="01.01.2020 - 20/20/2021" FontSize="{StaticResource FontSizeSimplyText}" Grid.Column="1" HorizontalAlignment="Left" Margin="0.2,0,0,0" VerticalAlignment="Top"/>
+                            </StackPanel>
+                            <TextBlock x:Name="ElectionDescriptionTextBlock" TextWrapping="Wrap" Text="Описание голосования" FontSize="14" />
+                            <StackPanel x:Name="OptionsStackPanel"></StackPanel>
+                        </StackPanel>
                     </Grid>
                 </StackPanel>
             </ScrollViewer>

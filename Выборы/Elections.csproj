@@ -80,16 +80,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Blocks.cs">
+    <Compile Include="Block.cs">
       <DependentUpon>ElectionsDataBase.tt</DependentUpon>
     </Compile>
     <Compile Include="Classes\Controller.cs" />
     <Compile Include="Classes\DataBase.cs" />
-    <Compile Include="Classes\Election.cs" />
-    <Compile Include="ElectionOptions.cs">
+    <Compile Include="Classes\Option.cs" />
+    <Compile Include="Election.cs">
       <DependentUpon>ElectionsDataBase.tt</DependentUpon>
     </Compile>
-    <Compile Include="Elections.cs">
+    <Compile Include="ElectionOption.cs">
       <DependentUpon>ElectionsDataBase.tt</DependentUpon>
     </Compile>
     <Compile Include="ElectionsDataBase.cs">
@@ -97,16 +97,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ElectionsDataBase.tt</DependentUpon>
     </Compile>
-    <Compile Include="PoolOptions.cs">
+    <Compile Include="PoolOption.cs">
       <DependentUpon>ElectionsDataBase.tt</DependentUpon>
     </Compile>
-    <Compile Include="Roles.cs">
+    <Compile Include="Role.cs">
       <DependentUpon>ElectionsDataBase.tt</DependentUpon>
     </Compile>
-    <Compile Include="Users.cs">
+    <Compile Include="User.cs">
       <DependentUpon>ElectionsDataBase.tt</DependentUpon>
     </Compile>
-    <Compile Include="VoitingTypes.cs">
+    <Compile Include="VoitingType.cs">
       <DependentUpon>ElectionsDataBase.tt</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
@@ -117,10 +117,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Classes\Block.cs" />
     <Compile Include="Classes\Chain.cs" />
-    <Compile Include="Classes\Candidate.cs" />
-    <Compile Include="Classes\User.cs" />
     <Compile Include="ElectionsDataBase.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
