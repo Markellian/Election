@@ -287,8 +287,8 @@ namespace Выборы
             else if (result is User)
             {
                 MessageBox.Show("Регистрация прошла успешно");
-                RegistrationGrid.Visibility = Visibility.Hidden;
-                MainGrid.Visibility = Visibility.Visible;
+                user = Controller.AuthUser(login, password);
+                ChangeGridVisibility(MainGrid, RegistrationGrid);
             }
         }
 
@@ -810,6 +810,12 @@ namespace Выборы
             {
                 MessageBox.Show("Ошибка голосования!");
             }
+        }
+
+        private void AuthGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            AuthLoginTextBox.Text = "";
+            AuthPasswordBox.Password = "";
         }
     }
 }

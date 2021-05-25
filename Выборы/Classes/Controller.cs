@@ -208,5 +208,6 @@ namespace Выборы.Classes
         {
             return DataBase.IfUserVoted(user, election);
         }
+
     }
 }

@@ -173,15 +173,10 @@ namespace Выборы.Classes
 
         public static List<User> GetAllUsers()
         {
-            List<User> list = new List<User>();
             using (var db = new ElectionsDataBase())
             {
-                foreach (var user in db.Users)
-                {                    
-                    list.Add(user);
-                }
+                return (from users in db.Users select users).ToList();
             }
-            return list;
         }
 
         public static List<Role> GetAllRoles()
