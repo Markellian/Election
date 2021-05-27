@@ -388,5 +388,16 @@ namespace Выборы.Classes
                 return res.FirstOrDefault();
             }
         }
+
+        public static List<Election> GetElections(int userId)
+        {
+            using (var db = new ElectionsDataBase())
+            {
+                return (from e in db.Elections
+                       join b in db.Blocks on e.Id equals b.Election_id
+                       where b.User_id == userId
+                       select e).ToList();
+            }
+        }
     }
 }

@@ -208,6 +208,21 @@ namespace Выборы.Classes
         {
             return DataBase.IfUserVoted(user, election);
         }
-
+        
+        public static List<Election> GetElections(int userId)
+        {
+            var list = DataBase.GetElections(userId);
+            if (list != null && list.Count != 0)
+            {
+                List<Election> elections = new List<Election>();
+                foreach (var l in list)
+                {
+                    if (!elections.Contains(l)) elections.Add(l);
+                }
+                return elections;
+            }
+            return null;
+                
+        }
     }
 }

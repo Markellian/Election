@@ -30,6 +30,7 @@ namespace Выборы
         List<string> listOptions = new List<string>();
         List<Option> options;
         List<User> listCandidates = new List<User>();
+        List<Election> listNews;
         public MainWindow()
         {
             InitializeComponent();
@@ -94,8 +95,8 @@ namespace Выборы
                     MenuMyProfileButton.Visibility = Visibility.Collapsed;
                     UserEnterMainMenuButton.Visibility = Visibility.Visible;
                     UserExitMainMenuButton.Visibility = Visibility.Hidden;
-                    MenuNavigationPanelCreateElection.Visibility = Visibility.Collapsed;
                     MenuNavigationPanelAdministration.Visibility = Visibility.Collapsed;
+                    MenuNavigationPanelMyElections.Visibility = Visibility.Collapsed;
 
                     MenuNavigationPanel.Margin = new Thickness(10, 10, UserEnterMainMenuButton.Width + UserEnterMainMenuButton.Margin.Right + 10, 0);
                 }
@@ -104,17 +105,16 @@ namespace Выборы
                     MenuMyProfileButton.Visibility = Visibility.Visible;
                     UserEnterMainMenuButton.Visibility = Visibility.Hidden;
                     UserExitMainMenuButton.Visibility = Visibility.Visible;
+                    MenuNavigationPanelMyElections.Visibility = Visibility.Visible;
 
                     MenuNavigationPanel.Margin = new Thickness(10, 10, UserExitMainMenuButton.Width + UserExitMainMenuButton.Margin.Right + 10, 0);
 
                     if (user.Role_id == 1)
                     {
-                        MenuNavigationPanelCreateElection.Visibility = Visibility.Visible;
                         MenuNavigationPanelAdministration.Visibility = Visibility.Visible;
                     }
                     else
                     {
-                        MenuNavigationPanelCreateElection.Visibility = Visibility.Collapsed;
                         MenuNavigationPanelAdministration.Visibility = Visibility.Collapsed;
                     }
 
@@ -568,91 +568,97 @@ namespace Выборы
             {
                 nowMenuGrid = NewsGrid;
 
-                var news = Controller.GetElections();
-                if (news == null || news.Count == 0) return;
+                listNews = Controller.GetElections();
+                if (listNews == null || listNews.Count == 0) return;
                 NewsStackPanel.Children.Clear();
-                foreach (var election in news)
+                foreach (var election in listNews)
                 {
-                    Grid grid = new Grid();
-                    grid.MouseLeftButtonDown += Grid_MouseLeftButtonDown;
-                    grid.Children.Add(new Label()
-                    {
-                        Content = election.Id,
-                        Visibility = Visibility.Collapsed,
-                    });
-                    StackPanel stackPanel = new StackPanel()
-                    {
-                        Orientation = Orientation.Vertical,
-                    };
-                    Label name = new Label()
-                    {
-                        Content = election.Name,
-                        FontSize = 30,
-                    };
-                    if (!string.IsNullOrEmpty(election.Description))
-                    {
-                        name.ToolTip = new TextBlock()
-                        {
-                            Text = election.Description,
-                            TextWrapping = TextWrapping.Wrap,
-                            FontSize = 14,
-                        };
-                    }
-                    Label date = new Label()
-                    {
-                        Content = election.DateStart.ToString("d") + " - " + election.DateEnd.ToString("d"),
-                        FontSize = 20,
-                        VerticalAlignment = VerticalAlignment.Bottom,
-                    };
-                    Label content = new Label()
-                    {
-                        FontSize = 14,
-                    };
-                    if (election.DateStart < DateTime.Now)
-                    {
-                        if (election.DateEnd < DateTime.Now)
-                        {
-                            name.Foreground = Brushes.Red;
-                            content.Content = "Голосование завершено!";
-                        }
-                        else
-                        {
-                            name.Foreground = Brushes.Green;
-                            content.Content = "Голосование началось. До конца голосования ";
-                            var time = election.DateEnd - DateTime.Now;
-                            content.Content += time.Days.ToString() + "д ";
-                            content.Content += time.Hours.ToString() + "ч ";
-                            content.Content += time.Minutes.ToString() + "м";
-                        }
-                    }
-                    else
-                    {
-                        name.Foreground = Brushes.Blue;
-                        content.Content = "Голосование начнется через ";
-                        var time = election.DateStart - DateTime.Now;
-                        content.Content += time.Days.ToString() + "д ";
-                        content.Content += time.Hours.ToString() + "ч ";
-                        content.Content += time.Minutes.ToString() + "м";
-                    }
-
-                    StackPanel header = new StackPanel()
-                    {
-                        Orientation = Orientation.Horizontal,
-                        Children = {name, date},
-                    };
-                    grid.Children.Add(stackPanel);
-                    stackPanel.Children.Add(header);
-                    stackPanel.Children.Add(content);
-                    Border border = new Border
-                    {
-                        BorderThickness = new Thickness(1),
-                        BorderBrush = Brushes.Black,
-                        Margin = new Thickness(10),
-                        Child = grid
-                    };
-                    NewsStackPanel.Children.Add(border);
+                    
+                    NewsStackPanel.Children.Add(CreateElectionConteiner(election));
                 }
             }
+        }
+
+        private Border CreateElectionConteiner(Election election)
+        {
+            Grid grid = new Grid();
+            grid.MouseLeftButtonDown += Grid_MouseLeftButtonDown;
+            grid.Children.Add(new Label()
+            {
+                Content = election.Id,
+                Visibility = Visibility.Collapsed,
+            });
+            StackPanel stackPanel = new StackPanel()
+            {
+                Orientation = Orientation.Vertical,
+            };
+            Label name = new Label()
+            {
+                Content = election.Name,
+                FontSize = 30,
+            };
+            if (!string.IsNullOrEmpty(election.Description))
+            {
+                name.ToolTip = new TextBlock()
+                {
+                    Text = election.Description,
+                    TextWrapping = TextWrapping.Wrap,
+                    FontSize = 14,
+                };
+            }
+            Label date = new Label()
+            {
+                Content = election.DateStart.ToString("d") + " - " + election.DateEnd.ToString("d"),
+                FontSize = 20,
+                VerticalAlignment = VerticalAlignment.Bottom,
+            };
+            Label content = new Label()
+            {
+                FontSize = 14,
+            };
+            if (election.DateStart < DateTime.Now)
+            {
+                if (election.DateEnd < DateTime.Now)
+                {
+                    name.Foreground = Brushes.Red;
+                    content.Content = "Голосование завершено!";
+                }
+                else
+                {
+                    name.Foreground = Brushes.Green;
+                    content.Content = "Голосование началось. До конца голосования ";
+                    var time = election.DateEnd - DateTime.Now;
+                    content.Content += time.Days.ToString() + "д ";
+                    content.Content += time.Hours.ToString() + "ч ";
+                    content.Content += time.Minutes.ToString() + "м";
+                }
+            }
+            else
+            {
+                name.Foreground = Brushes.Blue;
+                content.Content = "Голосование начнется через ";
+                var time = election.DateStart - DateTime.Now;
+                content.Content += time.Days.ToString() + "д ";
+                content.Content += time.Hours.ToString() + "ч ";
+                content.Content += time.Minutes.ToString() + "м";
+            }
+
+            StackPanel header = new StackPanel()
+            {
+                Orientation = Orientation.Horizontal,
+                Children = { name, date },
+            };
+            grid.Children.Add(stackPanel);
+            stackPanel.Children.Add(header);
+            stackPanel.Children.Add(content);
+            Border border = new Border
+            {
+                BorderThickness = new Thickness(1),
+                BorderBrush = Brushes.Black,
+                Margin = new Thickness(10),
+                Child = grid
+            };
+            return border;
         }
 
         private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -663,7 +669,7 @@ namespace Выборы
                 election = Controller.GetElectionById(Int32.Parse(((Label)item).Content.ToString()));
                 if (election != null)
                 {
-                    ChangeGridVisibility(ElectionGrid, NewsGrid);
+                    ChangeGridVisibility(ElectionGrid, nowMenuGrid);
                 }
             }            
         }
@@ -816,6 +822,51 @@ namespace Выборы
         {
             AuthLoginTextBox.Text = "";
             AuthPasswordBox.Password = "";
+        }
+
+        private void MenuMyProfileButton_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeGridVisibility(MyProfileGrid, nowMenuGrid);
+        }
+
+        private void MyProfileGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (MyProfileGrid.Visibility == Visibility)
+            {
+                nowMenuGrid = MyProfileGrid;
+
+                NameLabel.Content = user.First_name + " " + user.Name;
+                if (user.Last_name != null) NameLabel.Content += " " + user.Last_name;
+                string passport = user.Passport;
+                PassportLabel.Content = passport.Insert(4, " ");
+                BirthdayLabel.Content = user.Birthday.ToString("D");
+                EmailLabel.Content = user.Email;
+                PhoneLabel.Content = user.Phone ?? "Не указан";
+            }
+        }
+
+        private void MenuNavigationPanelMyElections_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeGridVisibility(MyElectionsGrid, nowMenuGrid);
+        }
+
+        private void MyElectionsGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if(MyElectionsGrid.Visibility == Visibility.Visible)
+            {
+                nowMenuGrid = MyElectionsGrid;
+
+                MyElectionsStackPanel.Children.Clear();
+                var elections = Controller.GetElections(user.Id);
+                if (elections!=null && elections.Count != 0)
+                {
+                    foreach(var el in elections)
+                    {
+                        MyElectionsStackPanel.Children.Add(CreateElectionConteiner(el));
+                    }
+                    
+                }
+            }
         }
     }
 }

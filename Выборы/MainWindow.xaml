@@ -149,15 +149,14 @@
 
             <Menu x:Name="MenuNavigationPanel" Height="35" Margin="10,10,95,0" VerticalAlignment="Top" VerticalContentAlignment="Center">
                 <MenuItem Header="Новости" FontSize="{StaticResource FontSizeSimplyText}" Height="35" Click="MenuItem_Click"/>
-                <MenuItem x:Name="MenuMyProfileButton" Header="Мой профиль" Visibility="Visible" FontSize="{StaticResource FontSizeSimplyText}">
+                <MenuItem x:Name="MenuMyProfileButton" Header="Мой профиль" Visibility="Visible" FontSize="{StaticResource FontSizeSimplyText}" Click="MenuMyProfileButton_Click">
 
                 </MenuItem>
-                <MenuItem Header="Опросы" FontSize="{StaticResource FontSizeSimplyText}">
-                    <MenuItem x:Name="MenuNavigationPanelCreateElection" Header="Создать голосование" Visibility="Visible" Click="MenuNavigationPanelCreateElection_Click"/>
-                    <MenuItem Header="Мои голосования"/>
-                </MenuItem>
+                <MenuItem x:Name="MenuNavigationPanelMyElections" Header="Мои голосования" FontSize="{StaticResource FontSizeSimplyText}" Click="MenuNavigationPanelMyElections_Click"/>
+                
                 <MenuItem x:Name="MenuNavigationPanelAdministration" Header="Администрация" HorizontalAlignment="Right" FontSize="{StaticResource FontSizeSimplyText}">
                     <MenuItem Header="Пользователи" Click="MenuNavigationPanelUsers_Click"/>
+                    <MenuItem Header="Создать голосование" Click="MenuNavigationPanelCreateElection_Click"/>
                 </MenuItem>
             </Menu>
 
@@ -281,6 +280,33 @@
                             <Button x:Name="VoteButton" Content="Проголосовать" FontSize="{StaticResource FontSizeSimplyText}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="60,0,0,0" Click="VoteButton_Click"/>
                             <Label Name="VoteImpossibleLabel" Content="Чтобы проголосовать, необходимо авторизироваться" Foreground="Red"/>
                             
+                        </StackPanel>
+                    </Grid>
+                    <Grid x:Name="MyProfileGrid" Visibility="Collapsed" IsVisibleChanged="MyProfileGrid_IsVisibleChanged">
+                        <StackPanel>
+                            <Label Name="NameLabel" Content="Имя пользователя" FontSize="{StaticResource FontSizeHead}" HorizontalContentAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Серия и номер паспорта:" FontSize="{StaticResource FontSizeSimplyText}" Margin="20,0,0,0" HorizontalAlignment="Left"/>
+                                <Label Name="PassportLabel" Content="0000 000000"  FontSize="{StaticResource FontSizeSimplyText}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Дата рождения: " FontSize="{StaticResource FontSizeSimplyText}" Margin="20,0,0,0" HorizontalAlignment="Left"/>
+                                <Label Name="BirthdayLabel" Content="01.02.2002" FontSize="{StaticResource FontSizeSimplyText}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Почта: " FontSize="{StaticResource FontSizeSimplyText}" Margin="20,0,0,0" HorizontalAlignment="Left"/>
+                                <Label Name="EmailLabel" Content="email@em.ail" FontSize="{StaticResource FontSizeSimplyText}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Телефон: " FontSize="{StaticResource FontSizeSimplyText}" Margin="20,0,0,0" HorizontalAlignment="Left"/>
+                                <Label Name="PhoneLabel" Content="+8-999-999-99-99" FontSize="{StaticResource FontSizeSimplyText}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                    <Grid x:Name="MyElectionsGrid" Visibility="Collapsed" IsVisibleChanged="MyElectionsGrid_IsVisibleChanged">
+                        <StackPanel>
+                            <Label Content="Мои голосования" FontSize="{StaticResource FontSizeHead}" HorizontalContentAlignment="Center"/>
+                            <StackPanel x:Name="MyElectionsStackPanel"/>
                         </StackPanel>
                     </Grid>
                 </StackPanel>
