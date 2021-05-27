@@ -12,10 +12,10 @@ namespace Выборы
     using System;
     using System.Collections.Generic;
     
-    public partial class VoitingType
+    public partial class VotingType
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public VoitingType()
+        public VotingType()
         {
             this.Elections = new HashSet<Election>();
         }

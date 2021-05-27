@@ -31,6 +31,6 @@ namespace Выборы
         public virtual DbSet<PoolOption> PoolOptions { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<VoitingType> VoitingTypes { get; set; }
+        public virtual DbSet<VotingType> VotingTypes { get; set; }
     }
 }

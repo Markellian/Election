@@ -254,7 +254,7 @@ namespace Выборы.Classes
                             DateStart = start,
                             DateEnd = end,
                             Description = description,
-                            Voiteing_type_id = 1 //Interview
+                            Voting_type_id = 1 //Interview
                         };
                         db.Elections.Add(elections);
                         db.SaveChanges();
@@ -305,7 +305,7 @@ namespace Выборы.Classes
                             DateStart = start,
                             DateEnd = end,
                             Description = description,
-                            Voiteing_type_id = 2 //Election
+                            Voting_type_id = 2 //Election
                         };
                         db.Elections.Add(elections);
                         db.SaveChanges();

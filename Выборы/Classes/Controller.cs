@@ -172,7 +172,7 @@ namespace Выборы.Classes
         {
             Chain chain = new Chain(election);
             List<Option> options = new List<Option>();
-            if (election.Voiteing_type_id == 1)
+            if (election.Voting_type_id == 1)
             {
                 var list = DataBase.GetOptions(election);
                 foreach (var option in list)
@@ -180,7 +180,7 @@ namespace Выборы.Classes
                     options.Add(new Option() { Name = option.Name, Voites = 0, Id = option.Id });
                 }
             }
-            if (election.Voiteing_type_id == 2)
+            if (election.Voting_type_id == 2)
             {
                 var list = DataBase.GetCandidates(election);
                 foreach (var candidate in list)

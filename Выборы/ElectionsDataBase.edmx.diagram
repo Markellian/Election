@@ -11,14 +11,14 @@
         <EntityTypeShape EntityType="ElectionsDataBaseModel.PoolOption" Width="1.5" PointX="3" PointY="11" />
         <EntityTypeShape EntityType="ElectionsDataBaseModel.Role" Width="1.5" PointX="0.75" PointY="3" />
         <EntityTypeShape EntityType="ElectionsDataBaseModel.User" Width="1.5" PointX="3" PointY="2" />
-        <EntityTypeShape EntityType="ElectionsDataBaseModel.VoitingType" Width="1.5" PointX="3.75" PointY="8" />
         <AssociationConnector Association="ElectionsDataBaseModel.FK_Blocks_Elections" />
         <AssociationConnector Association="ElectionsDataBaseModel.FK_Blocks_Users" />
         <AssociationConnector Association="ElectionsDataBaseModel.FK_ElectionOptions_Elections" />
         <AssociationConnector Association="ElectionsDataBaseModel.FK_ElectionOptions_PoolOptions" />
         <AssociationConnector Association="ElectionsDataBaseModel.FK_ElectionOptions_Users" />
-        <AssociationConnector Association="ElectionsDataBaseModel.FK_Elections_VoitingTypes" />
         <AssociationConnector Association="ElectionsDataBaseModel.FK_Users_Role" />
+        <EntityTypeShape EntityType="ElectionsDataBaseModel.VotingType" Width="1.5" PointX="3.75" PointY="8.125" />
+        <AssociationConnector Association="ElectionsDataBaseModel.FK_Elections_VoitingTypes" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

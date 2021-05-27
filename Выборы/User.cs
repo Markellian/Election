@@ -38,12 +38,5 @@ namespace Выборы
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ElectionOption> ElectionOptions { get; set; }
         public virtual Role Role { get; set; }
-
-        public override string ToString()
-        {
-            string res = Passport + " " + First_name + " " + Name;
-            if (!string.IsNullOrEmpty(Last_name)) res += " " + Last_name;
-            return res;
-        }
     }
 }

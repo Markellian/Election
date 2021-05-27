@@ -26,20 +26,24 @@ namespace Выборы.Classes
                 var genesisBlock = blocks.Find((b) => b.PreviousHash.Trim() == election.Name);
                 Blocks.Add(genesisBlock);
                 string hash = genesisBlock.Hash;
+                Block block;
                 do
                 {
-                    Block block = blocks.Find((b) => b.PreviousHash == hash);
-                    if (block != null && block.MakeHash() == block.Hash)
+                    block = blocks.Find((b) => b.PreviousHash == hash);
+                    if (block != null)
                     {
-                        Blocks.Add(block);
-                        hash = block.Hash;
-                    }
-                    else
-                    {
-                        hash = null;
+                        if (block.MakeHash() == block.Hash)
+                        {
+                            Blocks.Add(block);
+                            hash = block.Hash;
+                        }
+                        else
+                        {
+                            blocks.Remove(block);
+                        }
                     }
 
-                } while (hash != null);
+                } while (block != null);
                 Last = Blocks.Last();
             }
             catch (NullReferenceException)

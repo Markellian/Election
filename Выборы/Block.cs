@@ -27,17 +27,16 @@ namespace Выборы
         public virtual Election Election { get; set; }
         public virtual User User { get; set; }
 
+        public Block() { }
         /// <summary>
         /// Конструктор генезис-блока. Создает первый блок.
         /// </summary>
-        public Block() { }
         public Block(Election election)
         {
             User_id = null;
             DateCreated = election.DateStart.ToUniversalTime();
             Option_id = null;
             PreviousHash = election.Name;
-            Election_id = election.Id;
             Hash = MakeHash();
         }
         /// <summary>
@@ -53,7 +52,7 @@ namespace Выборы
                 throw new ArgumentException("Пустой блок", nameof(block));
             }
             User_id = user.Id;
-            DateCreated = DateTime.Now.ToUniversalTime();
+            DateCreated = DateTime.UtcNow;
             Option_id = option_id;
             Election_id = block.Election_id;
             PreviousHash = block.Hash;

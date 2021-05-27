@@ -106,7 +106,7 @@
     <Compile Include="User.cs">
       <DependentUpon>ElectionsDataBase.tt</DependentUpon>
     </Compile>
-    <Compile Include="VoitingType.cs">
+    <Compile Include="VotingType.cs">
       <DependentUpon>ElectionsDataBase.tt</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">

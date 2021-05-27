@@ -25,13 +25,13 @@ namespace Выборы
         public string Name { get; set; }
         public System.DateTime DateStart { get; set; }
         public System.DateTime DateEnd { get; set; }
-        public int Voiteing_type_id { get; set; }
+        public int Voting_type_id { get; set; }
         public string Description { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Block> Blocks { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ElectionOption> ElectionOptions { get; set; }
-        public virtual VoitingType VoitingType { get; set; }
+        public virtual VotingType VotingType { get; set; }
     }
 }
