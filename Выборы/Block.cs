@@ -37,6 +37,7 @@ namespace Выборы
             DateCreated = election.DateStart.ToUniversalTime();
             Option_id = null;
             PreviousHash = election.Name;
+            Election_id = election.Id;
             Hash = MakeHash();
         }
         /// <summary>

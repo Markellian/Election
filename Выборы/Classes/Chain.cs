@@ -15,7 +15,10 @@ namespace Выборы.Classes
         public List<Block> Blocks { get; set; }
         //Последний блок
         private Block Last { get; set; }
-        //Конструктор для создания цепочки блоков
+        /// <summary>
+        /// Конструктор для создания цепочки для сеществующего голосования
+        /// </summary>
+        /// <param name="election">Возвращает цепочку блоков. В случае ошибки возвращает null</param>
         public Chain(Election election)
         {
             try

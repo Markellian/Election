@@ -20,7 +20,14 @@ namespace Выборы
             this.Blocks = new HashSet<Block>();
             this.ElectionOptions = new HashSet<ElectionOption>();
         }
-    
+
+        public override string ToString()
+        {
+            var res = First_name + " " + Name;
+            if (!string.IsNullOrEmpty(Last_name)) res += " " + Last_name;
+            return res;                
+        }
+
         public int Id { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }

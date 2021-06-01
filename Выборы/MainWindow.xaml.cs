@@ -747,7 +747,7 @@ namespace Выборы
                         VoteImpossibleLabel.Visibility = Visibility.Visible;
                         VoteButton.Visibility = Visibility.Collapsed;
 
-                        VoteImpossibleLabel.Content = "Чтобы проголосовать, необходимо авторизироваться";
+                        VoteImpossibleLabel.Content = "Чтобы проголосовать, необходимо авторизоваться";
                         VoteImpossibleLabel.Foreground = Brushes.Red;
                     }
                     else

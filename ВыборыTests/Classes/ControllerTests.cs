@@ -19,6 +19,7 @@ namespace Выборы.Classes.Tests
             Assert.AreEqual(Properties.Language.EnterLogin, Controller.IsLoginValidate(""));
             Assert.AreEqual(Properties.Language.LoginLengthMustBe, Controller.IsLoginValidate("qwe"));
         }
+        [TestMethod()]
         public void IsPasswordValidateTest()
         {
             Assert.AreEqual("", Controller.IsPassportValidate("1234", "123123"));
