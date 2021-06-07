@@ -72,20 +72,32 @@ namespace Выборы
             ChangeGridVisibility(RegistrationGrid, AuthGrid);
             lastGrid.Add(AuthGrid);
         }
-
+        /// <summary>
+        /// Нажатие на кнопку выхода из акканта пользователя
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void UserExitMainMenuButton_Click(object sender, RoutedEventArgs e)
         {
             user = null;
             MainGrid_IsVisibleChanged(MainGrid, new DependencyPropertyChangedEventArgs());
             ChangeGridVisibility(NewsGrid, nowMenuGrid);
         }
-
+        /// <summary>
+        /// переход на страницу авторизации
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FromMainToAuth_Click(object sender, RoutedEventArgs e)
         {
             ChangeGridVisibility(AuthGrid, MainGrid);
             lastGrid.Add(MainGrid);
         }
-
+        /// <summary>
+        /// изменение видимости главной страницы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MainGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (((Grid)sender).Visibility == Visibility.Visible)
@@ -121,12 +133,21 @@ namespace Выборы
                 }
             }
         }
-
+        /// <summary>
+        /// Переход на страницу создания голосования
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuNavigationPanelCreateElection_Click(object sender, RoutedEventArgs e)
         {
             ChangeGridVisibility(CreateElectionGrid, nowMenuGrid);
             nowMenuGrid = CreateElectionGrid;
         }
+        /// <summary>
+        /// изменить видимости Grid
+        /// </summary>
+        /// <param name="makeVisible">сделать видимым</param>
+        /// <param name="makeHidden">сделать скрытым</param>
         private void ChangeGridVisibility(Grid makeVisible, Grid makeHidden)
         {
             makeHidden.Visibility = Visibility.Collapsed;
@@ -140,15 +161,27 @@ namespace Выборы
                 nowMenuGrid = CreateElectionGrid;
 
                 DateStartElectionDataPicker.DisplayDateStart = DateTime.Now;
+                DateStartElectionDataPicker.SelectedDate = null;
                 DateEndElectionDataPicker.DisplayDateStart = DateTime.Now;
+                DateEndElectionDataPicker.SelectedDate = null;
+                
+                DescriptionElectionTextBox.Text = "";
                 ElectionNameTextBox.Text = "";
                 InterviewRadioButton.IsChecked = true;
+
+                InterviewOptionsComboBox.ItemsSource = null;
+                CandidatsChoosedComboBox.ItemsSource = null;
+                DescriptionElectionTextBox.Text = "";
 
                 InterviewOptionsCreateGrid.Visibility = Visibility.Visible;
                 ElectionOptionsCreateGrid.Visibility = Visibility.Hidden;
             }
         }
-
+        /// <summary>
+        /// Событие при изменении даты начала голосования
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DateStartElectionDataPicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             DateEndElectionDataPicker.DisplayDateStart = ((DatePicker)sender).SelectedDate;
@@ -157,7 +190,11 @@ namespace Выборы
                 DateEndElectionDataPicker.SelectedDate = DateStartElectionDataPicker.SelectedDate;
             }
         }
-
+        /// <summary>
+        /// Создать голосование
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AddElectionButton_Click(object sender, RoutedEventArgs e)
         {
             string name = ElectionNameTextBox.Text.Trim();
@@ -201,7 +238,11 @@ namespace Выборы
             }
             ChangeGridVisibility(NewsGrid, CreateElectionGrid);
         }
-
+        /// <summary>
+        /// Нажата кнопка зарегистрироваться
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RegistrateButton_Click(object sender, RoutedEventArgs e)
         {
             string login = RegistrationLoginTextBox.Text.Trim();
@@ -280,18 +321,22 @@ namespace Выборы
 
             //если сюда дошло, то все данные заполнены верно
             var result = Controller.AddUser(login, password, passportSeries, passportNumber, firstName, name, lastName, email, phone, (DateTime)bith);
-            if (result is string)
+            if (result == null)
             {
-                MessageBox.Show(result);
+                MessageBox.Show("Ошибка регистрации");
             }
-            else if (result is User)
+            else
             {
                 MessageBox.Show("Регистрация прошла успешно");
                 user = Controller.AuthUser(login, password);
                 ChangeGridVisibility(MainGrid, RegistrationGrid);
             }
         }
-
+        /// <summary>
+        /// Изменение Логина на странице регистрации
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RegistrationLoginTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             string message = Controller.IsLoginValidate(RegistrationLoginTextBox.Text);
@@ -308,7 +353,11 @@ namespace Выборы
                 RegistrationLoginHelperLabel.Background = null;
             }
         }
-
+        /// <summary>
+        /// Изменение видимости страницы регистрации
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RegistrationGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             RegistrationLoginTextBox.Text = "";
@@ -329,7 +378,11 @@ namespace Выборы
             RegistrationEmailTextBox_TextChanged(null, null);
 
         }
-
+        /// <summary>
+        /// Изменение паспортных данных на странице регистрации
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RegistrationPassportData_TextChanged(object sender, TextChangedEventArgs e)
         {
             string message = Controller.IsPassportValidate(RegistrationSeriesPassportTextBox.Text, RegistrationNumberPassportTextBox.Text);
@@ -347,7 +400,11 @@ namespace Выборы
                 RegistrationPasportHelperLabel.Background = null;
             }
         }
-
+        /// <summary>
+        /// Изменение пароля на странице регистрации
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RegistrationPasswordPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             string message = Controller.IsPasswordValidate(RegistrationPasswordPasswordBox.Password);
@@ -362,7 +419,11 @@ namespace Выборы
                 RegistrationPassworgHelperLabel.Background = null;
             }
         }
-
+        /// <summary>
+        /// Изменение почты на странице регистрации
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RegistrationEmailTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             string message = Controller.IsEmailValidate(RegistrationEmailTextBox.Text);
@@ -379,7 +440,11 @@ namespace Выборы
                 RegistrationEmailHelperLabel.ToolTip = Properties.Language.RegistrationEmailLabelHelperMessage + ". " + Properties.Language.FieldIsRequired;
             }
         }
-
+        /// <summary>
+        /// Нажата кнопка "Назад"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ComeBackButton_Click(object sender, RoutedEventArgs e)
         {
             var last = lastGrid.LastOrDefault();
@@ -390,13 +455,21 @@ namespace Выборы
                 lastGrid.Remove(last);
             }
         }
-
+        /// <summary>
+        /// Переход на страницу "Пользователи"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuNavigationPanelUsers_Click(object sender, RoutedEventArgs e)
         {
             ChangeGridVisibility(UsersGrid, nowMenuGrid);
             nowMenuGrid = UsersGrid;
         }
-
+        /// <summary>
+        /// Изменение видимости страницы "Пользователи"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void UsersGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (UsersGrid.Visibility == Visibility.Visible)
@@ -407,7 +480,11 @@ namespace Выборы
                 RolesComboBox.ItemsSource = Controller.GetAllRoles();
             }
         }
-
+        /// <summary>
+        /// Удалить пользователя
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DeleteUserButton_Click(object sender, RoutedEventArgs e)
         {
             var selectedItem = UsersDataGrid.SelectedItem;
@@ -430,7 +507,11 @@ namespace Выборы
                 MessageBox.Show("Выберите пользователя");
             }
         }
-
+        /// <summary>
+        /// Изменение роли пользователя
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ChangeUserRoleButton_Click(object sender, RoutedEventArgs e)
         {
             var selectedRole = RolesComboBox.SelectedItem;
@@ -457,7 +538,11 @@ namespace Выборы
                 MessageBox.Show("Ошибка изменения роли");
             }
         }
-
+        /// <summary>
+        /// Добавить опцию
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AddOptionButton_Click(object sender, RoutedEventArgs e)
         {
             var optionName = OptionsTextBox.Text;
@@ -476,14 +561,22 @@ namespace Выборы
             InterviewOptionsComboBox.ItemsSource = listOptions;
             if (listOptions.Count > 0) InterviewOptionsComboBox.SelectedItem = listOptions.Last();
         }
-
+        /// <summary>
+        /// Изменение видимости создания опций для опроса
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void InterviewOptionsCreateStackPanel_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             OptionsTextBox.Text = "";
             InterviewOptionsComboBox.ItemsSource = null;
             listOptions.Clear();
         }
-
+        /// <summary>
+        /// Удалить опцию
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DeleteOptionButton_Click(object sender, RoutedEventArgs e)
         {
             var item = InterviewOptionsComboBox.SelectedItem;
@@ -498,16 +591,29 @@ namespace Выборы
             if (listOptions.Count > 0 ) InterviewOptionsComboBox.SelectedItem = listOptions.Last();
 
         }
-
+        /// <summary>
+        /// выбрано создание опроса
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void InterviewRadioButton_Checked(object sender, RoutedEventArgs e)
         {
             ChangeGridVisibility(InterviewOptionsCreateGrid, ElectionOptionsCreateGrid);
         }
+        /// <summary>
+        /// выбрано создание выборов
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ElectionRadioButton_Checked(object sender, RoutedEventArgs e)
         {
             ChangeGridVisibility(ElectionOptionsCreateGrid, InterviewOptionsCreateGrid);
         }
-
+        /// <summary>
+        /// изменение видимости создания опций для выборов
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ElectionOptionsCreateGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (ElectionOptionsCreateGrid.Visibility == Visibility.Visible)
@@ -515,7 +621,11 @@ namespace Выборы
                 CandidatsComboBox.ItemsSource = Controller.GetCandidates();
             }
         }
-
+        /// <summary>
+        /// добавить кандидата в качестве опции
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AddCandidateOptionToChoosedButton_Click(object sender, RoutedEventArgs e)
         {
             User item = (User)CandidatsComboBox.SelectedItem;
@@ -541,7 +651,11 @@ namespace Выборы
 
 
         }
-
+        /// <summary>
+        /// Удалить кандидата из опций
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DeleteCandidateOptionToChoosedButton_Click(object sender, RoutedEventArgs e)
         {
             User item = (User)CandidatsChoosedComboBox.SelectedItem;
@@ -561,7 +675,11 @@ namespace Выборы
             CandidatsComboBox.ItemsSource = l;
             CandidatsComboBox.SelectedItem = item;
         }
-
+        /// <summary>
+        /// изменена видимость страницы "Новости"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void NewsGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (NewsGrid.Visibility == Visibility.Visible)
@@ -578,7 +696,11 @@ namespace Выборы
                 }
             }
         }
-
+        /// <summary>
+        /// Создание шаблона для отображения 1 голосования
+        /// </summary>
+        /// <param name="election">голосование</param>
+        /// <returns>заполненый Border</returns>
         private Border CreateElectionConteiner(Election election)
         {
             Grid grid = new Grid();
@@ -660,7 +782,11 @@ namespace Выборы
             };
             return border;
         }
-
+        /// <summary>
+        /// нажатие на голосование
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var item = ((Grid)sender).Children[0];
@@ -673,7 +799,11 @@ namespace Выборы
                 }
             }            
         }
-
+        /// <summary>
+        /// изменение видимости страницы голосования
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ElectionGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
            
@@ -769,12 +899,20 @@ namespace Выборы
                 }
             }
         }
-
+        /// <summary>
+        /// переход на страницу "Новости"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             ChangeGridVisibility(NewsGrid, nowMenuGrid);
         }
-
+        /// <summary>
+        /// нажата кнопка "Проголосовать"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void VoteButton_Click(object sender, RoutedEventArgs e)
         {
             if (user == null)
@@ -817,18 +955,30 @@ namespace Выборы
                 MessageBox.Show("Ошибка голосования!");
             }
         }
-
+        /// <summary>
+        /// изменение видимости страницы авторизации
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AuthGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             AuthLoginTextBox.Text = "";
             AuthPasswordBox.Password = "";
         }
-
+        /// <summary>
+        /// Переход на страницу "Мой профиль"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuMyProfileButton_Click(object sender, RoutedEventArgs e)
         {
             ChangeGridVisibility(MyProfileGrid, nowMenuGrid);
         }
-
+        /// <summary>
+        /// изменение видимости страницы "Мой профиль"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MyProfileGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (MyProfileGrid.Visibility == Visibility)
@@ -844,12 +994,20 @@ namespace Выборы
                 PhoneLabel.Content = user.Phone ?? "Не указан";
             }
         }
-
+        /// <summary>
+        /// Переход на страницу "Мои голосования"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuNavigationPanelMyElections_Click(object sender, RoutedEventArgs e)
         {
             ChangeGridVisibility(MyElectionsGrid, nowMenuGrid);
         }
-
+        /// <summary>
+        /// изменение видимости страницы "Мои голосования"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MyElectionsGrid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if(MyElectionsGrid.Visibility == Visibility.Visible)

@@ -39,9 +39,6 @@
             <Button FontSize="{StaticResource FontSizeSimplyText}" Grid.ColumnSpan="2" Content="Регистрация" Grid.Column="1" Margin="35,15,10,0" Grid.Row="4"  VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="FromAuthToRegistration_Click"/>
 
         </Grid>
-        <Grid x:Name="UserGrid" Visibility="Hidden">
-
-        </Grid>
 
         <Grid x:Name="RegistrationGrid" Visibility="Hidden" IsVisibleChanged="RegistrationGrid_IsVisibleChanged">
             <Button Panel.ZIndex="1" Content="{x:Static res:Language.Back}" Margin="10,10" FontSize="{StaticResource FontSizeSimplyText}" HorizontalAlignment="Left" VerticalAlignment="Top" Click="ComeBackButton_Click"/>
@@ -159,7 +156,6 @@
                     <MenuItem Header="Создать голосование" Click="MenuNavigationPanelCreateElection_Click"/>
                 </MenuItem>
             </Menu>
-
 
             <ScrollViewer Margin="10,50,10,10">
                 <StackPanel>
@@ -311,11 +307,6 @@
                     </Grid>
                 </StackPanel>
             </ScrollViewer>
-
-
         </Grid>
-
-
-
     </Grid>
 </Window>

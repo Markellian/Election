@@ -21,7 +21,11 @@ namespace Выборы.Classes
                 return (from blocks in db.Blocks where blocks.Election_id == election_id select blocks).ToList();
             }           
         }
-
+        /// <summary>
+        /// Добавить блок
+        /// </summary>
+        /// <param name="block">блок</param>
+        /// <returns>true - успех, false - неудача</returns>
         public static bool AddBlock(Block block)
         {
             using (var db = new ElectionsDataBase())
@@ -31,7 +35,11 @@ namespace Выборы.Classes
                 return res==1;
             }
         }
-
+        /// <summary>
+        /// Получить голосование по названию
+        /// </summary>
+        /// <param name="electionName">название голосования</param>
+        /// <returns>Election в случае успеха, иначе - null</returns>
         public static Election GetElectionByName(string electionName)
         {
             using(var db = new ElectionsDataBase())
@@ -58,26 +66,12 @@ namespace Выборы.Classes
                 return null;
             }
         }
-        
-        public static PoolOption AddPoolOption(string name)
-        {
-            using (var db = new ElectionsDataBase())
-            {
-                PoolOption poolOptions = new PoolOption() { Name = name };
-                try
-                {
-                    db.PoolOptions.Add(poolOptions);
-                    db.SaveChanges();
-                    return poolOptions;
-                }
-                catch (InvalidOperationException)
-                {
-                    return null;
-                }
-                
-            }
-        }
-        
+        /// <summary>
+        /// Получить User по логину и паролю
+        /// </summary>
+        /// <param name="login">логин</param>
+        /// <param name="password">пароль</param>
+        /// <returns>User в случае успеха, иначе - null</returns>
         public static User GetUser(string login, string password)
         {
             User user = null;
@@ -87,25 +81,16 @@ namespace Выборы.Classes
                 var res0 = (from u in db.Users where u.Login == login && u.Password == pas  select u).ToList();
                 if (res0.Count() != 0)
                 {
-                    var res = res0.First(); 
-                    user = new User()
-                    {
-                        Id = res.Id,
-                        Passport = res.Passport,
-                        Name = res.Name,
-                        First_name = res.First_name,
-                        Last_name = res.Last_name,
-                        Email = res.Email,
-                        Phone = res.Phone,
-                        Birthday = res.Birthday,
-                        Role_id = res.Role_id,
-                        Login = login
-                    };
+                    user = res0.FirstOrDefault();                     
                 }
             }
             return user;
         }
-
+        /// <summary>
+        /// Есть ли пользователь с таким логином
+        /// </summary>
+        /// <param name="login">логин</param>
+        /// <returns>true - если существует пользователь с таким логином, иначе - false</returns>
         public static bool IfExistsUserByLogin(string login)
         {
             using (var db = new ElectionsDataBase())
@@ -113,6 +98,11 @@ namespace Выборы.Classes
                 return db.Users.Where(l => l.Login == login).FirstOrDefault() == null ? false : true;
             }
         }
+        /// <summary>
+        /// Существует ли пользователь с такими паспортными данными
+        /// </summary>
+        /// <param name="passport">паспорт</param>
+        /// <returns>true - если существует пользователь с таким паспортом, иначе - false</returns>
         public static bool IfExistsUserByPassport(string passport)
         {
             using (var db = new ElectionsDataBase())
@@ -120,8 +110,20 @@ namespace Выборы.Classes
                 return db.Users.Where(p => p.Passport == passport).FirstOrDefault() == null ? false : true;
             }
         }
-
-        public static dynamic AddUser(string login, string password, string passport, string firstName,
+        /// <summary>
+        /// Добавить пользователя
+        /// </summary>
+        /// <param name="login">логин</param>
+        /// <param name="password">пароль</param>
+        /// <param name="passport">паспорт</param>
+        /// <param name="firstName">фамилия</param>
+        /// <param name="name">имя</param>
+        /// <param name="lastName">отчество</param>
+        /// <param name="email"><почта/param>
+        /// <param name="phone">телефон</param>
+        /// <param name="bith">дата рождения</param>
+        /// <returns>User в случае успеха, иначе - null</returns>
+        public static User AddUser(string login, string password, string passport, string firstName,
                                     string name, string lastName, string email, string phone, DateTime bith)
         {
             User users = new User()
@@ -136,7 +138,6 @@ namespace Выборы.Classes
                 Phone = phone == "" ? null: phone,
                 Birthday = bith.ToUniversalTime(),
                 Role_id = 2
-
             };
 
             using (var db = new ElectionsDataBase())
@@ -144,33 +145,22 @@ namespace Выборы.Classes
                 db.Users.Add(users);
                 try
                 {
-
-
                     if (db.SaveChanges() == 1)
                     {
-                        return new User()
-                        {
-                            Login = login,
-                            Password = password,
-                            Passport = passport,
-                            Name = name,
-                            First_name = firstName,
-                            Last_name = lastName,
-                            Email = email,
-                            Phone = phone,
-                            Birthday = bith.ToUniversalTime(),
-                            Role_id = 2
-                        };
+                        return users;
                     }
                     else return null;
                 }
-                catch (System.Data.Entity.Infrastructure.DbUpdateException e)
+                catch (System.Data.Entity.Infrastructure.DbUpdateException)
                 {
-                    return e.Message;
+                    return null;
                 }
             }
         }
-
+        /// <summary>
+        /// получить список всех пользователей
+        /// </summary>
+        /// <returns>список пользователей</returns>
         public static List<User> GetAllUsers()
         {
             using (var db = new ElectionsDataBase())
@@ -178,7 +168,10 @@ namespace Выборы.Classes
                 return (from users in db.Users select users).ToList();
             }
         }
-
+        /// <summary>
+        /// Получить все роли
+        /// </summary>
+        /// <returns>список ролей</returns>
         public static List<Role> GetAllRoles()
         {
             List<Role> list = new List<Role>();
@@ -191,7 +184,11 @@ namespace Выборы.Classes
                 return list;
             }
         }
-
+        /// <summary>
+        /// Удалить пользователя
+        /// </summary>
+        /// <param name="id">id пользователя</param>
+        /// <returns>true - успех, false - неудача</returns>
         public static bool DeleteUser(int id)
         {
             using (var db = new ElectionsDataBase())
@@ -203,7 +200,12 @@ namespace Выборы.Classes
                 return true;
             }
         }
-
+        /// <summary>
+        /// Изменить роль пользователя
+        /// </summary>
+        /// <param name="userId">Id пользователя</param>
+        /// <param name="roleId">Id роли</param>
+        /// <returns>true - успех, false - неудача</returns>
         public static bool ChangeRole(int userId, int roleId)
         {
             using (var db = new ElectionsDataBase())
@@ -216,7 +218,11 @@ namespace Выборы.Classes
                 return true;
             }
         }
-
+        /// <summary>
+        /// создать хэш-строку
+        /// </summary>
+        /// <param name="str">исходная строка</param>
+        /// <returns>хэш-строка</returns>
         private static string GetHash(string str)
         {
             byte[] bytes = Encoding.Unicode.GetBytes(str);
@@ -230,7 +236,10 @@ namespace Выборы.Classes
 
             return hashString;
         }
-
+        /// <summary>
+        /// Получить пользователей с ролью "кандидат"
+        /// </summary>
+        /// <returns>список пользователей (кандидатов)</returns>
         public static List<User> GetCandidates()
         {
             using (var db = new ElectionsDataBase())
@@ -238,6 +247,15 @@ namespace Выборы.Classes
                 return (from u in db.Users where u.Role_id == 3 select u).ToList();
             }
         }
+        /// <summary>
+        /// Добавить опрос с опциями
+        /// </summary>
+        /// <param name="name">название голосования</param>
+        /// <param name="start">дата начала голосования</param>
+        /// <param name="end">дата окончания голосования</param>
+        /// <param name="description">описание</param>
+        /// <param name="listOptions">список опций</param>
+        /// <returns>созданное голосование в случае успеха, иначе - null</returns>
         public static Election AddInterviewWithOptions(string name, DateTime start, DateTime end, string description, List<string> listOptions)
         {
             if (GetElectionByName(name) != null) return null;
@@ -288,7 +306,15 @@ namespace Выборы.Classes
             }
             
         }
-    
+        /// <summary>
+        /// Добавить выборы с опциями
+        /// </summary>
+        /// <param name="name">название голосования</param>
+        /// <param name="start">дата начала голосования</param>
+        /// <param name="end">дата окончания голосования</param>
+        /// <param name="description">описание голосования</param>
+        /// <param name="candidates">список опций</param>
+        /// <returns>созданное голосование в случае успеха, иначе - null</returns>
         public static Election AddElectionWithCandidates(string name, DateTime start, DateTime end, string description, List<User> candidates)
         {
             if (GetElectionByName(name) != null) return null;
@@ -328,7 +354,10 @@ namespace Выборы.Classes
                 }
             }
         }
-    
+        /// <summary>
+        /// Получить все голосования
+        /// </summary>
+        /// <returns>список голосований</returns>
         public static List<Election> GetElections()
         {
             using (var db = new ElectionsDataBase())
@@ -336,7 +365,11 @@ namespace Выборы.Classes
                 return (from e in db.Elections select e).ToList();
             }
         }
-
+        /// <summary>
+        /// получить голосование по ID
+        /// </summary>
+        /// <param name="Id">id голосования</param>
+        /// <returns>Election в случае успеха, иначе - null</returns>
         public static Election GetElectionById(int Id)
         {
             using (var db = new ElectionsDataBase())
@@ -352,7 +385,11 @@ namespace Выборы.Classes
                 }
             }
         }
-
+        /// <summary>
+        /// получить опции опроса
+        /// </summary>
+        /// <param name="election">голосование</param>
+        /// <returns>список опций</returns>
         public static List<PoolOption> GetOptions(Election election)
         {
             using (var db = new ElectionsDataBase())
@@ -364,7 +401,11 @@ namespace Выборы.Classes
                 return res.ToList();
             }
         }
-
+        /// <summary>
+        /// Получить опции выборов
+        /// </summary>
+        /// <param name="election">голосование</param>
+        /// <returns>список кандидатов(User)</returns>
         public static List<User> GetCandidates(Election election)
         {
             using (var db = new ElectionsDataBase())
@@ -376,7 +417,12 @@ namespace Выборы.Classes
                 return res.ToList(); 
             }
         }
-
+        /// <summary>
+        /// голосовал ли пользователь
+        /// </summary>
+        /// <param name="user">пользователь</param>
+        /// <param name="election">голосование</param>
+        /// <returns>ID опции, если голосовал. иначе - null</returns>
         public static int? IfUserVoted(User user, Election election)
         {
             using (var db = new ElectionsDataBase())
@@ -388,7 +434,11 @@ namespace Выборы.Classes
                 return res.FirstOrDefault();
             }
         }
-
+        /// <summary>
+        /// получить голосования, в которыз участвовал пользователь
+        /// </summary>
+        /// <param name="userId">id пользователя</param>
+        /// <returns>список голосований</returns>
         public static List<Election> GetElections(int userId)
         {
             using (var db = new ElectionsDataBase())
