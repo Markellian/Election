@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -9,6 +11,27 @@ namespace Выборы.Classes
 {
     public class DataBase
     {
+        /// <summary>
+        /// Преверяет на возможность подключения к БД
+        /// </summary>
+        /// <returns>если null, то ошибок нет. иначе - сообщение об ошибке</returns>
+        public static string TryConnect()
+        {
+            using (var db = new ElectionsDataBase())
+            {
+                try
+                {
+                    db.Database.Connection.Open();
+                    db.Database.Connection.Close();
+                    return null;
+                }
+                catch (Exception e)
+                {
+                    return e.Message;
+                }
+            }
+        }
+
         /// <summary>
         /// Получение цепочки блоков для определенного голосования
         /// </summary>
@@ -77,11 +100,18 @@ namespace Выборы.Classes
             User user = null;
             using(var db = new ElectionsDataBase())
             {
-                var pas = GetHash(password);
-                var res0 = (from u in db.Users where u.Login == login && u.Password == pas  select u).ToList();
-                if (res0.Count() != 0)
+                try
                 {
-                    user = res0.FirstOrDefault();                     
+                    var pas = GetHash(password);
+                    var res0 = (from u in db.Users where u.Login == login && u.Password == pas select u).ToList();
+                    if (res0.Count() != 0)
+                    {
+                        user = res0.FirstOrDefault();
+                    }
+                }
+                catch (EntityException)
+                {
+                    return null;
                 }
             }
             return user;
@@ -362,7 +392,14 @@ namespace Выборы.Classes
         {
             using (var db = new ElectionsDataBase())
             {
-                return (from e in db.Elections select e).ToList();
+                try
+                {
+                    return (from e in db.Elections select e).ToList();
+                }
+                catch (EntityException)
+                {
+                    return null;
+                }
             }
         }
         /// <summary>

@@ -9,6 +9,17 @@ namespace Выборы.Classes
 {
     public class Controller
     {
+        private static bool isCanConnect = false;
+        /// <summary>
+        /// проверяет подключение к БД
+        /// </summary>
+        /// <returns>null в случае отсутствия ошибок, иначе - сообщение об ошибке</returns>
+        public static string TryConnectBD()
+        {
+            string result = DataBase.TryConnect();
+            isCanConnect = result == null;
+            return result;
+        }
         /// <summary>
         /// Авторизировать пользователя
         /// </summary>
@@ -17,7 +28,12 @@ namespace Выборы.Classes
         /// <returns>возвращает User в случае успеха авторизации, иначе - null</returns>
         public static User AuthUser(string login, string password)
         {
-            return DataBase.GetUser(login, password);
+            if (isCanConnect)
+            {
+                return DataBase.GetUser(login, password);
+            }
+            else return null;
+            
         }
         /// <summary>
         /// Добавить Опрос
@@ -74,19 +90,23 @@ namespace Выборы.Classes
         /// <returns>сообщение об ошибке. пустая строка - успех</returns>
         public static string IsLoginValidate(string login)
         {
-            if (string.IsNullOrEmpty(login))
+            if (isCanConnect)
             {
-                return Properties.Language.EnterLogin;
+                if (string.IsNullOrEmpty(login))
+                {
+                    return Properties.Language.EnterLogin;
+                }
+                if (login.Length < 6)
+                {
+                    return Properties.Language.LoginLengthMustBe;
+                }
+                if (DataBase.IfExistsUserByLogin(login))
+                {
+                    return Properties.Language.UserWithThisLoginIsRaegistered;
+                }
+                return "";
             }
-            if (login.Length < 6)
-            {
-                return Properties.Language.LoginLengthMustBe;
-            }
-            if (DataBase.IfExistsUserByLogin(login))
-            {
-                return Properties.Language.UserWithThisLoginIsRaegistered;
-            }            
-            return "";
+            else return "Ошибка подключения к базе данных";
         }
         /// <summary>
         /// Проверяет пароль на корректность
@@ -113,24 +133,28 @@ namespace Выборы.Classes
         /// <returns>сообщение об ошибке. пустая строка - успех</returns>
         public static string IsPassportValidate(string series, string number)
         {
-            if (string.IsNullOrEmpty(series) || string.IsNullOrEmpty(number))
+            if (isCanConnect)
             {
-                return "Введите серию и номер паспорта";
-            }
+                if (string.IsNullOrEmpty(series) || string.IsNullOrEmpty(number))
+                {
+                    return "Введите серию и номер паспорта";
+                }
 
-            if (series.Length != 4 || !int.TryParse(series, out int a))
-            {
-                return "Некорректная серия паспотра. Серия паспорта состоит из 4 цифр";
+                if (series.Length != 4 || !int.TryParse(series, out int a))
+                {
+                    return "Некорректная серия паспотра. Серия паспорта состоит из 4 цифр";
+                }
+                if (number.Length != 6 || !int.TryParse(number, out int b))
+                {
+                    return "Некорректный номер паспотра. Номер паспорта состоит из 6 цифр";
+                }
+                if (DataBase.IfExistsUserByPassport(series + number))
+                {
+                    return "Пользователь с такими паспортными данными уже зарегистрирован";
+                }
+                return "";
             }
-            if (number.Length != 6 || !int.TryParse(number, out int b))
-            {
-                return "Некорректный номер паспотра. Номер паспорта состоит из 6 цифр";
-            }
-            if (DataBase.IfExistsUserByPassport(series + number))
-            {
-                return "Пользователь с такими паспортными данными уже зарегистрирован";
-            }
-            return "";
+            else return "Ошибка подключения к базе данных";
         }
         /// <summary>
         /// Проверяет почту на корректность
@@ -216,10 +240,16 @@ namespace Выборы.Classes
         /// <returns>список голосования</returns>
         public static List<Election> GetElections()
         {
-            var elections = DataBase.GetElections();
-            if (elections == null || elections.Count == 0) return null;
-            elections.Sort((x,y) => y.Id.CompareTo(x.Id));
-            return elections;
+            if (isCanConnect)
+            {
+
+
+                var elections = DataBase.GetElections();
+                if (elections == null || elections.Count == 0) return null;
+                elections.Sort((x, y) => y.Id.CompareTo(x.Id));
+                return elections;
+            }
+            else return null;
         }
         /// <summary>
         /// Удалить пользователя
@@ -257,31 +287,35 @@ namespace Выборы.Classes
         public static List<Option> GetOptions(Election election)
         {
             Chain chain = new Chain(election);
-            List<Option> options = new List<Option>();
-            if (election.Voting_type_id == 1)
+            if (chain.isValidate())
             {
-                var list = DataBase.GetOptions(election);
-                foreach (var option in list)
+                List<Option> options = new List<Option>();
+                if (election.Voting_type_id == 1)
                 {
-                    options.Add(new Option() { Name = option.Name, Voites = 0, Id = option.Id });
+                    var list = DataBase.GetOptions(election);
+                    foreach (var option in list)
+                    {
+                        options.Add(new Option() { Name = option.Name, Voites = 0, Id = option.Id });
+                    }
                 }
-            }
-            if (election.Voting_type_id == 2)
-            {
-                var list = DataBase.GetCandidates(election);
-                foreach (var candidate in list)
+                if (election.Voting_type_id == 2)
                 {
-                    options.Add(new Option() { Name = candidate.ToString(), Voites = 0, Id = candidate.Id });
+                    var list = DataBase.GetCandidates(election);
+                    foreach (var candidate in list)
+                    {
+                        options.Add(new Option() { Name = candidate.ToString(), Voites = 0, Id = candidate.Id });
+                    }
                 }
-            }
 
-            foreach (Block block in chain.Blocks.Skip(1))
-            {
-                Option option = options.Find((o) => o.Id == block.Option_id);
-                option.Voites++;
+                foreach (Block block in chain.Blocks.Skip(1))
+                {
+                    Option option = options.Find((o) => o.Id == block.Option_id);
+                    option.Voites++;
+                }
+
+                return options;
             }
-            
-            return options;
+            else return null;
         }
         /// <summary>
         /// Проголосовать. Добавляет в цепочку блоков новый блок.

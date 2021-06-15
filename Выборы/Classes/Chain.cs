@@ -27,31 +27,37 @@ namespace Выборы.Classes
                 Blocks = new List<Block>(blocks.Count() * 2);
 
                 var genesisBlock = blocks.Find((b) => b.PreviousHash.Trim() == election.Name);
-                Blocks.Add(genesisBlock);
-                string hash = genesisBlock.Hash;
-                Block block;
-                do
+                if (genesisBlock != null)
                 {
-                    block = blocks.Find((b) => b.PreviousHash == hash);
-                    if (block != null)
+                    Blocks.Add(genesisBlock);
+                    string hash = genesisBlock.Hash;
+                    Block block;
+                    do
                     {
-                        if (block.MakeHash() == block.Hash)
+                        block = blocks.Find((b) => b.PreviousHash == hash);
+                        if (block != null)
                         {
-                            Blocks.Add(block);
-                            hash = block.Hash;
+                            if (block.MakeHash() == block.Hash)
+                            {
+                                Blocks.Add(block);
+                                hash = block.Hash;
+                            }
+                            else
+                            {
+                                blocks.Remove(block);
+                            }
                         }
-                        else
-                        {
-                            blocks.Remove(block);
-                        }
-                    }
-
-                } while (block != null);
-                Last = Blocks.Last();
+                    } while (block != null);
+                    Last = Blocks.Last();
+                }
+                else
+                {
+                    Blocks = null;
+                }
             }
             catch (NullReferenceException)
             {
-                return;
+                Blocks = null;
             }
         }
 
@@ -64,7 +70,7 @@ namespace Выборы.Classes
         /// <returns>true - добавление прошло успешно. false - ошибка добавления</returns>
         public bool Add(User user, int option_id)
         {
-            if (user == null)
+            if (Blocks == null || user == null)
             {
                 return false;
             }
@@ -80,7 +86,15 @@ namespace Выборы.Classes
             {
                 return false;
             }            
-        }      
+        }     
+        /// <summary>
+        /// Проверяет, валидна ли цепочка
+        /// </summary>
+        /// <returns>true - валидна, иначе - false</returns>
+        public bool isValidate()
+        {
+            return Blocks != null;
+        }
     
     }
 }

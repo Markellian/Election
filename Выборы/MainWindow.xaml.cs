@@ -33,10 +33,28 @@ namespace Выборы
         List<Election> listNews;
         public MainWindow()
         {
+            MakeBasicSettings();
             InitializeComponent();
-            Controller controller = new Controller();
+            
         }
-
+        /// <summary>
+        /// Выполняет базовые проверки и настройки при запуске приложения
+        /// </summary>
+        private void MakeBasicSettings()
+        {
+            CheckConnection();
+        }
+        /// <summary>
+        /// Проверяет подключение к БД
+        /// </summary>
+        private void CheckConnection()
+        {
+            string message = Controller.TryConnectBD();
+            if (message != null)
+            {
+                MessageBox.Show(message);
+            }
+        }
         /// <summary>
         /// Авторизация пользователя на странице авторизации
         /// </summary>
@@ -817,11 +835,16 @@ namespace Выборы
                     ElectionNameLabel.Content = election.Name;
                     ElectionDateLabel.Content = election.DateStart.ToString("d") + " - " + election.DateEnd.ToString("d");
                     ElectionDescriptionTextBlock.Text = election.Description;
+                    OptionsStackPanel.Children.Clear();
 
                     options = Controller.GetOptions(election);
+                    if (options == null)
+                    {
+                        MessageBox.Show("Голосование не валидно.");
+                        return;
+                    }
                     int countVoit = 0;
                     foreach (var o in options) countVoit += o.Voites;
-                    OptionsStackPanel.Children.Clear();
                     int? option_id = null;
                     if (user!=null) option_id = Controller.IfUserVoted(user, election);
 
