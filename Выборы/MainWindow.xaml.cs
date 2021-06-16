@@ -23,6 +23,8 @@ namespace Выборы
     /// </summary>
     public partial class MainWindow : Window
     {
+        const int electionsOnOnePage = 5;
+
         User user;
         Election election;
         List<Grid> lastGrid = new List<Grid>();
@@ -30,7 +32,8 @@ namespace Выборы
         List<string> listOptions = new List<string>();
         List<Option> options;
         List<User> listCandidates = new List<User>();
-        List<Election> listNews;
+        Election[] listNews;
+        int page = 1;
         public MainWindow()
         {
             MakeBasicSettings();
@@ -704,15 +707,30 @@ namespace Выборы
             {
                 nowMenuGrid = NewsGrid;
 
-                listNews = Controller.GetElections();
-                if (listNews == null || listNews.Count == 0) return;
-                NewsStackPanel.Children.Clear();
-                foreach (var election in listNews)
-                {
-                    
-                    NewsStackPanel.Children.Add(CreateElectionConteiner(election));
-                }
+                listNews = Controller.GetElections().ToArray();
+
+                CountPagesLabel.Content = (listNews.Length/electionsOnOnePage + 1).ToString();
+
+                LoadPageNews(page);
             }
+        }
+        private void LoadPageNews(int page)
+        {
+            if (listNews == null || listNews.Length == 0) return;
+            NewsStackPanel.Children.Clear();
+            for (int i = (page - 1) * electionsOnOnePage; i < page * electionsOnOnePage; i++)
+            {
+                if (i < listNews.Length)
+                {
+                    NewsStackPanel.Children.Add(CreateElectionConteiner(listNews[i]));
+                }
+                else break;
+            }
+            NowPageLabel.Content = page.ToString();
+
+            PageForward.Visibility = (page == listNews.Length / electionsOnOnePage + 1) ? Visibility.Hidden : Visibility.Visible;
+            PageBack.Visibility = (page == 1) ? Visibility.Hidden : Visibility.Visible;
+            
         }
         /// <summary>
         /// Создание шаблона для отображения 1 голосования
@@ -1048,6 +1066,16 @@ namespace Выборы
                     
                 }
             }
+        }
+
+        private void PageBack_Click(object sender, RoutedEventArgs e)
+        {
+            LoadPageNews(--page);
+        }
+
+        private void PageForward_Click(object sender, RoutedEventArgs e)
+        {
+            LoadPageNews(++page);
         }
     }
 }

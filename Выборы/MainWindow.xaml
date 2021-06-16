@@ -160,8 +160,17 @@
             <ScrollViewer Margin="10,50,10,10">
                 <StackPanel>
                     <Grid x:Name="NewsGrid" Visibility="Visible" IsVisibleChanged="NewsGrid_IsVisibleChanged">
-                        <Label Content="Новости" FontSize="{StaticResource FontSizeHead}" HorizontalContentAlignment="Center" Height="50" VerticalAlignment="Top" Margin="0"/>
-                        <StackPanel Name="NewsStackPanel" Margin="0,50,0,0" VerticalAlignment="Top"/>
+                        <StackPanel Orientation="Vertical">
+                            <Label Content="Новости" FontSize="{StaticResource FontSizeHead}" HorizontalContentAlignment="Center" Height="50" VerticalAlignment="Top" Margin="0"/>
+                            <StackPanel Name="NewsStackPanel" VerticalAlignment="Top"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Button x:Name="PageBack" Content="&lt;" Click="PageBack_Click"/>
+                                <Label Name="NowPageLabel" Content="100"/>
+                                <Label Content="/"/>
+                                <Label Name="CountPagesLabel" Content="110"/>
+                                <Button x:Name="PageForward" Content=">" Click="PageForward_Click"/>
+                            </StackPanel>
+                        </StackPanel>
                     </Grid>
                     <Grid x:Name="CreateElectionGrid" Visibility="Collapsed" IsVisibleChanged="CreateElectionGrid_IsVisibleChanged">
                         <Grid.ColumnDefinitions>
