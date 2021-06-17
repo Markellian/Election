@@ -162,6 +162,40 @@
                     <Grid x:Name="NewsGrid" Visibility="Visible" IsVisibleChanged="NewsGrid_IsVisibleChanged">
                         <StackPanel Orientation="Vertical">
                             <Label Content="Новости" FontSize="{StaticResource FontSizeHead}" HorizontalContentAlignment="Center" Height="50" VerticalAlignment="Top" Margin="0"/>
+
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Horizontal" Grid.Column="0">
+
+                                    <Label Content="Статус:" FontSize="{StaticResource FontSizeSimplyText}"/>
+                                    <ComboBox Name="StatusElectionComboBox" Margin="0,5" VerticalContentAlignment="Center" SelectionChanged="FilterElections">
+                                        <TextBlock FontSize="{StaticResource FontSizeSimplyText}" Text="Все"/>
+                                        <TextBlock FontSize="{StaticResource FontSizeSimplyText}" Text="Начатые"/>
+                                        <TextBlock FontSize="{StaticResource FontSizeSimplyText}" Text="Не начатые"/>
+                                        <TextBlock FontSize="{StaticResource FontSizeSimplyText}" Text="Завершенные"/>
+                                    </ComboBox>
+                                    <Label Content="Тип:" FontSize="{StaticResource FontSizeSimplyText}"/>
+                                    <ComboBox Name="TypeElectionComboBox" Margin="0,5" VerticalContentAlignment="Center" SelectionChanged="FilterElections">
+                                        <TextBlock FontSize="{StaticResource FontSizeSimplyText}" Text="Все"/>
+                                        <TextBlock FontSize="{StaticResource FontSizeSimplyText}" Text="Опрос"/>
+                                        <TextBlock FontSize="{StaticResource FontSizeSimplyText}" Text="Выборы"/>
+                                    </ComboBox>
+                                    
+                                </StackPanel>
+                                <StackPanel HorizontalAlignment="Right" Grid.Column="1" Orientation="Horizontal">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                        <Label Content="Название:" FontSize="{StaticResource FontSizeSimplyText}"/>
+                                        <TextBox x:Name="SearchElectionTextBox" FontSize="{StaticResource FontSizeSimplyText}" VerticalContentAlignment="Center" Margin="10,0" Text="" Width="200" TextChanged="SearchElectionTextBox_TextChanged"/>
+                                    </StackPanel>
+                                </StackPanel>
+
+                            </Grid>
+
+
                             <StackPanel Name="NewsStackPanel" VerticalAlignment="Top"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Button x:Name="PageBack" Content="&lt;" Click="PageBack_Click"/>

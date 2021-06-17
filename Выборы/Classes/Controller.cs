@@ -242,8 +242,6 @@ namespace Выборы.Classes
         {
             if (isCanConnect)
             {
-
-
                 var elections = DataBase.GetElections();
                 if (elections == null || elections.Count == 0) return null;
                 elections.Sort((x, y) => y.Id.CompareTo(x.Id));

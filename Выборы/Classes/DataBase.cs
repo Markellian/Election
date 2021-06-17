@@ -385,7 +385,7 @@ namespace Выборы.Classes
             }
         }
         /// <summary>
-        /// Получить все голосования
+        /// Получить все голосования. 
         /// </summary>
         /// <returns>список голосований</returns>
         public static List<Election> GetElections()
