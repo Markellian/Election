@@ -33,15 +33,12 @@ namespace Выборы
         List<Option> options;
         List<User> listCandidates = new List<User>();
         Election[] listNews;
-        Election[] listElections;
         int page = 1;
         public MainWindow()
         {
             MakeBasicSettings();
             InitializeComponent();
 
-            listElections = Controller.GetElections().ToArray();
-            listNews = listElections;
             StatusElectionComboBox.SelectedIndex = 0;
             TypeElectionComboBox.SelectedIndex = 0;
         }
@@ -210,7 +207,8 @@ namespace Выборы
         /// <param name="e"></param>
         private void DateStartElectionDataPicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            DateEndElectionDataPicker.DisplayDateStart = ((DatePicker)sender).SelectedDate;
+            var date = ((DatePicker)sender).SelectedDate;
+            if (date != null) DateEndElectionDataPicker.DisplayDateStart = date.Value.AddDays(1);
             if (DateStartElectionDataPicker.SelectedDate > DateEndElectionDataPicker.SelectedDate)
             {
                 DateEndElectionDataPicker.SelectedDate = DateStartElectionDataPicker.SelectedDate;
@@ -710,11 +708,8 @@ namespace Выборы
         {
             if (NewsGrid.Visibility == Visibility.Visible)
             {
-                nowMenuGrid = NewsGrid;                               
-
-                CountPagesLabel.Content = (listNews.Length/electionsOnOnePage + 1).ToString();
-
-                LoadPageNews(page);
+                nowMenuGrid = NewsGrid;
+                FilterElections();
             }
         }
         private void LoadPageNews(int page)
@@ -1095,34 +1090,7 @@ namespace Выборы
         private void FilterElections()
         {
             DateTime now = DateTime.Now;
-            string name = SearchElectionTextBox.Text;
-            int votingType = TypeElectionComboBox.SelectedIndex;
-            switch (StatusElectionComboBox.SelectedIndex)
-            {
-                case 1:
-                    listNews = listElections.Where((x) => x.DateStart < now && x.DateEnd > now && x.Name.Contains(name)).ToArray();
-                    break;
-                case 2:
-                    listNews = listElections.Where((x) => x.DateStart > now && x.Name.Contains(name)).ToArray();
-                    break;
-                case 3:
-                    listNews = listElections.Where((x) => x.DateEnd < now && x.Name.Contains(name)).ToArray();
-                    break;
-                default:
-                    listNews = listElections.Where((x) => x.Name.Contains(name)).ToArray();
-                    break;
-            }
-            switch (TypeElectionComboBox.SelectedIndex)
-            {
-                case 1:
-                    listNews = listNews.Where((x) => x.Voting_type_id == 1).ToArray();
-                    break;
-                case 2: 
-                    listNews = listNews.Where((x) => x.Voting_type_id == 2).ToArray();
-                    break;
-                default:
-                    break;
-            }
+            listNews = Controller.GetElections(StatusElectionComboBox.SelectedIndex, SearchElectionTextBox.Text, TypeElectionComboBox.SelectedIndex);
             page = 1;
 
             int pages = listNews.Length / electionsOnOnePage;

@@ -249,6 +249,10 @@ namespace Выборы.Classes
             }
             else return null;
         }
+        public static Election[] GetElections(int status, string name, int type)
+        {
+            return DataBase.GetElections(status, name, type).ToArray();
+        }
         /// <summary>
         /// Удалить пользователя
         /// </summary>

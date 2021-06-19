@@ -39,10 +39,10 @@ namespace Выборы.Classes
         /// <returns>Цепочку блоков</returns>
         public static List<Block> GetChain(int election_id)
         {
-            using(var db = new ElectionsDataBase())
+            using (var db = new ElectionsDataBase())
             {
                 return (from blocks in db.Blocks where blocks.Election_id == election_id select blocks).ToList();
-            }           
+            }
         }
         /// <summary>
         /// Добавить блок
@@ -55,7 +55,7 @@ namespace Выборы.Classes
             {
                 db.Blocks.Add(block);
                 var res = db.SaveChanges();
-                return res==1;
+                return res == 1;
             }
         }
         /// <summary>
@@ -65,9 +65,9 @@ namespace Выборы.Classes
         /// <returns>Election в случае успеха, иначе - null</returns>
         public static Election GetElectionByName(string electionName)
         {
-            using(var db = new ElectionsDataBase())
+            using (var db = new ElectionsDataBase())
             {
-                return (from e in db.Elections where e.Name == electionName select e).ToList().FirstOrDefault();                
+                return (from e in db.Elections where e.Name == electionName select e).ToList().FirstOrDefault();
             }
         }
 
@@ -84,7 +84,7 @@ namespace Выборы.Classes
                 if (options != null)
                 {
                     var option = options.ToList().FirstOrDefault();
-                    if (option != null) return option;                    
+                    if (option != null) return option;
                 }
                 return null;
             }
@@ -98,7 +98,7 @@ namespace Выборы.Classes
         public static User GetUser(string login, string password)
         {
             User user = null;
-            using(var db = new ElectionsDataBase())
+            using (var db = new ElectionsDataBase())
             {
                 try
                 {
@@ -158,14 +158,14 @@ namespace Выборы.Classes
         {
             User users = new User()
             {
-                Login = login, 
+                Login = login,
                 Password = GetHash(password),
                 Passport = passport,
                 Name = name,
                 First_name = firstName,
                 Last_name = lastName == "" ? null : lastName,
                 Email = email,
-                Phone = phone == "" ? null: phone,
+                Phone = phone == "" ? null : phone,
                 Birthday = bith.ToUniversalTime(),
                 Role_id = 2
             };
@@ -334,7 +334,7 @@ namespace Выборы.Classes
                     }
                 }
             }
-            
+
         }
         /// <summary>
         /// Добавить выборы с опциями
@@ -403,6 +403,63 @@ namespace Выборы.Classes
             }
         }
         /// <summary>
+        /// Получение Голосования по статусу, названию и типу
+        /// </summary>
+        /// <param name="status">статус голосования: 1 - начавшееся, 2 - не начавшееся, 3 - завершенное</param>
+        /// <param name="name">часть названия голосования</param>
+        /// <param name="type">тип голосования: 1 - опрос, 2 - интервью</param>
+        /// <returns>список голосования</returns>
+        public static List<Election> GetElections(int status, string name, int type)
+        {
+            DateTime now = DateTime.Now;
+            using (var db = new ElectionsDataBase())
+            {
+                switch (status)
+                {
+                    case 1:
+                        switch (type)
+                        {
+                            case 1:
+                                return (from e in db.Elections where (e.DateStart < now && e.DateEnd > now && e.Name.Contains(name) && e.Voting_type_id == 1) select e).ToList();
+                            case 2:
+                                return (from e in db.Elections where (e.DateStart < now && e.DateEnd > now && e.Name.Contains(name) && e.Voting_type_id == 2) select e).ToList();
+                            default:
+                                return (from e in db.Elections where (e.DateStart < now && e.DateEnd > now && e.Name.Contains(name)) select e).ToList();
+                        }
+                    case 2:
+                        switch (type)
+                        {
+                            case 1:
+                                return (from e in db.Elections where (e.DateStart > now && e.Name.Contains(name) && e.Voting_type_id == 1) select e).ToList();
+                            case 2:
+                                return (from e in db.Elections where (e.DateStart > now && e.Name.Contains(name) && e.Voting_type_id == 2) select e).ToList();
+                            default:
+                                return (from e in db.Elections where (e.DateStart > now && e.Name.Contains(name)) select e).ToList();
+                        }
+                    case 3:
+                        switch (type)
+                        {
+                            case 1:
+                                return (from e in db.Elections where (e.DateEnd < now && e.Name.Contains(name) && e.Voting_type_id == 1) select e).ToList();
+                            case 2:
+                                return (from e in db.Elections where (e.DateEnd < now && e.Name.Contains(name) && e.Voting_type_id == 2) select e).ToList();
+                            default:
+                                return (from e in db.Elections where (e.DateEnd < now && e.Name.Contains(name)) select e).ToList();
+                        }
+                    default:
+                        switch (type)
+                        {
+                            case 1:
+                                return (from e in db.Elections where (e.Name.Contains(name) && e.Voting_type_id == 1) select e).ToList();
+                            case 2:
+                                return (from e in db.Elections where (e.Name.Contains(name) && e.Voting_type_id == 2) select e).ToList();
+                            default:
+                                return (from e in db.Elections where (e.Name.Contains(name)) select e).ToList();
+                        }
+                }
+            }
+        }
+        /// <summary>
         /// получить голосование по ID
         /// </summary>
         /// <param name="Id">id голосования</param>
@@ -451,7 +508,7 @@ namespace Выборы.Classes
                           join eo in db.ElectionOptions on u.Id equals eo.Option_id
                           where eo.Election_id == election.Id
                           select u;
-                return res.ToList(); 
+                return res.ToList();
             }
         }
         /// <summary>
@@ -481,9 +538,9 @@ namespace Выборы.Classes
             using (var db = new ElectionsDataBase())
             {
                 return (from e in db.Elections
-                       join b in db.Blocks on e.Id equals b.Election_id
-                       where b.User_id == userId
-                       select e).ToList();
+                        join b in db.Blocks on e.Id equals b.Election_id
+                        where b.User_id == userId
+                        select e).ToList();
             }
         }
     }
